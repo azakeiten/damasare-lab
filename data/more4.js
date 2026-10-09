@@ -1,7 +1,7 @@
 /* 追加シナリオ（第5弾）：AI副業ツール・美容モニター・暗号資産のエアドロップ・荷物の受け取りバイト・点検商法 */
 (window.DL ||= { scenarios: [] }).scenarios.push(
 {
-  id: "aitool", genre: "kasegu", tag: "AI副業", title: "「AIが自動で稼ぐ」ツール", sub: "寝ている間に月30万、という動画広告", isNew: true,
+  id: "aitool", genre: "kasegu", tag: "AI副業", title: "「AIが自動で稼ぐ」ツール", sub: "寝ている間に月30万、という動画広告",
   mins: 4, level: 2, clock: "22:50",
   intro: "あなたは大学2年生。AIの話題はよく見るけれど、くわしくはない。動画アプリで、AIを使った副業の広告が流れてきました。",
   cast: { ad: { n: "動画広告", i: "広", h: 190, r: "動画アプリの広告" }, sales: { n: "AI副業サポート", i: "A", h: 170, r: "LINEの担当者" } },
@@ -63,7 +63,7 @@
   }
 },
 {
-  id: "monitor", genre: "kau", tag: "美容モニター", title: "「モニターになれば、実質無料」", sub: "SNSで声をかけてきた美容サロン", isNew: true,
+  id: "monitor", genre: "kau", tag: "美容モニター", title: "「モニターになれば、実質無料」", sub: "SNSで声をかけてきた美容サロン",
   mins: 4, level: 2, clock: "20:15",
   intro: "あなたは高校3年生。卒業式までに肌をきれいにしたいと思っていたら、SNSで美容サロンのアカウントからDMが届きました。",
   cast: { salon: { n: "美容サロン公式", i: "美", h: 330, r: "SNSのアカウント" }, staff: { n: "サロンのスタッフ", i: "ス", h: 320, r: "店頭の担当者" }, mom: { n: "お母さん", i: "母", h: 20, r: "家族" } },
@@ -128,7 +128,7 @@
   }
 },
 {
-  id: "airdrop", genre: "net", tag: "暗号資産", title: "「無料で暗号資産がもらえます」", sub: "ウォレットをつなぐだけ、のはずが", isNew: true,
+  id: "airdrop", genre: "net", tag: "暗号資産", title: "「無料で暗号資産がもらえます」", sub: "ウォレットをつなぐだけ、のはずが",
   mins: 4, level: 3, clock: "23:40",
   intro: "あなたは大学1年生。最近、暗号資産（仮想通貨）に少し興味があって、ウォレットのアプリを入れてみたところ。SNSで、こんな投稿を見つけました。",
   cast: { proj: { n: "NEO COIN 公式（？）", i: "N", h: 260, r: "SNSのアカウント" }, support: { n: "サポートデスク（？）", i: "S", h: 200, r: "DMの相手" } },
@@ -180,7 +180,7 @@
   }
 },
 {
-  id: "nikuke", genre: "kasegu", tag: "荷物の受け取り", title: "「荷物を受け取って転送するだけ」", sub: "SNSで知り合った人からのバイトの話", isNew: true,
+  id: "nikuke", genre: "kasegu", tag: "荷物の受け取り", title: "「荷物を受け取って転送するだけ」", sub: "SNSで知り合った人からのバイトの話",
   mins: 4, level: 3, clock: "21:30",
   intro: "あなたは専門学校の1年生。SNSで趣味の話で仲良くなった、海外に住んでいるという人から、こんな相談をされました。",
   cast: { leo: { n: "レオ", i: "レ", h: 230, r: "SNSで仲良くなった人" }, police: { n: "警察官", i: "警", h: 220, r: "交番" } },
@@ -233,7 +233,7 @@
   }
 },
 {
-  id: "tenken", genre: "kurashi", tag: "点検商法", title: "「屋根がずれていますよ」", sub: "実家に来た、無料点検の業者", isNew: true,
+  id: "tenken", genre: "kurashi", tag: "点検商法", title: "「屋根がずれていますよ」", sub: "実家に来た、無料点検の業者",
   mins: 4, level: 1, clock: "10:30",
   intro: "あなたは高校2年生。土曜日、実家でおじいちゃんと留守番をしています。インターホンが鳴りました。",
   cast: { gyosha: { n: "作業着の男性", i: "業", h: 30, r: "「近くで工事をしている」業者" }, grandpa: { n: "おじいちゃん", i: "祖", h: 200, r: "いっしょに留守番" } },

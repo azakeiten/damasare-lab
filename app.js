@@ -277,8 +277,12 @@ function renderHome() {
 
   <section class="sec" aria-label="シナリオ一覧">
     <div class="sec-h"><h2>シナリオをえらぶ</h2><p>どれからでもOK。結末はシナリオごとに3〜8種類。選択を変えると、ちがう結末とサインに出会えます。</p></div>
+    <div class="libtools">
+      <label class="search"><span class="sr">シナリオを探す</span><input type="search" id="libQ" placeholder="キーワードで探す（例：投資、チケット、電話）" value="${esc(libQ)}"></label>
+      <label class="sortsel"><span>並べかえ</span><select id="libSort">${Object.entries(SORTS).map(([k, s]) => `<option value="${k}"${libSort === k ? " selected" : ""}>${s.n}</option>`).join("")}</select></label>
+    </div>
     <div class="filters" role="group" aria-label="ジャンルでしぼりこむ" id="filters"></div>
-    <div class="lib" id="lib"></div>
+    <div id="lib"></div>
   </section>
 
   <section class="sec bleed b-ink" aria-label="9つのサイン">
@@ -287,7 +291,7 @@ function renderHome() {
     <div style="margin-top:18px"><a class="btn small" href="#zukan">サイン図鑑で集めたサインを見る</a></div>
   </section>`;
 
-  renderFilters(); renderLib(); renderQuiz(); renderSQ(); runDemo();
+  renderFilters(); renderLib(); bindLibTools(); renderQuiz(); renderSQ(); runDemo();
   $("ctaQuiz").onclick = (e) => { e.preventDefault(); $("quizSec").scrollIntoView({ behavior: reduced ? "auto" : "smooth" }); };
 }
 /* サインあてクイズ：各シナリオの「サインつきの選択」の直前に出るメッセージを問題にする */
@@ -363,8 +367,42 @@ function renderFilters() {
   $("filters").innerHTML = opts.map(([k, n]) => `<button class="chipbtn" type="button" id="f-${k}" data-f="${k}" aria-pressed="${filter === k}">${esc(n)}</button>`).join("");
   $("filters").querySelectorAll("button").forEach((b) => (b.onclick = () => { filter = b.dataset.f; renderFilters(); renderLib(); }));
 }
+/* 一覧：検索・並べかえ。「すべて・おすすめ順・検索なし」のときはジャンルごとの棚にする */
+let libQ = "", libSort = "rec";
+const played = (s) => ((progress[s.id] || {}).ends || []).length > 0;
+const SORTS = {
+  rec: { n: "おすすめ順", f: null },
+  new: { n: "まだ遊んでいない話から", f: (a, b) => played(a) - played(b) },
+  short: { n: "短い順", f: (a, b) => a.mins - b.mins },
+  easy: { n: "かんたんな順", f: (a, b) => a.level - b.level },
+  hard: { n: "むずかしい順", f: (a, b) => b.level - a.level }
+};
 function renderLib() {
-  $("lib").innerHTML = SCENARIOS.filter((s) => filter === "all" || s.genre === filter).map(scenarioCard).join("");
+  const q = libQ.trim().toLowerCase();
+  let list = SCENARIOS.filter((s) => filter === "all" || s.genre === filter);
+  if (q) list = list.filter((s) => [s.title, s.sub, s.tag, s.intro, GENRES[s.genre].n, ...Object.values(s.signs).map((x) => x.t)].join(" ").toLowerCase().includes(q));
+  if (SORTS[libSort].f) list = list.slice().sort(SORTS[libSort].f);
+  if (!list.length) {
+    $("lib").innerHTML = `<div class="lib-empty">${mascot("md")}<p>「${esc(libQ)}」に合う話が見つかりませんでした。別のことばで探してみてね。</p></div>`;
+    return;
+  }
+  if (filter === "all" && !q && libSort === "rec") {
+    $("lib").innerHTML = Object.entries(GENRES).map(([gk, g]) => {
+      const items = list.filter((s) => s.genre === gk);
+      const done = items.filter(played).length;
+      return `<section class="shelf-row" style="--gh:${g.h}" aria-label="${esc(g.n)}">
+        <div class="shelf-h"><span class="gtag">${esc(g.n)}</span><b>${items.length}本</b><span class="shelf-p"><i style="width:${Math.round((done / items.length) * 100)}%"></i></span><span>${done}/${items.length} クリア</span>
+          <button class="linkbtn" type="button" data-g="${gk}">ぜんぶ見る</button></div>
+        <div class="shelf-scroll">${items.map(scenarioCard).join("")}</div></section>`;
+    }).join("");
+    $("lib").querySelectorAll("[data-g]").forEach((b) => (b.onclick = () => { filter = b.dataset.g; renderFilters(); renderLib(); $("filters").scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" }); }));
+    return;
+  }
+  $("lib").innerHTML = `<p class="lib-count">${list.length}本</p><div class="lib">${list.map(scenarioCard).join("")}</div>`;
+}
+function bindLibTools() {
+  $("libQ").oninput = (e) => { libQ = e.target.value; renderLib(); };
+  $("libSort").onchange = (e) => { libSort = e.target.value; renderLib(); };
 }
 function renderQuiz() {
   const el = $("quizMain");
@@ -633,6 +671,7 @@ function openScenario(id) {
   $("playTitle").textContent = sc.title;
   $("playTag").textContent = sc.tag;
   $("playTag").style.setProperty("--gh", GENRES[sc.genre].h);
+  $("v-play").style.setProperty("--gh", GENRES[sc.genre].h);
   $("clock").textContent = S.clock;
   const first = sc.nodes[sc.start];
   S.scene = null;
@@ -897,6 +936,7 @@ function showEnd(id, n) {
   const isNewEnd = !p.ends.includes(id);
   if (isNewEnd) p.ends.push(id);
   if (n.end === "safe" && !Object.values(S.signs).includes("missed")) p.perfect = true;
+  if (n.end === "safe") confetti();
   saveProgress();
   setTimeout(checkAch, 1600);
   append(`<div class="end"><div class="tape"></div><div class="in"><span class="stamp s-${n.end}" aria-hidden="true">${STAMP[n.end]}</span><span class="label ${n.end}">結末｜${ENDLAB[n.end]}</span><h3>${esc(n.h)}</h3><p>${esc(n.p)}</p></div></div>`);
@@ -909,6 +949,28 @@ function showEnd(id, n) {
   setTimeout(() => { if (S && S.sc === sc && S.node === id) openResult(id, n, isNewEnd); }, reduced || factor() === 0 ? 300 : 1400);
 }
 
+/* 「被害なし」の結末で、テープ色の紙吹雪を少しだけ */
+function confetti() {
+  if (reduced) return;
+  const cv = document.createElement("canvas");
+  cv.className = "confetti"; cv.setAttribute("aria-hidden", "true");
+  const W = (cv.width = innerWidth), H = (cv.height = innerHeight);
+  document.body.appendChild(cv);
+  const x = cv.getContext("2d");
+  const cs = getComputedStyle(document.documentElement);
+  const cols = ["--accent", "--safe", "--ink", "--gold"].map((v) => cs.getPropertyValue(v).trim() || "#FFC21A");
+  const ps = Array.from({ length: 110 }, () => ({ x: W / 2 + (Math.random() - 0.5) * W * 0.3, y: H * 0.35, vx: (Math.random() - 0.5) * 14, vy: -Math.random() * 14 - 4,
+    w: 6 + Math.random() * 8, h: 4 + Math.random() * 6, r: Math.random() * 6, vr: (Math.random() - 0.5) * 0.4, c: cols[Math.floor(Math.random() * cols.length)] }));
+  const t0 = performance.now();
+  const step = (t) => {
+    const k = (t - t0) / 1800;
+    x.clearRect(0, 0, W, H);
+    ps.forEach((p) => { p.vy += 0.42; p.vx *= 0.99; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      x.save(); x.globalAlpha = Math.max(0, 1 - k); x.translate(p.x, p.y); x.rotate(p.r); x.fillStyle = p.c; x.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); x.restore(); });
+    if (k < 1) requestAnimationFrame(step); else cv.remove();
+  };
+  requestAnimationFrame(step);
+}
 function renderDots() {
   const sc = S.sc;
   $("playDots").innerHTML = Object.keys(sc.signs).map((k) => `<i class="${S.signs[k] || ""}" title="${S.signs[k] ? esc(sc.signs[k].t) : "未発見"}"></i>`).join("");

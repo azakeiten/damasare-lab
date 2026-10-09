@@ -764,3 +764,36 @@ body { background-color: var(--bg); background-image: radial-gradient(var(--dot)
 .b-ink .cats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 @media (max-width: 860px) { .b-ink .cats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .b-ink .cats { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- v10: 一覧の検索・並べかえ・ジャンルの棚 ---------- */
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.libtools { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+.search { flex: 1 1 280px; min-width: 0; }
+.search input { width: 100%; min-height: 48px; border: 2px solid var(--ink); border-radius: 16px 16px 16px 4px; padding: 10px 14px 10px 40px; font: inherit;
+  background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235B6777' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cpath d='M15.5 15.5 21 21'/%3E%3C/svg%3E") 12px 50% / 18px no-repeat; color: var(--ink); }
+.search input::placeholder { color: var(--muted); }
+.sortsel { display: inline-flex; align-items: center; gap: 8px; font-size: var(--step--1); font-weight: 700; color: var(--muted); }
+.sortsel select { min-height: 48px; border: 2px solid var(--ink); border-radius: 14px; padding: 8px 12px; font: inherit; font-weight: 700; background: var(--surface); color: var(--ink); }
+.lib-count { font-size: var(--step--1); color: var(--muted); font-weight: 700; margin-bottom: 8px; }
+.lib-empty { display: flex; align-items: center; gap: 12px; background: var(--surface); border-radius: 18px; padding: 16px; }
+.shelf-row { margin-top: 22px; }
+.shelf-row:first-child { margin-top: 6px; }
+.shelf-h { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin-bottom: 10px; font-size: var(--step--1); color: var(--muted); }
+.shelf-h .gtag { font-size: var(--step--1); padding: 2px 12px; }
+.shelf-h b { color: var(--ink); }
+.shelf-p { width: 90px; height: 6px; border-radius: 6px; background: var(--line); overflow: hidden; }
+.shelf-p i { display: block; height: 100%; background: var(--safe); }
+.shelf-h .linkbtn { margin-left: auto; color: var(--ink); border-color: var(--ink); }
+.shelf-scroll { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(250px, 280px); gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory;
+  padding: 4px 6px 14px 2px; scrollbar-width: thin; }
+.shelf-scroll .scard { scroll-snap-align: start; }
+@media (max-width: 640px) { .shelf-scroll { grid-auto-columns: 78%; } }
+
+/* プレイ画面：ジャンルの色の帯 */
+.b-genre::before { background: hsl(var(--gh, 210) var(--g-s) var(--g-l)); border-bottom: 2px solid hsl(var(--gh, 210) 60% var(--g-ls)); }
+.playbar.bleed { padding-block: 14px; margin-bottom: 18px; }
+.phone { box-shadow: 0 24px 50px -26px var(--scrim), 10px 10px 0 hsl(var(--gh, 210) 60% var(--g-ls)); }
+@media (max-width: 860px) { .phone { box-shadow: 0 24px 50px -26px var(--scrim); } }
+
+/* 紙吹雪 */
+.confetti { position: fixed; inset: 0; pointer-events: none; z-index: 70; }
