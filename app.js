@@ -518,6 +518,22 @@ const SHEET_TEXT = `だまされ体験ラボ　ふりかえりシート
 6. 困ったときの相談先（番号も書こう）：
 7. 家族や友だちに伝えたいこと：`;
 
+/* QRコード：cdnjs の qrcode-generator を必要なときだけ読み込む */
+function drawQR() {
+  const box = $("qrBox"); if (!box) return;
+  const paint = () => {
+    try {
+      const qr = window.qrcode(0, "M"); qr.addData(SHARE_URL); qr.make();
+      box.innerHTML = qr.createSvgTag({ cellSize: 6, margin: 2, scalable: true });
+    } catch (e) { box.innerHTML = `<span class="qr-wait">QRコードを表示できませんでした。下のURLを使ってください。</span>`; }
+  };
+  if (window.qrcode) return paint();
+  const s = document.createElement("script");
+  s.src = "https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js";
+  s.onload = paint;
+  s.onerror = () => { box.innerHTML = `<span class="qr-wait">QRコードを表示できませんでした。下のURLを使ってください。</span>`; };
+  document.head.appendChild(s);
+}
 function renderTeach() {
   const genreOf = (sc) => GENRES[sc.genre].n;
   const catsOf = (sc) => [...new Set(Object.values(sc.signs).map((s) => s.cat))].map((c) => CATS[c] ? CATS[c].n : c).join("、");
@@ -525,6 +541,14 @@ function renderTeach() {
   <div class="help-hero"><div class="eyebrow">FOR TEACHERS &amp; FAMILIES</div><h1>授業や家庭で使う</h1>
     <p style="color:var(--muted)">2022年4月から成年年齢は18歳になり、18歳になると親の同意なく契約できるかわりに、未成年者取消権が使えなくなりました。このページは、高校生から大学1年生くらいの人といっしょに体験し、話し合うためのガイドです。1シナリオは約3〜7分。登録やログインは不要です。</p>
     ${ORG.name ? `<div class="hero-org">${orgBadge()}</div>` : ""}</div>
+
+  <section class="sec qrsec" aria-label="教室で配る">
+    <div class="qrbox" id="qrBox" aria-label="このページのQRコード"><span class="qr-wait">QRコードを準備中…</span></div>
+    <div class="qrtext"><span class="eyebrow">教室で配る</span><h2>スクリーンに映して、スマホで読み取り</h2>
+      <p>生徒は登録もログインもなしで、そのまま体験を始められます。進み具合はそれぞれのスマホの中だけに保存されます。</p>
+      <code class="qrurl" id="qrUrl">${esc(SHARE_URL)}</code>
+      <div class="row-btns"><button class="btn small" type="button" id="qrCopy">URLをコピー</button></div></div>
+  </section>
 
   <section class="sec" aria-label="ねらい">
     <div class="sec-h"><h2>この教材のねらい</h2></div>
@@ -574,6 +598,11 @@ function renderTeach() {
       <li><b>記録は端末の中だけ</b><span>進み具合や図鑑はブラウザに保存されるだけで、だれかに送られることはありません。共有端末では、図鑑ページの「記録をリセット」で消せます。</span></li>
     </ol>
   </section>`;
+  $("qrCopy").onclick = async () => {
+    try { await navigator.clipboard.writeText(SHARE_URL); toast("コピーしました"); }
+    catch (e) { const r = document.createRange(); r.selectNodeContents($("qrUrl")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); toast("選択しました。コピーしてください"); }
+  };
+  drawQR();
   $("sheetCopy").onclick = async () => {
     try { await navigator.clipboard.writeText(SHEET_TEXT); toast("コピーしました"); }
     catch (e) { const ta = $("sheetText"); ta.focus(); ta.select(); toast("選択しました。コピーしてください"); }
@@ -601,18 +630,90 @@ function openScenario(id) {
   const first = sc.nodes[sc.start];
   S.scene = null;
   if (first.scene) { S.scene = first.scene; setHead(); }
-  renderSide(); renderDots();
+  renderSide(); renderDots(); renderMap();
   const castKeys = Object.keys(sc.cast);
   append(`<div class="intro" style="--gh:${GENRES[sc.genre].h}"><div class="band"><span class="gtag">${esc(sc.tag)}</span><h3>${esc(sc.title)}</h3></div>
     <div class="in"><p>${esc(sc.intro)}</p>
     <div class="castlist">${castKeys.map((k) => `<div>${av(sc, k, true)}<span><b>${esc(sc.cast[k].n)}</b>${sc.cast[k].r ? `　<span style="color:var(--muted)">${esc(sc.cast[k].r)}</span>` : ""}</span></div>`).join("")}</div>
     <div class="goal">${mascot("sm")}<span>この話にかくれた <b>${Object.keys(sc.signs).length}つのサイン</b> を見つけよう。結末は${endIds(sc).length}種類。</span></div></div></div>`);
   $("composer").innerHTML = `<button class="choice go" type="button" id="goBtn">ストーリーをはじめる</button>`;
-  $("goBtn").onclick = () => {
+  const begin = () => {
     prog(sc.id).plays++; saveProgress();
     S.scene = null; S.lastFrom = null;
     playNode(sc.start);
   };
+  $("goBtn").onclick = () => {
+    if (store.get("dl3-coach", false)) return begin();
+    showCoach(begin);
+  };
+}
+/* はじめての人向けの3ステップ案内（1回だけ） */
+function showCoach(done) {
+  const stop = $("stop");
+  stop.className = "stop coach";
+  stop.innerHTML = `<div class="tape"></div><div class="in">
+    <div class="v">${mascot("md")}<div><b id="stopTitle">遊び方</b><span>3つだけ覚えればOK</span></div></div>
+    <ol class="coach-steps">
+      <li><b>返信か、行動をえらぶ</b><span>メッセージが届いたら、下のボタンから選ぼう。正解の位置は毎回変わるよ。</span></li>
+      <li><b>選ぶたびに「STOP」</b><span>そこにかくれていたサインを、ミヌケが解説するよ。</span></li>
+      <li><b>迷ったら「ミヌケのヒント」</b><span>結末やサインは、図鑑と称号に集まっていくよ。</span></li>
+    </ol>
+    <button type="button" id="coachGo">わかった、はじめる</button></div>`;
+  $("overlay").hidden = false;
+  $("coachGo").focus({ preventScroll: true });
+  const close = () => { $("overlay").hidden = true; S.closeStop = null; store.set("dl3-coach", true); done(); };
+  $("coachGo").onclick = close;
+  S.closeStop = close;
+}
+
+/* ===== ストーリーマップ：分かれ道を上から下へ描く ===== */
+function storyMap(sc, path, current) {
+  const p = progress[sc.id] || {};
+  const seen = new Set(p.nodes || []);
+  const got = new Set(p.ends || []);
+  const depth = { [sc.start]: 0 }, order = [sc.start];
+  for (let i = 0; i < order.length; i++) {
+    const n = sc.nodes[order[i]];
+    (n.choices || []).forEach((c) => { if (!(c.next in depth) && sc.nodes[c.next]) { depth[c.next] = depth[order[i]] + 1; order.push(c.next); } });
+  }
+  const levels = [];
+  order.forEach((id) => { (levels[depth[id]] ||= []).push(id); });
+  const W = 320, rowH = 38, top = 18;
+  const pos = {};
+  levels.forEach((ids, d) => ids.forEach((id, j) => { pos[id] = { x: Math.round(((j + 1) * W) / (ids.length + 1)), y: top + d * rowH }; }));
+  const H = top * 2 + (levels.length - 1) * rowH;
+  const onPath = new Set();
+  for (let i = 1; i < path.length; i++) onPath.add(path[i - 1] + ">" + path[i]);
+  const edges = [];
+  order.forEach((id) => {
+    const n = sc.nodes[id];
+    [...new Set((n.choices || []).map((c) => c.next))].forEach((to) => {
+      if (!pos[to]) return;
+      const a = pos[id], b = pos[to];
+      const cls = onPath.has(id + ">" + to) ? "now" : seen.has(id) && seen.has(to) ? "seen" : "";
+      edges.push(`<path class="me ${cls}" d="M${a.x} ${a.y} C${a.x} ${a.y + rowH / 2}, ${b.x} ${b.y - rowH / 2}, ${b.x} ${b.y}"></path>`);
+    });
+  });
+  const tip = (n) => {
+    if (n.end) return n.h;
+    const l = (n.log || []).find((x) => x[0] === "them" || x[0] === "narr" || x[0] === "card");
+    return l ? (l[0] === "card" ? l[1] : l[1]).slice(0, 40) : "";
+  };
+  const dots = order.map((id) => {
+    const n = sc.nodes[id], q = pos[id];
+    const cur = id === current ? " cur" : "";
+    if (n.end) {
+      const g = got.has(id);
+      return `<g class="mn end ${g ? "got " + n.end : ""}${cur}"><title>${esc(g ? n.h : "まだ見ていない結末")}</title><rect x="${q.x - 8}" y="${q.y - 8}" width="16" height="16" rx="4"></rect></g>`;
+    }
+    return `<g class="mn ${seen.has(id) ? "seen" : ""}${cur}"><title>${esc(seen.has(id) ? tip(n) : "まだ通っていない場面")}</title><circle cx="${q.x}" cy="${q.y}" r="${id === sc.start ? 7 : 5.5}"></circle></g>`;
+  }).join("");
+  return `<svg class="smap" viewBox="0 0 ${W} ${H}" role="img" aria-label="ストーリーの分かれ道の図。通った場面 ${order.filter((id) => seen.has(id) && !sc.nodes[id].end).length}、回収した結末 ${got.size} / ${endIds(sc).length}">${edges.join("")}${dots}</svg>`;
+}
+const MAP_LEGEND = `<div class="map-legend"><span><i class="lg-seen"></i>通った場面</span><span><i class="lg-now"></i>今回のルート</span><span><i class="lg-safe"></i>被害なし</span><span><i class="lg-partial"></i>最小限</span><span><i class="lg-bad"></i>被害あり</span><span><i class="lg-none"></i>未回収</span></div>`;
+function renderMap() {
+  if (!$("mapBox") || !S) return;
+  $("mapBox").innerHTML = storyMap(S.sc, S.path, S.node) + MAP_LEGEND;
 }
 
 function setHead() {
@@ -692,6 +793,10 @@ async function playNode(id) {
   const n = S.sc.nodes[id];
   if (!n) { console.error("missing node", id); return; }
   S.node = id; S.skip = false; S.path.push(id);
+  const pn = prog(S.sc.id);
+  pn.nodes ||= [];
+  if (!pn.nodes.includes(id)) { pn.nodes.push(id); saveProgress(); }
+  renderMap();
   if (n.scene) setScene(n.scene);
   if (n.time) {
     if (/^\d{1,2}:\d{2}$/.test(n.time)) S.clock = n.time;
@@ -844,6 +949,7 @@ function openResult(id, n, isNewEnd) {
     <div><span class="label ${n.end}">結末｜${ENDLAB[n.end]}${isNewEnd ? "（はじめて回収！）" : ""}</span><p style="margin-top:6px;font-weight:700">${esc(n.h)}</p></div>
     <div class="resgrid"><div><b>${caught}</b><span>気づけたサイン</span></div><div><b>${missed}</b><span>見逃したサイン</span></div><div><b>${p.ends.length}/${endIds(sc).length}</b><span>回収した結末</span></div></div>
     ${S.hints ? `<p class="hintnote">${mascot("sm")}ミヌケのヒントを ${S.hints} 回使いました。次はヒントなしで挑戦してみよう。</p>` : ""}
+    <div><div class="side-h"><h2>ストーリーマップ</h2><span>結末 ${p.ends.length} / ${endIds(sc).length}</span></div><div class="mapbox">${storyMap(sc, S.path, id)}${MAP_LEGEND}</div></div>
     ${missed ? `<div><div class="side-h"><h2>見逃したサイン</h2></div><ul class="signs">${ids.filter((k) => S.signs[k] === "missed").map((k) => `<li><span class="st missed">見逃した</span><b>${esc(sc.signs[k].t)}</b><span class="d">${esc(sc.signs[k].d)}</span></li>`).join("")}</ul></div>` : ""}
     ${S.hist.length ? `<div><div class="side-h"><h2>あなたが通ったルート</h2><span>分かれ道からやり直せます</span></div>
       <ol class="route">${S.hist.map((h, i) => `<li class="${h.sign ? (h.ok ? "ok" : "ng") : ""}">

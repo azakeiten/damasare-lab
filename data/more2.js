@@ -1,7 +1,7 @@
 /* 追加シナリオ（第3弾）：当選詐欺・偽通販サイト・おばあちゃんを守る・就活の不安・災害募金 */
 (window.DL ||= { scenarios: [] }).scenarios.push(
 {
-  id: "tousen", genre: "net", tag: "当選詐欺", title: "「おめでとうございます、当選です」", sub: "推しの公式から届いた、当選のDM", isNew: true,
+  id: "tousen", genre: "net", tag: "当選詐欺", title: "「おめでとうございます、当選です」", sub: "推しの公式から届いた、当選のDM",
   mins: 4, level: 1, clock: "19:30",
   intro: "あなたは高校2年生。推しのグループがデビュー10周年。SNSでは記念のキャンペーンの話題でもちきり。そんな夜、DMが届きます。",
   cast: {
@@ -63,7 +63,7 @@
   }
 },
 {
-  id: "nisetsuhan", genre: "kau", tag: "偽通販サイト", title: "品切れのゲーム機が、半額で在庫あり", sub: "検索結果に出てきた通販サイト", isNew: true,
+  id: "nisetsuhan", genre: "kau", tag: "偽通販サイト", title: "品切れのゲーム機が、半額で在庫あり", sub: "検索結果に出てきた通販サイト",
   mins: 4, level: 1, clock: "22:15",
   intro: "あなたは高校1年生。お年玉とバイト代をためて、ずっとほしかった新型ゲーム機を買うつもり。でも、どの店でも売り切れ。",
   cast: { shop: { n: "GAME STORE JAPAN", i: "G", h: 200, r: "検索で見つけた通販サイト" } },
@@ -113,7 +113,7 @@
   }
 },
 {
-  id: "oreore", genre: "kurashi", tag: "家族を守る", title: "おばあちゃんにかかってきた電話", sub: "「けんただけど、会社のお金をなくして…」", isNew: true,
+  id: "oreore", genre: "kurashi", tag: "家族を守る", title: "おばあちゃんにかかってきた電話", sub: "「けんただけど、会社のお金をなくして…」",
   mins: 4, level: 1, clock: "15:00",
   intro: "あなたは高校1年生。週末、ひとり暮らしのおばあちゃんの家に遊びに来ています。今回は、あなたが「気づく側」です。",
   cast: {
@@ -177,7 +177,7 @@
   }
 },
 {
-  id: "shukatsu", genre: "deai", tag: "就活の不安", title: "「このままだと、内定ゼロですよ」", sub: "SNSで声をかけてきた就活アドバイザー", isNew: true,
+  id: "shukatsu", genre: "deai", tag: "就活の不安", title: "「このままだと、内定ゼロですよ」", sub: "SNSで声をかけてきた就活アドバイザー",
   mins: 5, level: 2, clock: "21:00",
   intro: "あなたは大学3年生。まわりがインターンの話をしはじめて、なんとなく焦っている。そんなとき、SNSにDMが届きます。",
   cast: { shin: { n: "就活アドバイザー｜しん", i: "し", h: 215, r: "SNSで声をかけてきた人" }, career: { n: "大学のキャリアセンター", i: "大", h: 150, r: "大学の窓口" } },
@@ -241,7 +241,7 @@
   }
 },
 {
-  id: "bokin", genre: "net", tag: "募金詐欺", title: "「拡散希望」被災地への募金", sub: "胸がしめつけられる写真と、振込先", isNew: true,
+  id: "bokin", genre: "net", tag: "募金詐欺", title: "「拡散希望」被災地への募金", sub: "胸がしめつけられる写真と、振込先",
   mins: 3, level: 1, clock: "20:40",
   intro: "あなたは中学3年生。ニュースで大きな地震のことを知って、何かできないかと考えている。SNSを開くと、こんな投稿が流れてきました。",
   cast: { acct: { n: "被災地支援プロジェクト", i: "支", h: 0, r: "SNSのアカウント" } },
