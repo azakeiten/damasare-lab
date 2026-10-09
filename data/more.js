@@ -1,7 +1,7 @@
 /* 追加シナリオ：給付金詐欺・口座売買・部屋探し・後払い現金化・有名人なりすまし投資広告・オンラインカジノ */
 (window.DL ||= { scenarios: [] }).scenarios.push(
 {
-  id: "kyufu", genre: "kurashi", tag: "給付金詐欺", title: "「給付金の手続きが、今日までです」", sub: "役所を名のる人からの電話", isNew: true,
+  id: "kyufu", genre: "kurashi", tag: "給付金詐欺", title: "「給付金の手続きが、今日までです」", sub: "役所を名のる人からの電話",
   mins: 4, level: 1, clock: "14:10",
   intro: "あなたは大学1年生。春から一人暮らしを始めたばかり。午後、授業の合間に、知らない番号から電話がかかってきます。",
   cast: {
@@ -74,7 +74,7 @@
   }
 },
 {
-  id: "koza", genre: "kasegu", tag: "口座の売買", title: "「使ってない口座、3万円で買います」", sub: "昔作った口座が、お金になる？", isNew: true,
+  id: "koza", genre: "kasegu", tag: "口座の売買", title: "「使ってない口座、3万円で買います」", sub: "昔作った口座が、お金になる？",
   mins: 4, level: 2, clock: "22:00",
   intro: "あなたは大学2年生。高校のときに作った銀行口座が、もう何年も使わないままになっている。夜、SNSを見ていると、こんな投稿が流れてきました。",
   cast: {
@@ -136,7 +136,7 @@
   }
 },
 {
-  id: "chintai", genre: "kurashi", tag: "部屋探し", title: "はじめての一人暮らし、部屋探し", sub: "駅近・格安の部屋と、退去のときの請求", isNew: true,
+  id: "chintai", genre: "kurashi", tag: "部屋探し", title: "はじめての一人暮らし、部屋探し", sub: "駅近・格安の部屋と、退去のときの請求",
   mins: 5, level: 2, clock: "20:00",
   intro: "あなたは高校3年生。4月から大学に通うため、はじめての一人暮らしの部屋を探しています。家賃はできるだけおさえたい。",
   cast: {
@@ -202,7 +202,7 @@
   }
 },
 {
-  id: "genkinka", genre: "kurashi", tag: "後払い現金化", title: "「給料日前でも、即日現金」", sub: "後払いアプリで現金が手に入る、という広告", isNew: true,
+  id: "genkinka", genre: "kurashi", tag: "後払い現金化", title: "「給料日前でも、即日現金」", sub: "後払いアプリで現金が手に入る、という広告",
   mins: 4, level: 2, clock: "23:30",
   intro: "あなたは専門学校の1年生。今月はバイトのシフトが少なく、スマホ代が払えそうにない。給料日まで、あと2週間。",
   cast: {
@@ -265,7 +265,7 @@
   }
 },
 {
-  id: "celeb", genre: "kasegu", tag: "なりすまし広告", title: "有名人が教える「資産3倍の方法」", sub: "SNS広告から、投資の勉強会グループへ", isNew: true,
+  id: "celeb", genre: "kasegu", tag: "なりすまし広告", title: "有名人が教える「資産3倍の方法」", sub: "SNS広告から、投資の勉強会グループへ",
   mins: 5, level: 2, clock: "21:15",
   intro: "あなたは社会人1年目、19歳。はじめてのボーナスをどうしようか考えていたら、テレビで見たことのある経済評論家の広告が流れてきました。",
   cast: {
@@ -326,7 +326,7 @@
   }
 },
 {
-  id: "casino", genre: "net", tag: "オンラインカジノ", title: "「海外のサイトだから合法」", sub: "友だちが送ってきた、配信者の切り抜き", isNew: true,
+  id: "casino", genre: "net", tag: "オンラインカジノ", title: "「海外のサイトだから合法」", sub: "友だちが送ってきた、配信者の切り抜き",
   mins: 5, level: 2, clock: "21:40",
   intro: "あなたは大学1年生。同じクラスのそうまから、夜にLINEが届きます。最近、そうまはやけに羽ぶりがいい。",
   cast: {

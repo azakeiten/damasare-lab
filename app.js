@@ -32,10 +32,13 @@ const GENRES = {
 const QUIZ = [
   { q: "もっとお金をかせぎたい、と思うことがよくある", s: ["side", "yami", "koza", "course"], type: "がんばり屋タイプ" },
   { q: "投資や「お金を増やす方法」に興味がある", s: ["celeb", "invest", "romance"], type: "資産づくりタイプ" },
-  { q: "推し活やほしいもののために、SNSやフリマをよく見る", s: ["ticket", "flea", "pay"], type: "推し活タイプ" },
+  { q: "推し活やほしいもののために、SNSやフリマをよく見る", s: ["ticket", "tousen", "flea", "nisetsuhan"], type: "推し活タイプ" },
+  { q: "SNSの投稿を、よくシェアや拡散をする", s: ["bokin", "tousen", "takeover"], type: "シェア好きタイプ" },
+  { q: "家族や祖父母のことが、ときどき心配になる", s: ["oreore", "kyufu", "phishing"], type: "家族思いタイプ" },
   { q: "マッチングアプリやSNSで、知らない人とやり取りすることがある", s: ["romance", "side", "scout"], type: "つながりタイプ" },
   { q: "クレジットカードや後払いを使っている（使ってみたい）", s: ["pay", "genkinka", "esthe"], type: "キャッシュレスタイプ" },
   { q: "先輩や友だちの誘いを断るのが、ちょっと苦手", s: ["multi", "invest", "casino"], type: "やさしいタイプ" },
+  { q: "就活や将来のことを考えると、不安になる", s: ["shukatsu", "course", "side"], type: "将来まじめタイプ" },
   { q: "一人暮らしをしている、またはもうすぐ始める", s: ["chintai", "kyufu", "genkinka"], type: "ひとり立ちタイプ" },
   { q: "スマホの通知やリンクは、とりあえずタップしがち", s: ["phishing", "support", "takeover"], type: "タップ早押しタイプ" }
 ];
@@ -254,7 +257,7 @@ function renderHome() {
       <div class="quiz-side">
         <div class="eyebrow" style="color:inherit">YES / NO 診断</div>
         <h3>あなたがねらわれやすいのは、どんな話？</h3>
-        <p>7つの質問に答えると、まず体験してほしいシナリオを3つえらびます。答えはこの端末の中だけで使います。</p>
+        <p>${QUIZ.length}の質問に答えると、まず体験してほしいシナリオを3つえらびます。答えはこの端末の中だけで使います。</p>
       </div>
       <div class="quiz-main" id="quizMain"></div>
     </div>
@@ -311,7 +314,7 @@ function renderSQ() {
   if (!SQ) newSQ();
   if (SQ.i >= SQ.items.length) {
     const best = Math.max(prefs.sqBest || 0, SQ.score);
-    if (best !== prefs.sqBest) { prefs.sqBest = best; savePrefs(); }
+    if (best !== prefs.sqBest) { prefs.sqBest = best; savePrefs(); setTimeout(checkAch, 400); }
     const msg = SQ.score === 5 ? "全問正解！ サインの系統が身についています。" : SQ.score >= 3 ? "いい感じ。まちがえた系統は、図鑑で見直そう。" : "サインの系統は、ホームの「9つのサイン」で確認できます。";
     el.innerHTML = `<div class="sq-end">${mascot("md")}<div><span class="eyebrow">結果</span><b>${SQ.score} / ${SQ.items.length} 問正解</b><p>${msg}（これまでのベスト：${best}問）</p></div>
       <button class="btn small primary" type="button" id="sqAgain">もう一度（問題が変わります）</button></div>`;
@@ -385,6 +388,47 @@ function renderQuiz() {
   if ($("qBack")) $("qBack").onclick = () => { quiz.i--; renderQuiz(); };
 }
 
+/* ===== 称号 ===== */
+function achievements() {
+  const P = (id) => progress[id] || { ends: [], signs: {} };
+  const cleared = SCENARIOS.filter((s) => (P(s.id).ends || []).length);
+  const allSigns = [];
+  SCENARIOS.forEach((sc) => Object.entries(sc.signs).forEach(([k, sg]) => allSigns.push({ cat: sg.cat, st: (P(sc.id).signs || {})[k] })));
+  const met = allSigns.filter((x) => x.st).length;
+  const caughtCats = new Set(allSigns.filter((x) => x.st === "caught").map((x) => x.cat));
+  const perfect = SCENARIOS.filter((s) => P(s.id).perfect).length;
+  const badEnds = SCENARIOS.reduce((a, sc) => a + (P(sc.id).ends || []).filter((e) => sc.nodes[e] && sc.nodes[e].end === "bad").length, 0);
+  const safeEnd = (id) => (P(id).ends || []).some((e) => byId(id) && byId(id).nodes[e].end === "safe");
+  return [
+    { id: "first", ic: "一", n: "はじめの一歩", d: "結末を1つ回収する", got: cleared.length >= 1 },
+    { id: "five", ic: "五", n: "5つの話を体験", d: "5本のシナリオをクリア", got: cleared.length >= 5 },
+    { id: "all", ic: "全", n: "全シナリオ制覇", d: `${SCENARIOS.length}本すべてをクリア`, got: cleared.length === SCENARIOS.length },
+    { id: "genre", ic: "門", n: "全ジャンル制覇", d: "すべてのジャンルで1本ずつクリア", got: Object.keys(GENRES).every((g) => cleared.some((s) => s.genre === g)) },
+    { id: "perfect", ic: "無", n: "ノーミス見抜き", d: "見逃しゼロで「被害なし」の結末へ", got: perfect >= 1 },
+    { id: "perfect5", ic: "達", n: "見抜きの達人", d: "5本のシナリオでノーミス見抜き", got: perfect >= 5 },
+    { id: "comp", ic: "完", n: "結末コンプリート", d: "1本のシナリオの結末をすべて回収", got: SCENARIOS.some((s) => (P(s.id).ends || []).length === endIds(s).length) },
+    { id: "learn", ic: "学", n: "失敗から学ぶ", d: "「被害にあった」結末を5つ見る", got: badEnds >= 5 },
+    { id: "signs", ic: "集", n: "サイン収集家", d: "50個のサインに出会う", got: met >= 50 },
+    { id: "cats", ic: "九", n: "9系統マスター", d: "9つの系統すべてで、サインに気づく", got: Object.keys(CATS).every((c) => caughtCats.has(c)) },
+    { id: "talk", ic: "話", n: "相談の達人", d: "「相談・被害のあと」のサインに5つ気づく", got: allSigns.filter((x) => x.cat === "soudan" && x.st === "caught").length >= 5 },
+    { id: "second", ic: "盾", n: "二次被害ブロッカー", d: "「取り戻せます」の連絡を見抜く", got: (P("ticket").signs || {}).second === "caught" },
+    { id: "family", ic: "家", n: "家族の守り手", d: "おばあちゃんを守りきる", got: safeEnd("oreore") },
+    { id: "quiz", ic: "満", n: "クイズ満点", d: "サインあてクイズで5問正解", got: (prefs.sqBest || 0) >= 5 }
+  ];
+}
+function checkAch() {
+  const had = new Set(store.get("dl3-ach", []) || []);
+  const now = achievements().filter((a) => a.got);
+  const fresh = now.filter((a) => !had.has(a.id));
+  store.set("dl3-ach", now.map((a) => a.id));
+  fresh.forEach((a, i) => setTimeout(() => toast(`称号を手に入れた！「${a.n}」`), i * 2400));
+}
+function achHTML() {
+  const list = achievements();
+  return `<section class="sec" aria-label="称号"><div class="sec-h"><h2>称号　${list.filter((a) => a.got).length} / ${list.length}</h2><p>体験を重ねると手に入ります。まだの称号は、条件を見てチャレンジしてみよう。</p></div>
+    <div class="medals">${list.map((a) => `<div class="medal${a.got ? " got" : ""}"><span class="md-ic" aria-hidden="true">${a.ic}</span><div><b>${esc(a.n)}</b><span>${esc(a.d)}</span></div>${a.got ? `<span class="md-st">獲得</span>` : ""}</div>`).join("")}</div></section>`;
+}
+
 /* ===== 図鑑 ===== */
 let resetArmed = false;
 function renderZukan() {
@@ -411,6 +455,7 @@ function renderZukan() {
         <span class="val">${r.met ? `${r.caught}/${r.met}` : "—"}</span></div>`).join("")}</div>
     </div>
   </div>
+  ${achHTML()}
   ${catRows.map((r) => `<section class="zgroup" aria-label="${esc(r.c.n)}">
     <div class="zgroup-h"><span class="ic" aria-hidden="true">${r.c.ic}</span><div><b>${esc(r.c.n)}</b><span>${esc(r.c.d)}</span></div></div>
     <div class="zcards">${r.items.map((x) => {
@@ -665,11 +710,17 @@ function waitingUI() {
 }
 function choicesUI(n) {
   const order = (S.order[S.node] ||= n.choices.map((_, i) => i).sort(() => Math.random() - 0.5));
-  $("composer").innerHTML = `<div class="q"><span>あなたならどうする？</span></div>` + order.map((i) => {
+  const hintSign = n.choices.map((c) => c.sign && S.sc.signs[c.sign]).find(Boolean);
+  $("composer").innerHTML = `<div class="q"><span>あなたならどうする？</span>${hintSign ? `<button class="linkbtn hintbtn" type="button" id="hintBtn">${mascot("sm")}ミヌケのヒント</button>` : ""}</div>` + order.map((i) => {
     const c = n.choices[i];
     return `<button class="choice ${c.say ? "say" : "do"}" type="button" id="ch-${S.node}-${i}" data-i="${i}"><small>${c.say ? "返信する" : "行動する"}</small><span>${esc(c.say || c.act)}</span></button>`;
   }).join("");
   $("composer").querySelectorAll("[data-i]").forEach((b) => (b.onclick = () => choose(n.choices[+b.dataset.i])));
+  if ($("hintBtn")) $("hintBtn").onclick = () => {
+    const cat = CATS[hintSign.cat];
+    S.hints = (S.hints || 0) + 1;
+    $("hintBtn").outerHTML = `<span class="hint" role="status">${mascot("sm")}<span>この場面には「<b>${esc(cat.n)}</b>」のサインがかくれているかも。${esc(cat.d)}</span></span>`;
+  };
   const firstBtn = $("composer").querySelector("button");
   if (firstBtn && document.activeElement && document.activeElement.closest && document.activeElement.closest("#composer")) firstBtn.focus({ preventScroll: true });
 }
@@ -680,6 +731,13 @@ async function choose(c) {
   if (c.say) sendMe(c.say);
   else { append(`<div class="act">${esc(c.act)}</div>`); S.lastFrom = null; }
   if (c.sign && S.sc.signs[c.sign]) {
+    /* サインがかくれていたメッセージに印をつける */
+    const target = [...$("log").querySelectorAll(".row.them:not(.typing), .shot")].pop();
+    const cat = CATS[S.sc.signs[c.sign].cat];
+    if (target && !target.classList.contains("flag") && cat) {
+      target.classList.add("flag", c.ok ? "flag-ok" : "flag-ng");
+      (target.querySelector(".bub") || target).insertAdjacentHTML("beforeend", `<span class="flag-tag"><b>${cat.ic}</b>${esc(cat.n)}のサイン</span>`);
+    }
     S.signs[c.sign] = c.ok ? "caught" : "missed";
     const p = prog(S.sc.id);
     if (p.signs[c.sign] !== "caught") p.signs[c.sign] = S.signs[c.sign];
@@ -726,7 +784,9 @@ function showEnd(id, n) {
   const sc = S.sc, p = prog(sc.id);
   const isNewEnd = !p.ends.includes(id);
   if (isNewEnd) p.ends.push(id);
+  if (n.end === "safe" && !Object.values(S.signs).includes("missed")) p.perfect = true;
   saveProgress();
+  setTimeout(checkAch, 1600);
   append(`<div class="end"><div class="tape"></div><div class="in"><span class="stamp s-${n.end}" aria-hidden="true">${STAMP[n.end]}</span><span class="label ${n.end}">結末｜${ENDLAB[n.end]}</span><h3>${esc(n.h)}</h3><p>${esc(n.p)}</p></div></div>`);
   $("composer").innerHTML = `<div class="pair">
     <button class="choice go" type="button" id="btn-result">結果を見る</button>
@@ -783,6 +843,7 @@ function openResult(id, n, isNewEnd) {
     <div class="rank">${mascot()}<div><small>判定</small><b id="resTitle">${esc(rk.r)}</b><span>${esc(rk.m)}</span></div><span class="stamp s-${n.end}" aria-hidden="true">${STAMP[n.end]}</span></div>
     <div><span class="label ${n.end}">結末｜${ENDLAB[n.end]}${isNewEnd ? "（はじめて回収！）" : ""}</span><p style="margin-top:6px;font-weight:700">${esc(n.h)}</p></div>
     <div class="resgrid"><div><b>${caught}</b><span>気づけたサイン</span></div><div><b>${missed}</b><span>見逃したサイン</span></div><div><b>${p.ends.length}/${endIds(sc).length}</b><span>回収した結末</span></div></div>
+    ${S.hints ? `<p class="hintnote">${mascot("sm")}ミヌケのヒントを ${S.hints} 回使いました。次はヒントなしで挑戦してみよう。</p>` : ""}
     ${missed ? `<div><div class="side-h"><h2>見逃したサイン</h2></div><ul class="signs">${ids.filter((k) => S.signs[k] === "missed").map((k) => `<li><span class="st missed">見逃した</span><b>${esc(sc.signs[k].t)}</b><span class="d">${esc(sc.signs[k].d)}</span></li>`).join("")}</ul></div>` : ""}
     ${S.hist.length ? `<div><div class="side-h"><h2>あなたが通ったルート</h2><span>分かれ道からやり直せます</span></div>
       <ol class="route">${S.hist.map((h, i) => `<li class="${h.sign ? (h.ok ? "ok" : "ng") : ""}">
@@ -945,6 +1006,7 @@ document.addEventListener("keydown", (e) => {
 window.addEventListener("hashchange", route);
 
 if (ORG.name) { $("footOrg").hidden = false; $("footOrg").innerHTML = orgBadge(); }
+if (store.get("dl3-ach", null) === null) store.set("dl3-ach", achievements().filter((a) => a.got).map((a) => a.id));
 applyFs();
 route();
 })();
