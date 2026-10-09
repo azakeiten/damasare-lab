@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="20本の分岐ストーリーで、副業・投資・闇バイト・推し活・後払い・フィッシング・恋愛詐欺などに「気づくサイン」を体験的に学ぶ。AZAKEI（麻経）制作。">
+<meta name="theme-color" content="#F1F4F8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0D131A" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="だまされ体験ラボ">
+<meta property="og:title" content="だまされ体験ラボ｜その誘い、どこで見抜ける？">
+<meta property="og:description" content="20本の分岐ストーリーで、副業・投資・闇バイト・推し活・後払い・フィッシング・恋愛詐欺などに「気づくサイン」を体験的に学ぶ。AZAKEI（麻経）制作。">
+<meta property="og:url" content="https://ryoishiyama1-svg.github.io/damasare-lab/">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://ryoishiyama1-svg.github.io/damasare-lab/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%23FFC21A' stroke='%231B2534' stroke-width='4'/%3E%3Cellipse cx='23' cy='36' rx='4' ry='5' fill='%231B2534'/%3E%3Cellipse cx='41' cy='36' rx='4' ry='5' fill='%231B2534'/%3E%3C/svg%3E">
+<style>html{color-scheme:light dark}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>だまされ体験ラボ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Dela+Gothic+One&family=Shippori+Mincho:wght@800&family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="app.css">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <pattern id="tapePat" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="10" height="10" fill="var(--accent)"></rect><rect width="5" height="10" fill="var(--ink)"></rect>
+    </pattern>
+  </defs>
+  <symbol id="minuke" viewBox="0 0 64 64">
+    <circle cx="32" cy="34" r="27" fill="var(--accent)" stroke="var(--ink)" stroke-width="3"></circle>
+    <path d="M7 24 Q32 12 57 24 L58 32 Q32 20 6 32 Z" fill="url(#tapePat)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"></path>
+    <ellipse cx="23" cy="38" rx="3.6" ry="4.6" fill="var(--ink)"></ellipse>
+    <ellipse cx="41" cy="38" rx="3.6" ry="4.6" fill="var(--ink)"></ellipse>
+    <circle cx="24.2" cy="36.4" r="1.3" fill="var(--accent)"></circle>
+    <circle cx="42.2" cy="36.4" r="1.3" fill="var(--accent)"></circle>
+    <path d="M26 48 Q32 52 38 48" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"></path>
+    <path d="M17 31 L28 33 M47 31 L36 33" stroke="var(--ink)" stroke-width="2.6" stroke-linecap="round"></path>
+  </symbol>
+</svg>
+
+<header class="appbar">
+  <div class="appbar-in">
+    <a class="logo" href="#home" id="logoLink"><svg class="mascot sm" aria-hidden="true"><use href="#minuke"></use></svg><span>だまされ体験ラボ</span></a>
+    <nav class="tabs" aria-label="メニュー">
+      <a href="#home" data-nav="home" id="nav-home">シナリオ</a>
+      <a href="#zukan" data-nav="zukan" id="nav-zukan">サイン図鑑</a>
+      <a href="#teach" data-nav="teach" id="nav-teach">授業で使う</a>
+      <a href="#help" data-nav="help" id="nav-help">相談先</a>
+    </nav>
+    <button class="fs" type="button" id="fsBtn" aria-pressed="false" title="文字の大きさ">文字<b>大</b></button>
+  </div>
+</header>
+
+<main id="app">
+  <section class="view" id="v-home" aria-label="ホーム"></section>
+  <section class="view" id="v-play" aria-label="ストーリー" hidden>
+    <div class="playbar">
+      <a class="back" href="#home" id="playBack">← シナリオ一覧</a>
+      <div class="pt"><span class="gtag" id="playTag"></span><b id="playTitle"></b></div>
+      <div class="pdots" id="playDots" aria-label="見つけたサイン"></div>
+    </div>
+    <div class="playgrid">
+      <div class="phone-col">
+        <div class="phone">
+          <div class="screen" id="screen" data-scene="dm">
+            <div class="status"><span id="clock">23:12</span><span class="island"></span><span class="icons"><i></i><i></i><i></i><span class="batt"><b></b></span></span></div>
+            <div class="head" id="head"></div>
+            <div class="log" id="log" aria-live="polite"></div>
+            <div class="composer" id="composer"></div>
+            <div class="overlay" id="overlay" hidden><div class="stop" id="stop" role="dialog" aria-modal="true" aria-labelledby="stopTitle"></div></div>
+          </div>
+        </div>
+      </div>
+      <aside class="pside" aria-label="このシナリオの記録">
+        <div class="card-plain">
+          <div class="side-h"><h2>会話のテンポ</h2></div>
+          <div class="seg" role="group" aria-label="会話のテンポ">
+            <button type="button" id="tempo-normal" data-t="normal">ふつう</button>
+            <button type="button" id="tempo-fast" data-t="fast">はやい</button>
+            <button type="button" id="tempo-instant" data-t="instant">一瞬</button>
+          </div>
+        </div>
+        <div>
+          <div class="side-h"><h2>このシナリオのサイン</h2><span id="zcount"></span></div>
+          <ul class="signs" id="signs"></ul>
+        </div>
+        <div>
+          <div class="side-h"><h2>エンディング</h2><span id="ecount"></span></div>
+          <div class="ends" id="ends"></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+  <section class="view" id="v-zukan" aria-label="サイン図鑑" hidden></section>
+  <section class="view" id="v-teach" aria-label="授業で使う" hidden></section>
+  <section class="view" id="v-help" aria-label="相談先" hidden></section>
+</main>
+
+<div class="modal" id="result" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="resTitle" id="resultSheet"></div>
+</div>
+
+<footer class="foot">
+  <p>ストーリーと登場人物はすべてフィクションです。<a href="https://www.kokusen.go.jp/" target="_blank" rel="noopener">国民生活センター</a>・<a href="https://www.caa.go.jp/" target="_blank" rel="noopener">消費者庁</a>・<a href="https://www.fsa.go.jp/" target="_blank" rel="noopener">金融庁</a>・<a href="https://www.npa.go.jp/" target="_blank" rel="noopener">警察庁</a>などが公開している注意喚起の傾向をもとに、手口ではなく「気づくサイン」に焦点をしぼって構成しています。金額・条件・手数料は説明のための例です。</p>
+  <p class="foot-org" id="footOrg" hidden></p>
+  <p class="foot-help">困ったら　<b>188</b>（消費者ホットライン）　<b>#9110</b>（警察相談専用電話）</p>
+</footer>
+
+<script defer src="data/kasegu.js"></script>
+<script defer src="data/kau.js"></script>
+<script defer src="data/net.js"></script>
+<script defer src="data/deai.js"></script>
+<script defer src="data/more.js"></script>
+<script defer src="data/debrief.js"></script>
+<script defer src="app.js"></script>
+
+</html>
