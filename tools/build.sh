@@ -28,7 +28,9 @@ DESC="30本の分岐ストーリーで、副業・投資・闇バイト・推し
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%23FFC21A' stroke='%231B2534' stroke-width='4'/%3E%3Cellipse cx='23' cy='36' rx='4' ry='5' fill='%231B2534'/%3E%3Cellipse cx='41' cy='36' rx='4' ry='5' fill='%231B2534'/%3E%3C/svg%3E">
 <style>html{color-scheme:light dark}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 EOF
-  cat damasare-lab.html
+  # 自前の CSS・JS には更新日時を付けて、古いキャッシュが使われないようにする
+  VER="$(date +%Y%m%d%H%M)"
+  sed -E "s#(src|href)=\"(app\.js|app\.css|data/[a-z0-9]+\.js)\"#\1=\"\2?v=$VER\"#g" damasare-lab.html
   printf '\n</html>\n'
 } > index.html
 echo "index.html を作成しました"
