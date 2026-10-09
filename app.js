@@ -165,6 +165,12 @@ const DEMOS = [
   { app: "SNS", n: "高収入バイト募集", i: "募", h: 0, msgs: ["【急募】ホワイト案件 即日5万〜", "荷物を受け取って、指定の場所に置くだけ", "未経験OK・身バレなし"], cat: "umai", sign: "仕事内容があいまいなのに高額" }
 ];
 let demoTimer = null;
+/* ヒーローの下を横切る警告テープ（文字が流れる） */
+function tapeRun() {
+  const words = ["その誘い、どこで見抜ける？", "STOP", "うますぎる話", "急かす", "先にお金", "秘密にさせる", "ひとりで抱えない", "188", "#9110"];
+  const run = words.map((w) => `<span>${esc(w)}</span><i aria-hidden="true">●</i>`).join("");
+  return `<div class="tape-run" aria-hidden="true"><div class="tr-in">${run}${run}</div></div>`;
+}
 function demoHTML() {
   return `<div class="hero-stage">
     <div class="mini-phone" aria-label="メッセージの例と、気づくサイン">
@@ -230,7 +236,7 @@ function renderHome() {
     : "";
 
   $("v-home").innerHTML = `
-  <div class="hero">
+  <div class="hero bleed b-hero">
     <div>
       <div class="eyebrow">18歳からの消費者トラブル体験ゲーム</div>
       <h1>その誘い、<br><em>どこで見抜ける？</em></h1>
@@ -243,6 +249,7 @@ function renderHome() {
     </div>
     ${demoHTML()}
   </div>
+  ${tapeRun()}
   <div class="stats">
     <div class="stat"><b>${SCENARIOS.length}</b><span>シナリオ</span></div>
     <div class="stat"><b>${t.signs}</b><span>気づくサイン</span></div>
@@ -252,7 +259,7 @@ function renderHome() {
   ${contHTML}
   ${todaySignHTML()}
 
-  <section class="sec" id="quizSec" aria-label="タイプ診断">
+  <section class="sec bleed b-sun" id="quizSec" aria-label="タイプ診断">
     <div class="quiz">
       <div class="quiz-side">
         <div class="eyebrow" style="color:inherit">YES / NO 診断</div>
@@ -274,7 +281,7 @@ function renderHome() {
     <div class="lib" id="lib"></div>
   </section>
 
-  <section class="sec" aria-label="8つのサイン">
+  <section class="sec bleed b-ink" aria-label="9つのサイン">
     <div class="sec-h"><h2>だましに共通する、9つのサイン</h2><p>どのシナリオのサインも、この9つのどれかに分けられます。ひとつでも当てはまったら、いったん止まろう。</p></div>
     <div class="cats">${Object.entries(CATS).map(([k, c]) => `<div class="cat"><span class="ic" aria-hidden="true">${c.ic}</span><b>${esc(c.n)}</b><span>${esc(c.d)}</span></div>`).join("")}</div>
     <div style="margin-top:18px"><a class="btn small" href="#zukan">サイン図鑑で集めたサインを見る</a></div>
@@ -441,7 +448,7 @@ function renderZukan() {
     return { ck, c, items, met, caught, rate: met ? caught / met : 0 };
   });
   $("v-zukan").innerHTML = `
-  <div class="zhead">
+  <div class="zhead bleed b-hero">
     <div>
       <div class="eyebrow">COLLECTION</div>
       <h1>サイン図鑑</h1>
@@ -476,7 +483,7 @@ function renderZukan() {
 /* ===== 相談先 ===== */
 function renderHelp() {
   $("v-help").innerHTML = `
-  <div class="help-hero"><div class="eyebrow">IF SOMETHING HAPPENS</div><h1>困ったら、ひとりで抱えない</h1>
+  <div class="help-hero bleed b-hero"><div class="eyebrow">IF SOMETHING HAPPENS</div><h1>困ったら、ひとりで抱えない</h1>
     <p style="color:var(--muted)">だまされたのは恥ずかしいことではありません。早く相談するほど、取れる手段が増えます。迷ったら、まず188へ。</p></div>
   <div class="calls">
     <div class="call"><span class="eyebrow">消費者ホットライン</span><div class="num">188</div><p>局番なし。近くの消費生活センターにつながります。契約・解約・お金のトラブル全般。「いやや！」で覚えよう。</p></div>
@@ -538,7 +545,7 @@ function renderTeach() {
   const genreOf = (sc) => GENRES[sc.genre].n;
   const catsOf = (sc) => [...new Set(Object.values(sc.signs).map((s) => s.cat))].map((c) => CATS[c] ? CATS[c].n : c).join("、");
   $("v-teach").innerHTML = `
-  <div class="help-hero"><div class="eyebrow">FOR TEACHERS &amp; FAMILIES</div><h1>授業や家庭で使う</h1>
+  <div class="help-hero bleed b-hero"><div class="eyebrow">FOR TEACHERS &amp; FAMILIES</div><h1>授業や家庭で使う</h1>
     <p style="color:var(--muted)">2022年4月から成年年齢は18歳になり、18歳になると親の同意なく契約できるかわりに、未成年者取消権が使えなくなりました。このページは、高校生から大学1年生くらいの人といっしょに体験し、話し合うためのガイドです。1シナリオは約3〜7分。登録やログインは不要です。</p>
     ${ORG.name ? `<div class="hero-org">${orgBadge()}</div>` : ""}</div>
 

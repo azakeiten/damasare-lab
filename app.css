@@ -11,6 +11,13 @@
   --gold: #8A6A2F;
   --qr-bg: #FFFFFF;
   --qr-ink: #000000;
+  --dot: #D3DBE5;
+  --band-hero: #FFF2C6;
+  --band-hero-2: #FFE38F;
+  --band-sun: #FFF8E1;
+  --band-ink: #1B2534;
+  --on-band-ink: #F1F4F8;
+  --on-band-muted: #A9B4C2;
   --accent: #FFC21A;
   --accent-soft: #FFF3CC;
   --on-accent: #1B2534;
@@ -47,7 +54,7 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0D131A; --gold: #D6B97F; --surface: #17212C; --surface-2: #121B24; --ink: #E6ECF2; --muted: #96A3B1; --line: #2B3744; --frame: #000000;
+    --bg: #0D131A; --gold: #D6B97F; --dot: #1C2631; --band-hero: #231D0C; --band-hero-2: #3A2F10; --band-sun: #17140B; --band-ink: #05080C; --on-band-ink: #E6ECF2; --on-band-muted: #8E9AA8; --surface: #17212C; --surface-2: #121B24; --ink: #E6ECF2; --muted: #96A3B1; --line: #2B3744; --frame: #000000;
     --accent: #FFC93A; --accent-soft: #2E2610; --on-accent: #141B24; --danger: #F2725F; --danger-soft: #361B17; --safe: #4CC596; --safe-soft: #10291F;
     --bubble-them: #243241; --bubble-me: #E6ECF2; --on-me: #0D131A; --av-s: 45%; --av-l: 42%; --g-s: 35%; --g-l: 18%; --g-ls: 70%;
     --on-av: #FFFFFF; --scrim: rgba(0,0,0,.62);
@@ -56,7 +63,7 @@
   }
 }
 :root[data-theme="dark"] {
-  --bg: #0D131A; --gold: #D6B97F; --surface: #17212C; --surface-2: #121B24; --ink: #E6ECF2; --muted: #96A3B1; --line: #2B3744; --frame: #000000;
+  --bg: #0D131A; --gold: #D6B97F; --dot: #1C2631; --band-hero: #231D0C; --band-hero-2: #3A2F10; --band-sun: #17140B; --band-ink: #05080C; --on-band-ink: #E6ECF2; --on-band-muted: #8E9AA8; --surface: #17212C; --surface-2: #121B24; --ink: #E6ECF2; --muted: #96A3B1; --line: #2B3744; --frame: #000000;
   --accent: #FFC93A; --accent-soft: #2E2610; --on-accent: #141B24; --danger: #F2725F; --danger-soft: #361B17; --safe: #4CC596; --safe-soft: #10291F;
   --bubble-them: #243241; --bubble-me: #E6ECF2; --on-me: #0D131A; --av-s: 45%; --av-l: 42%; --g-s: 35%; --g-l: 18%; --g-ls: 70%;
   --on-av: #FFFFFF; --scrim: rgba(0,0,0,.62);
@@ -697,3 +704,63 @@ button:focus-visible, a:focus-visible, [tabindex]:focus-visible { outline: 3px s
 .qrtext p { color: var(--muted); font-size: var(--step--1); }
 .qrurl { font-size: var(--step--1); background: var(--surface-2); border-radius: 8px; padding: 6px 10px; overflow-wrap: anywhere; justify-self: start; }
 .sheet, .end { overflow-x: hidden; }
+
+/* ---------- v9: 背景のバンドと、吹き出しの形 ---------- */
+html, body { overflow-x: clip; }
+body { background-color: var(--bg); background-image: radial-gradient(var(--dot) 1px, transparent 1.4px); background-size: 22px 22px; }
+.bleed { position: relative; isolation: isolate; }
+.bleed::before { content: ""; position: absolute; top: 0; bottom: 0; left: calc(50% - 50vw); right: calc(50% - 50vw); z-index: -1; }
+.b-hero::before { background:
+  repeating-linear-gradient(-45deg, var(--band-hero-2) 0 22px, transparent 22px 44px) right top / 46% 100% no-repeat,
+  var(--band-hero); }
+.b-hero::after { content: ""; position: absolute; z-index: -1; right: calc(50% - 50vw); top: 0; bottom: 0; width: 46%;
+  background: linear-gradient(90deg, var(--band-hero), transparent 40%); }
+.b-sun::before { background: var(--band-sun); border-block: 2px dashed var(--band-hero-2); }
+.b-ink { color: var(--on-band-ink); }
+.b-ink::before { background: var(--band-ink); }
+.b-ink .sec-h p { color: var(--on-band-muted); }
+.b-ink .btn { box-shadow: 3px 3px 0 var(--accent); }
+.hero.bleed { padding-block: 44px 40px; }
+.sec.bleed { margin-top: 56px; padding-block: 48px; }
+.zhead.bleed, .help-hero.bleed { padding-block: 36px 32px; }
+.zhead.bleed { padding-top: 32px; }
+.help-hero.bleed { max-width: none; }
+.help-hero.bleed > * { max-width: 46em; }
+@media (max-width: 760px) { .b-hero::before { background: repeating-linear-gradient(-45deg, var(--band-hero-2) 0 16px, transparent 16px 32px) right bottom / 100% 120px no-repeat, var(--band-hero); } .b-hero::after { display: none; } }
+/* バンドの中のカードは、いつもの文字色に戻す */
+.quiz, .cat, .scard, .stat, .sq, .chart, .call, .today, .cont { color: var(--ink); }
+
+/* ヒーローの下を横切る警告テープ */
+.tape-run { position: relative; margin-inline: calc(50% - 50vw); width: 100vw; overflow: hidden; background: var(--accent); color: var(--on-accent);
+  border-block: 4px solid var(--ink); transform: rotate(-1.6deg); margin-top: -18px; margin-bottom: 8px; z-index: 2; }
+.tr-in { display: flex; width: max-content; gap: 18px; align-items: center; padding: 8px 0; font-family: var(--font-display); font-size: var(--step-1); white-space: nowrap; }
+.tr-in i { font-style: normal; font-size: 10px; }
+@media (prefers-reduced-motion: no-preference) { .tr-in { animation: marquee 38s linear infinite; } @keyframes marquee { to { transform: translateX(-50%); } } }
+
+/* 形：カードは吹き出しの形にそろえる（左下だけ小さい角） */
+.scard { border-radius: 22px 22px 22px 6px; }
+.stat { border-radius: 18px 18px 18px 4px; }
+.cat { border-radius: 18px 18px 18px 4px; border: 2px solid transparent; }
+.b-ink .cat { border-color: transparent; box-shadow: 4px 4px 0 var(--accent); }
+.b-ink .cat .ic { background: var(--accent); }
+.today { border-radius: 22px 22px 22px 6px; }
+.call { border-radius: 22px 22px 22px 6px; }
+.quiz { border-radius: 26px 26px 26px 8px; box-shadow: 6px 6px 0 var(--ink); border: 2px solid var(--ink); }
+.sq { border-radius: 26px 26px 26px 8px; border: 2px solid var(--ink); }
+.stats { margin-top: 26px; }
+.stat { border: 2px solid var(--ink); }
+.stat b { color: var(--ink); }
+.hero h1 { font-size: clamp(2.2rem, 6.2vw, 3.6rem); }
+.mini-phone { box-shadow: 0 30px 60px -30px var(--scrim), 12px 12px 0 var(--ink); }
+
+/* プレイ画面とフッターにも面を */
+.playbar { position: relative; }
+.foot { max-width: none; background: var(--band-ink); color: var(--on-band-muted); border-top: 0; padding-inline: max(16px, calc((100% - 1180px) / 2)); }
+.foot a, .foot-help b, .foot-org { color: var(--on-band-ink); }
+.foot .org { background: var(--band-ink); }
+.foot .org-word { color: var(--on-band-ink); }
+.b-ink .btn { color: var(--ink); }
+.b-ink .btn.primary { color: var(--on-accent); }
+.b-ink .cats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 860px) { .b-ink .cats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .b-ink .cats { grid-template-columns: minmax(0, 1fr); } }
