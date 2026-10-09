@@ -27,10 +27,11 @@
     <a class="logo" href="#home" id="logoLink"><svg class="mascot sm" aria-hidden="true"><use href="#minuke"></use></svg><span>だまされ体験ラボ</span></a>
     <nav class="tabs" aria-label="メニュー">
       <a href="#home" data-nav="home" id="nav-home">シナリオ</a>
-      <a href="#zukan" data-nav="zukan" id="nav-zukan">サイン図鑑</a>
-      <a href="#teach" data-nav="teach" id="nav-teach">授業で使う</a>
+      <a href="#zukan" data-nav="zukan" id="nav-zukan"><span class="lg">サイン</span>図鑑</a>
+      <a href="#teach" data-nav="teach" id="nav-teach">授業<span class="lg">で使う</span></a>
       <a href="#help" data-nav="help" id="nav-help">相談先</a>
     </nav>
+    <button class="fs" type="button" id="themeBtn" title="画面の明るさ">表示<b id="themeLab">自動</b></button>
     <button class="fs" type="button" id="fsBtn" aria-pressed="false" title="文字の大きさ">文字<b>大</b></button>
   </div>
 </header>
@@ -41,6 +42,7 @@
     <div class="playbar">
       <a class="back" href="#home" id="playBack">← シナリオ一覧</a>
       <div class="pt"><span class="gtag" id="playTag"></span><b id="playTitle"></b></div>
+      <div class="meter" id="meter" aria-label="いまのあぶなさ"></div>
       <div class="pdots" id="playDots" aria-label="見つけたサイン"></div>
     </div>
     <div class="playgrid">

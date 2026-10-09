@@ -5,7 +5,7 @@
 const SCENARIOS = (window.DL && window.DL.scenarios) || [];
 const DEBRIEF = (window.DL && window.DL.debrief) || {};
 /* GitHub Pages で開かれたときはそのURLを、それ以外では公開ページのURLをシェアに使う */
-const PAGES_URL = "https://ryoishiyama1-svg.github.io/damasare-lab/";
+const PAGES_URL = "https://azakeiten.github.io/damasare-lab/";
 const SHARE_URL = /github\.io$/.test(location.hostname) ? location.origin + location.pathname : PAGES_URL;
 /* 企画・制作の表記。フッター・ホーム・授業ページに表示される */
 const ORG = { name: "AZAKEI（麻経）", note: "麻布中学校・高等学校 経済系同好会", url: "https://azakeiten.github.io/" };
@@ -40,6 +40,7 @@ const QUIZ = [
   { q: "スマホの通知やリンクは、とりあえずタップしがち", s: ["phishing", "support", "takeover"], type: "タップ早押しタイプ" }
 ];
 const ENDLAB = { safe: "被害なし", partial: "被害を最小限に", bad: "被害にあった" };
+const STAMP = { safe: "SAFE", partial: "ギリギリ", bad: "OUT" };
 const TEMPO = { normal: 1, fast: 0.4, instant: 0 };
 
 /* ===== 保存（この端末のブラウザだけ） ===== */
@@ -124,14 +125,84 @@ function scenarioCard(sc) {
   const ne = endIds(sc).length, ns = Object.keys(sc.signs).length;
   const caught = Object.values(p.signs || {}).filter((v) => v === "caught").length;
   const g = GENRES[sc.genre];
-  const castKeys = Object.keys(sc.cast).slice(0, 3);
-  const badge = (p.ends || []).length === ne ? `<span class="badge clear">コンプリート</span>` : (p.ends || []).length ? `<span class="badge clear">クリア</span>` : sc.isNew ? `<span class="badge">NEW</span>` : "";
-  return `<a class="scard" href="#${sc.id}" id="card-${sc.id}" style="--gh:${g.h}">
-    <div class="band"><span class="gtag">${esc(sc.tag)}</span><span class="band-r">${badge}<span class="avs">${castKeys.map((k) => av(sc, k)).join("")}</span></span></div>
-    <div class="body"><h3>${esc(sc.title)}</h3><p class="sub">${esc(sc.sub)}</p>
-      <div class="meta"><span>約${sc.mins}分</span><span>むずかしさ <span class="lvl">${lvl(sc.level)}</span></span><span>結末 ${(p.ends || []).length}/${ne}</span><span>サイン ${caught}/${ns}</span></div>
-      <div class="pbar" aria-hidden="true"><i style="width:${Math.round(((p.ends || []).length / ne) * 100)}%"></i></div>
+  const played = (p.ends || []).length;
+  const badge = played === ne ? `<span class="badge clear">コンプリート</span>` : played ? `<span class="badge clear">クリア</span>` : sc.isNew ? `<span class="badge">NEW</span>` : "";
+  const f = firstMsg(sc);
+  /* 一覧は「スマホの通知」に見立てる：アプリ名・時刻・送り主・最初のひとこと */
+  return `<a class="scard${played ? "" : " unread"}" href="#${sc.id}" id="card-${sc.id}" style="--gh:${g.h}">
+    <div class="nt-head"><span class="nt-app">${esc(f.app)}</span><span class="nt-time">${esc(sc.clock || "")}</span>${badge}</div>
+    <div class="nt-body">${av(sc, f.who)}<div><b>${esc(f.name)}</b><p class="nt-prev">${esc(f.text)}</p></div></div>
+    <div class="body"><span class="gtag">${esc(sc.tag)}</span><h3>${esc(sc.title)}</h3>
+      <div class="meta"><span>約${sc.mins}分</span><span>むずかしさ <span class="lvl">${lvl(sc.level)}</span></span><span>結末 ${played}/${ne}</span><span>サイン ${caught}/${ns}</span></div>
+      <div class="pbar" aria-hidden="true"><i style="width:${Math.round((played / ne) * 100)}%"></i></div>
     </div></a>`;
+}
+/* 最初に届くメッセージ（通知のプレビュー用） */
+function firstMsg(sc) {
+  let node = sc.nodes[sc.start], app = "", who = "", text = "";
+  const seen = new Set();
+  while (node && !seen.has(node)) {
+    seen.add(node);
+    if (node.scene) { app = app || node.scene.app; who = who || node.scene.who; }
+    const m = (node.log || []).find((l) => l[0] === "them" || l[0] === "card");
+    if (m) {
+      if (m[0] === "them") { text = m[1]; if (m[2]) who = m[2]; } else { text = `${m[1]}：${m[2][0]}`; }
+      break;
+    }
+    node = node.choices && sc.nodes[node.choices[0].next];
+  }
+  const c = sc.cast[who] || {};
+  return { app: app || "メッセージ", who, name: c.n || "", text };
+}
+/* ヒーローのデモ：届いたメッセージに STOP のハンコが押される、を繰り返す */
+const DEMOS = [
+  { app: "SNS メッセージ", n: "みき", i: "み", h: 340, msgs: ["はじめまして〜！ 突然ごめんなさい🙏", "スマホで1日5分の作業で、月20万くらいになってて", "よかったら、やり方シェアしましょうか？☺️"], cat: "umai", sign: "「簡単・短時間・高収入」がそろっている" },
+  { app: "SMS", n: "+81 80-XXXX-XXXX", i: "?", h: 0, msgs: ["お客様宛にお荷物のお届けにあがりましたが、不在の為持ち帰りました。", "下記よりご確認ください。http://xxxx-delivery.top/"], cat: "tsuuchi", sign: "SMSのリンクから開かせようとする" },
+  { app: "LINE", n: "たくみ先輩", i: "た", h: 210, msgs: ["おー久しぶり！ 元気してる？", "実はさ、いい話があって", "今度の土曜、カフェでちょっと話聞いてみない？ おごるから"], cat: "kankei", sign: "久しぶりの人から、急にお金の「いい話」" },
+  { app: "SNS", n: "高収入バイト募集", i: "募", h: 0, msgs: ["【急募】ホワイト案件 即日5万〜", "荷物を受け取って、指定の場所に置くだけ", "未経験OK・身バレなし"], cat: "umai", sign: "仕事内容があいまいなのに高額" }
+];
+let demoTimer = null;
+function demoHTML() {
+  return `<div class="hero-stage">
+    <div class="mini-phone" aria-label="メッセージの例と、気づくサイン">
+      <div class="mp-status"><span>23:12</span><span class="island"></span><span>●●●</span></div>
+      <div class="mp-head" id="mpHead"></div>
+      <div class="mp-log" id="mpLog"></div>
+      <div class="mp-stamp" id="mpStamp" aria-hidden="true"><span>STOP</span></div>
+      <div class="mp-sign" id="mpSign"></div>
+    </div>
+    <div class="hero-mascot">${mascot()}<div class="say-bubble">ぼくはミヌケ。<br>「あれ？」って気づく練習、いっしょにしよう！</div></div>
+  </div>`;
+}
+function runDemo() {
+  clearTimeout(demoTimer);
+  let k = 0;
+  const show = (d, animate) => {
+    if (!$("mpLog")) return false;
+    $("mpHead").innerHTML = `<span class="av sm" style="--h:${d.h}">${esc(d.i)}</span><b>${esc(d.n)}</b><span class="app">${esc(d.app)}</span>`;
+    $("mpLog").innerHTML = "";
+    $("mpStamp").classList.remove("on");
+    $("mpSign").classList.remove("on");
+    $("mpSign").innerHTML = `<span class="cat-tag">${esc(CATS[d.cat].n)}のサイン</span><b>${esc(d.sign)}</b>`;
+    if (!animate) {
+      d.msgs.forEach((m) => $("mpLog").insertAdjacentHTML("beforeend", `<p>${esc(m)}</p>`));
+      $("mpStamp").classList.add("on"); $("mpSign").classList.add("on");
+      return true;
+    }
+    d.msgs.forEach((m, i) => setTimeout(() => { if ($("mpLog")) $("mpLog").insertAdjacentHTML("beforeend", `<p class="pop">${esc(m)}</p>`); }, 500 + i * 900));
+    const t = 500 + d.msgs.length * 900 + 300;
+    setTimeout(() => { if ($("mpStamp")) { $("mpStamp").classList.add("on"); $("mpSign").classList.add("on"); } }, t);
+    return true;
+  };
+  show(DEMOS[0], false);
+  if (reduced) return;
+  const loop = () => {
+    if ($("v-home").hidden || !$("mpLog")) return;
+    k = (k + 1) % DEMOS.length;
+    show(DEMOS[k], true);
+    demoTimer = setTimeout(loop, 1400 + DEMOS[k].msgs.length * 900 + 2600);
+  };
+  demoTimer = setTimeout(loop, 4200);
 }
 function av(sc, key, sm) {
   const c = sc.cast[key];
@@ -160,17 +231,14 @@ function renderHome() {
     <div>
       <div class="eyebrow">18歳からの消費者トラブル体験ゲーム</div>
       <h1>その誘い、<br><em>どこで見抜ける？</em></h1>
-      <p class="lead">スマホの中で進む会話に、あなたが返信して物語が動きます。副業、投資、推し活、恋愛、スマホの通知。ねらわれやすい場面を体験して、手口ではなく「おかしいと気づくサイン」を覚えよう。</p>
+      <p class="lead">スマホに届いたメッセージに、あなたが返信して物語が動きます。副業、投資、推し活、恋愛、ひとり暮らし。${SCENARIOS.length}の場面を体験して、手口ではなく「おかしいと気づくサイン」を覚えよう。</p>
       <div class="ctas">
         <a class="btn primary" href="#${(next || SCENARIOS[0]).id}" id="ctaStart">まずは体験してみる <small>約5分</small></a>
         <a class="btn" href="#quizSec" id="ctaQuiz">自分に近い話を診断</a>
       </div>
       <div class="hero-org">${orgBadge()}</div>
     </div>
-    <div class="hero-art">
-      <div class="say-bubble">ぼくはミヌケ。<br>だまされる前に「あれ？」って気づく練習、いっしょにしよう！</div>
-      ${mascot()}
-    </div>
+    ${demoHTML()}
   </div>
   <div class="stats">
     <div class="stat"><b>${SCENARIOS.length}</b><span>シナリオ</span></div>
@@ -209,7 +277,7 @@ function renderHome() {
     <div style="margin-top:18px"><a class="btn small" href="#zukan">サイン図鑑で集めたサインを見る</a></div>
   </section>`;
 
-  renderFilters(); renderLib(); renderQuiz(); renderSQ();
+  renderFilters(); renderLib(); renderQuiz(); renderSQ(); runDemo();
   $("ctaQuiz").onclick = (e) => { e.preventDefault(); $("quizSec").scrollIntoView({ behavior: reduced ? "auto" : "smooth" }); };
 }
 /* サインあてクイズ：各シナリオの「サインつきの選択」の直前に出るメッセージを問題にする */
@@ -659,7 +727,7 @@ function showEnd(id, n) {
   const isNewEnd = !p.ends.includes(id);
   if (isNewEnd) p.ends.push(id);
   saveProgress();
-  append(`<div class="end"><div class="tape"></div><div class="in"><span class="label ${n.end}">結末｜${ENDLAB[n.end]}</span><h3>${esc(n.h)}</h3><p>${esc(n.p)}</p></div></div>`);
+  append(`<div class="end"><div class="tape"></div><div class="in"><span class="stamp s-${n.end}" aria-hidden="true">${STAMP[n.end]}</span><span class="label ${n.end}">結末｜${ENDLAB[n.end]}</span><h3>${esc(n.h)}</h3><p>${esc(n.p)}</p></div></div>`);
   $("composer").innerHTML = `<div class="pair">
     <button class="choice go" type="button" id="btn-result">結果を見る</button>
     <button class="choice" type="button" id="btn-retry"><small>同じシナリオ</small><span>別の選択でもう一度</span></button></div>`;
@@ -672,6 +740,12 @@ function showEnd(id, n) {
 function renderDots() {
   const sc = S.sc;
   $("playDots").innerHTML = Object.keys(sc.signs).map((k) => `<i class="${S.signs[k] || ""}" title="${S.signs[k] ? esc(sc.signs[k].t) : "未発見"}"></i>`).join("");
+  /* あぶなさメーター：見逃すと上がり、気づくと下がる（0〜5） */
+  const vals = Object.values(S.signs);
+  const lv = Math.max(0, Math.min(5, vals.filter((v) => v === "missed").length * 2 - vals.filter((v) => v === "caught").length + (vals.length ? 1 : 0)));
+  const words = ["平穏", "平穏", "ちょっと注意", "あやしい", "かなり危険", "危険！"];
+  $("meter").innerHTML = `<span class="m-lab">あぶなさ</span><span class="m-bars">${[1, 2, 3, 4, 5].map((i) => `<i class="${i <= lv ? "on l" + lv : ""}"></i>`).join("")}</span><span class="m-word">${words[lv]}</span>`;
+  $("meter").dataset.lv = lv;
 }
 function renderSide(flash) {
   const sc = S.sc, p = prog(sc.id), ids = Object.keys(sc.signs);
@@ -706,7 +780,7 @@ function openResult(id, n, isNewEnd) {
   const idx = SCENARIOS.indexOf(sc);
   const next = SCENARIOS.slice(idx + 1).concat(SCENARIOS.slice(0, idx)).find((s) => !(progress[s.id] && (progress[s.id].ends || []).length)) || SCENARIOS[(idx + 1) % SCENARIOS.length];
   $("resultSheet").innerHTML = `<div class="tape"></div><div class="in">
-    <div class="rank">${mascot()}<div><small>判定</small><b id="resTitle">${esc(rk.r)}</b><span>${esc(rk.m)}</span></div></div>
+    <div class="rank">${mascot()}<div><small>判定</small><b id="resTitle">${esc(rk.r)}</b><span>${esc(rk.m)}</span></div><span class="stamp s-${n.end}" aria-hidden="true">${STAMP[n.end]}</span></div>
     <div><span class="label ${n.end}">結末｜${ENDLAB[n.end]}${isNewEnd ? "（はじめて回収！）" : ""}</span><p style="margin-top:6px;font-weight:700">${esc(n.h)}</p></div>
     <div class="resgrid"><div><b>${caught}</b><span>気づけたサイン</span></div><div><b>${missed}</b><span>見逃したサイン</span></div><div><b>${p.ends.length}/${endIds(sc).length}</b><span>回収した結末</span></div></div>
     ${missed ? `<div><div class="side-h"><h2>見逃したサイン</h2></div><ul class="signs">${ids.filter((k) => S.signs[k] === "missed").map((k) => `<li><span class="st missed">見逃した</span><b>${esc(sc.signs[k].t)}</b><span class="d">${esc(sc.signs[k].d)}</span></li>`).join("")}</ul></div>` : ""}
@@ -849,6 +923,20 @@ function applyFs() {
   $("fsBtn").setAttribute("aria-pressed", String(prefs.fs === "l"));
 }
 $("fsBtn").onclick = () => { prefs.fs = prefs.fs === "l" ? "m" : "l"; savePrefs(); applyFs(); };
+/* 表示の明るさ：自動（端末に合わせる）→ ライト → ダーク */
+const THEMES = { auto: "自動", light: "ライト", dark: "ダーク" };
+function applyTheme(init) {
+  const t = prefs.theme in THEMES ? prefs.theme : "auto";
+  if (t === "auto") { if (!init) document.documentElement.removeAttribute("data-theme"); }
+  else document.documentElement.dataset.theme = t;
+  $("themeLab").textContent = THEMES[t];
+}
+$("themeBtn").onclick = () => {
+  const order = ["auto", "light", "dark"];
+  prefs.theme = order[(order.indexOf(prefs.theme in THEMES ? prefs.theme : "auto") + 1) % 3];
+  savePrefs(); applyTheme(false);
+};
+applyTheme(true);
 document.addEventListener("keydown", (e) => {
   if (e.key !== "Escape") return;
   if (!$("result").hidden) closeResult();

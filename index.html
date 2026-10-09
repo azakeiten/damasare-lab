@@ -10,9 +10,12 @@
 <meta property="og:site_name" content="だまされ体験ラボ">
 <meta property="og:title" content="だまされ体験ラボ｜その誘い、どこで見抜ける？">
 <meta property="og:description" content="20本の分岐ストーリーで、副業・投資・闇バイト・推し活・後払い・フィッシング・恋愛詐欺などに「気づくサイン」を体験的に学ぶ。AZAKEI（麻経）制作。">
-<meta property="og:url" content="https://ryoishiyama1-svg.github.io/damasare-lab/">
-<meta name="twitter:card" content="summary">
-<link rel="canonical" href="https://ryoishiyama1-svg.github.io/damasare-lab/">
+<meta property="og:url" content="https://azakeiten.github.io/damasare-lab/">
+<meta property="og:image" content="https://azakeiten.github.io/damasare-lab/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://azakeiten.github.io/damasare-lab/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%23FFC21A' stroke='%231B2534' stroke-width='4'/%3E%3Cellipse cx='23' cy='36' rx='4' ry='5' fill='%231B2534'/%3E%3Cellipse cx='41' cy='36' rx='4' ry='5' fill='%231B2534'/%3E%3C/svg%3E">
 <style>html{color-scheme:light dark}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>だまされ体験ラボ</title>
@@ -44,10 +47,11 @@
     <a class="logo" href="#home" id="logoLink"><svg class="mascot sm" aria-hidden="true"><use href="#minuke"></use></svg><span>だまされ体験ラボ</span></a>
     <nav class="tabs" aria-label="メニュー">
       <a href="#home" data-nav="home" id="nav-home">シナリオ</a>
-      <a href="#zukan" data-nav="zukan" id="nav-zukan">サイン図鑑</a>
-      <a href="#teach" data-nav="teach" id="nav-teach">授業で使う</a>
+      <a href="#zukan" data-nav="zukan" id="nav-zukan"><span class="lg">サイン</span>図鑑</a>
+      <a href="#teach" data-nav="teach" id="nav-teach">授業<span class="lg">で使う</span></a>
       <a href="#help" data-nav="help" id="nav-help">相談先</a>
     </nav>
+    <button class="fs" type="button" id="themeBtn" title="画面の明るさ">表示<b id="themeLab">自動</b></button>
     <button class="fs" type="button" id="fsBtn" aria-pressed="false" title="文字の大きさ">文字<b>大</b></button>
   </div>
 </header>
@@ -58,6 +62,7 @@
     <div class="playbar">
       <a class="back" href="#home" id="playBack">← シナリオ一覧</a>
       <div class="pt"><span class="gtag" id="playTag"></span><b id="playTitle"></b></div>
+      <div class="meter" id="meter" aria-label="いまのあぶなさ"></div>
       <div class="pdots" id="playDots" aria-label="見つけたサイン"></div>
     </div>
     <div class="playgrid">

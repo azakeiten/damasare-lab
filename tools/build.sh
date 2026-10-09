@@ -3,7 +3,7 @@
 # 使い方：リポジトリのルートで  sh tools/build.sh
 set -e
 cd "$(dirname "$0")/.."
-URL="https://ryoishiyama1-svg.github.io/damasare-lab/"
+URL="https://azakeiten.github.io/damasare-lab/"
 DESC="20本の分岐ストーリーで、副業・投資・闇バイト・推し活・後払い・フィッシング・恋愛詐欺などに「気づくサイン」を体験的に学ぶ。AZAKEI（麻経）制作。"
 {
   cat <<EOF
@@ -20,7 +20,10 @@ DESC="20本の分岐ストーリーで、副業・投資・闇バイト・推し
 <meta property="og:title" content="だまされ体験ラボ｜その誘い、どこで見抜ける？">
 <meta property="og:description" content="$DESC">
 <meta property="og:url" content="$URL">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="${URL}og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="$URL">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%23FFC21A' stroke='%231B2534' stroke-width='4'/%3E%3Cellipse cx='23' cy='36' rx='4' ry='5' fill='%231B2534'/%3E%3Cellipse cx='41' cy='36' rx='4' ry='5' fill='%231B2534'/%3E%3C/svg%3E">
 <style>html{color-scheme:light dark}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>

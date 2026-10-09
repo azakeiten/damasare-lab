@@ -4,7 +4,7 @@
 
 スマホの中で進む会話に返信しながら、詐欺や消費者トラブルを体験する分岐ストーリーゲームです。覚えるのは手口ではなく、「おかしいと気づくサイン」。
 
-▶ **遊ぶ：https://ryoishiyama1-svg.github.io/damasare-lab/**
+▶ **遊ぶ：https://azakeiten.github.io/damasare-lab/**
 
 企画・制作：[AZAKEI（麻経）](https://azakeiten.github.io/)　麻布中学校・高等学校 経済系同好会
 
