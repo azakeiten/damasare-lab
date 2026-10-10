@@ -682,9 +682,12 @@ function openScenario(id) {
     <div class="in"><p>${esc(sc.intro)}</p>
     <div class="castlist">${castKeys.map((k) => `<div>${av(sc, k, true)}<span><b>${esc(sc.cast[k].n)}</b>${sc.cast[k].r ? `　<span style="color:var(--muted)">${esc(sc.cast[k].r)}</span>` : ""}</span></div>`).join("")}</div>
     <div class="goal">${mascot("sm")}<span>この話にかくれた <b>${Object.keys(sc.signs).length}つのサイン</b> を見つけよう。結末は${endIds(sc).length}種類。</span></div></div></div>`);
-  $("composer").innerHTML = `<button class="choice go" type="button" id="goBtn">ストーリーをはじめる</button>`;
+  $("composer").innerHTML = `<button class="choice go" type="button" id="goBtn"><span class="ch-ic" aria-hidden="true">${ICON_PLAY}</span><span>ストーリーをはじめる</span></button>`;
   const begin = () => {
     prog(sc.id).plays++; saveProgress();
+    /* 始まったら、あらすじは見出しだけに折りたたんで、会話の場所を広くする */
+    const intro = $("log").querySelector(".intro");
+    if (intro) intro.classList.add("mini");
     S.scene = null; S.lastFrom = null;
     playNode(sc.start);
   };
@@ -692,7 +695,12 @@ function openScenario(id) {
     if (store.get("dl3-coach", false)) return begin();
     showCoach(begin);
   };
+  /* スマホでは、開いたらスマホ画面が画面いっぱいに見える位置まで送る */
+  if (matchMedia("(max-width: 860px)").matches) requestAnimationFrame(() => document.querySelector(".phone-col").scrollIntoView({ block: "start" }));
 }
+const ICON_SAY = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></svg>`;
+const ICON_ACT = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>`;
+const ICON_PLAY = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg>`;
 /* はじめての人向けの3ステップ案内（1回だけ） */
 function showCoach(done) {
   const stop = $("stop");
@@ -805,7 +813,7 @@ async function showItem(it) {
     const nm = showName && !cont ? `<span class="nm">${esc(c.n)}</span>` : "";
     if (factor() > 0) {
       const tEl = append(`<div class="row them typing${cont ? " cont" : ""}">${slot}<span class="bub">${nm}<p><i></i><i></i><i></i></p></span></div>`);
-      await pause(Math.min(1900, 450 + a.length * 30));
+      await pause(Math.min(1500, 350 + a.length * 22));
       tEl.remove();
       if (S.run !== RUN) return;
     }
@@ -864,7 +872,7 @@ function choicesUI(n) {
   const hintSign = n.choices.map((c) => c.sign && S.sc.signs[c.sign]).find(Boolean);
   $("composer").innerHTML = `<div class="q"><span>あなたならどうする？</span>${hintSign ? `<button class="linkbtn hintbtn" type="button" id="hintBtn">${mascot("sm")}ミヌケのヒント</button>` : ""}</div>` + order.map((i) => {
     const c = n.choices[i];
-    return `<button class="choice ${c.say ? "say" : "do"}" type="button" id="ch-${S.node}-${i}" data-i="${i}"><small>${c.say ? "返信する" : "行動する"}</small><span>${esc(c.say || c.act)}</span></button>`;
+    return `<button class="choice ${c.say ? "say" : "do"}" type="button" id="ch-${S.node}-${i}" data-i="${i}"><span class="ch-ic" aria-hidden="true">${c.say ? ICON_SAY : ICON_ACT}</span><span class="ch-tx"><small>${c.say ? "返信する" : "行動する"}</small><span>${esc(c.say || c.act)}</span></span></button>`;
   }).join("");
   $("composer").querySelectorAll("[data-i]").forEach((b) => (b.onclick = () => choose(n.choices[+b.dataset.i])));
   if ($("hintBtn")) $("hintBtn").onclick = () => {

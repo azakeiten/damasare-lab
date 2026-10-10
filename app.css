@@ -797,3 +797,53 @@ body { background-color: var(--bg); background-image: radial-gradient(var(--dot)
 
 /* 紙吹雪 */
 .confetti { position: fixed; inset: 0; pointer-events: none; z-index: 70; }
+
+/* ---------- v11: トーク画面を読みやすく ---------- */
+.playgrid { grid-template-columns: minmax(0, 460px) minmax(0, 1fr); }
+@media (max-width: 860px) { .playgrid { grid-template-columns: minmax(0, 1fr); } .phone-col { max-width: 520px; } }
+.phone-col { scroll-margin-top: 62px; }
+.screen { height: min(820px, calc(100svh - 130px)); min-height: 560px; }
+@media (max-width: 860px) { .screen { height: calc(100svh - 74px); min-height: 520px; } }
+.head { min-height: 62px; }
+.head .who b { font-size: var(--step-1); }
+.log { padding: 16px 14px 22px; gap: 8px; font-size: 1rem; }
+.row { max-width: 90%; }
+.bub p { font-size: 1rem; line-height: 1.75; padding: 10px 15px; }
+.bub .nm { font-size: var(--step--1); font-weight: 700; color: var(--ink); opacity: .75; }
+.row .meta { font-size: 11px; }
+/* ト書き：中央の小さい灰色文字から、左に線のある読みやすいブロックへ */
+.narr { align-self: stretch; max-width: none; text-align: left; font-size: var(--step--1); color: var(--ink); line-height: 1.75;
+  background: color-mix(in srgb, var(--surface) 78%, transparent); border-left: 4px solid var(--accent); border-radius: 4px 12px 12px 4px; padding: 8px 12px; margin: 4px 0; }
+/* 心の声：ふきだし型で、少し大きく */
+.think { font-size: .9375rem; color: var(--ink); background: color-mix(in srgb, var(--surface) 55%, transparent); border-color: var(--muted);
+  border-radius: 18px 18px 6px 18px; padding: 8px 14px; max-width: 86%; }
+.think::before { color: var(--muted); }
+.act { font-size: .9375rem; padding: 8px 14px; }
+.shot { width: min(92%, 360px); }
+.shot .t { font-size: var(--step--1); }
+.shot ul { font-size: .9375rem; line-height: 1.7; }
+.timechip { background: color-mix(in srgb, var(--surface) 80%, transparent); border-radius: 999px; padding: 2px 12px; margin-top: 8px; }
+.scene-div { font-size: var(--step--1); color: var(--ink); }
+.scene-div::before, .scene-div::after { background: var(--muted); opacity: .4; }
+.sys { font-size: var(--step--1); }
+/* あらすじ：始まったら見出しだけに */
+.intro .in { font-size: .9375rem; }
+.intro.mini .in { display: none; }
+.intro.mini .band { padding: 10px 14px; flex-direction: row; display: flex; align-items: center; gap: 10px; }
+.intro.mini .band h3 { font-size: var(--step-0); }
+/* 選択肢：大きく、アイコンつき */
+.composer { padding: 12px 12px 16px; gap: 8px; max-height: 56%; }
+.composer .q { font-size: var(--step--1); }
+.choice { display: flex; align-items: center; gap: 10px; font-size: 1rem; line-height: 1.55; padding: 10px 14px; min-height: 56px; }
+.ch-ic { flex: 0 0 auto; width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--accent-soft); color: var(--ink); }
+.choice.say .ch-ic { background: var(--bubble-me); color: var(--on-me); }
+.choice.go { justify-content: center; font-size: var(--step-1); min-height: 60px; }
+.choice.go .ch-ic { background: var(--ink); color: var(--accent); }
+.ch-tx { display: grid; gap: 1px; min-width: 0; }
+.ch-tx small { font-size: 11px; font-weight: 700; letter-spacing: .1em; color: var(--muted); }
+html[data-fs="l"] .log, html[data-fs="l"] .bub p { font-size: 1.0625rem; }
+.screen { min-height: 520px; }
+.composer { max-height: 50%; }
+.choice { min-height: 50px; padding: 8px 12px; font-size: .9688rem; }
+.ch-ic { width: 30px; height: 30px; }
+@media (max-height: 760px) { .choice { min-height: 44px; padding: 6px 10px; } .ch-tx small { display: none; } .composer { gap: 6px; padding: 10px; } }

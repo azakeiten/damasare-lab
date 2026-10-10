@@ -4,7 +4,7 @@
 set -e
 cd "$(dirname "$0")/.."
 URL="https://azakeiten.github.io/damasare-lab/"
-DESC="40本の分岐ストーリーで、副業・投資・闇バイト・推し活・当選詐欺・偽通販・家族を名のる電話などに「気づくサイン」を体験的に学ぶ。AZAKEI（麻経）制作。"
+DESC="45本の分岐ストーリーで、副業・投資・闇バイト・推し活・当選詐欺・偽通販・家族を名のる電話などに「気づくサイン」を体験的に学ぶ。AZAKEI（麻経）制作。"
 {
   cat <<EOF
 <!doctype html>
