@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="45本の分岐ストーリーで、副業・投資・闇バイト・推し活・当選詐欺・偽通販・家族を名のる電話などに「気づくサイン」を体験的に学ぶ。AZAKEI（麻経）制作。">
+<meta name="description" content="50本の分岐ストーリーで、副業・投資・闇バイト・推し活・当選詐欺・偽通販・家族を名のる電話などに「気づくサイン」を体験的に学ぶ。AZAKEI（麻経）制作。">
 <meta name="theme-color" content="#F1F4F8" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0D131A" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="だまされ体験ラボ">
 <meta property="og:title" content="だまされ体験ラボ｜その誘い、どこで見抜ける？">
-<meta property="og:description" content="45本の分岐ストーリーで、副業・投資・闇バイト・推し活・当選詐欺・偽通販・家族を名のる電話などに「気づくサイン」を体験的に学ぶ。AZAKEI（麻経）制作。">
+<meta property="og:description" content="50本の分岐ストーリーで、副業・投資・闇バイト・推し活・当選詐欺・偽通販・家族を名のる電話などに「気づくサイン」を体験的に学ぶ。AZAKEI（麻経）制作。">
 <meta property="og:url" content="https://azakeiten.github.io/damasare-lab/">
 <meta property="og:image" content="https://azakeiten.github.io/damasare-lab/og.png">
 <meta property="og:image:width" content="1200">
@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Dela+Gothic+One&family=Shippori+Mincho:wght@800&family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="app.css?v=202610101002">
+<link rel="stylesheet" href="app.css?v=202610101221">
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -60,7 +60,7 @@
   <section class="view" id="v-home" aria-label="ホーム"></section>
   <section class="view" id="v-play" aria-label="ストーリー" hidden>
     <div class="playbar bleed b-genre">
-      <a class="back" href="#home" id="playBack">← シナリオ一覧</a>
+      <a class="back" href="#home" id="playBack" aria-label="シナリオ一覧にもどる">←<span class="back-tx"> シナリオ一覧</span></a>
       <div class="pt"><span class="gtag" id="playTag"></span><b id="playTitle"></b></div>
       <div class="meter" id="meter" aria-label="いまのあぶなさ"></div>
       <div class="pdots" id="playDots" aria-label="見つけたサイン"></div>
@@ -106,6 +106,13 @@
   <section class="view" id="v-help" aria-label="相談先" hidden></section>
 </main>
 
+<nav class="botnav" aria-label="メニュー（スマホ）">
+  <a href="#home" data-nav="home" id="bn-home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg><span>シナリオ</span></a>
+  <a href="#zukan" data-nav="zukan" id="bn-zukan"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg><span>図鑑</span></a>
+  <a href="#teach" data-nav="teach" id="bn-teach"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-5 9 5-9 5z"/><path d="M7 11.5V16c0 1.5 2.5 3 5 3s5-1.5 5-3v-4.5"/></svg><span>授業</span></a>
+  <a href="#help" data-nav="help" id="bn-help"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 12l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 4 5a2 2 0 0 1 2-2z"/></svg><span>相談先</span></a>
+</nav>
+
 <div class="modal" id="result" hidden>
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="resTitle" id="resultSheet"></div>
 </div>
@@ -116,17 +123,18 @@
   <p class="foot-help">困ったら　<b>188</b>（消費者ホットライン）　<b>#9110</b>（警察相談専用電話）</p>
 </footer>
 
-<script defer src="data/kasegu.js?v=202610101002"></script>
-<script defer src="data/kau.js?v=202610101002"></script>
-<script defer src="data/net.js?v=202610101002"></script>
-<script defer src="data/deai.js?v=202610101002"></script>
-<script defer src="data/more.js?v=202610101002"></script>
-<script defer src="data/more2.js?v=202610101002"></script>
-<script defer src="data/more3.js?v=202610101002"></script>
-<script defer src="data/more4.js?v=202610101002"></script>
-<script defer src="data/more5.js?v=202610101002"></script>
-<script defer src="data/more6.js?v=202610101002"></script>
-<script defer src="data/debrief.js?v=202610101002"></script>
-<script defer src="app.js?v=202610101002"></script>
+<script defer src="data/kasegu.js?v=202610101221"></script>
+<script defer src="data/kau.js?v=202610101221"></script>
+<script defer src="data/net.js?v=202610101221"></script>
+<script defer src="data/deai.js?v=202610101221"></script>
+<script defer src="data/more.js?v=202610101221"></script>
+<script defer src="data/more2.js?v=202610101221"></script>
+<script defer src="data/more3.js?v=202610101221"></script>
+<script defer src="data/more4.js?v=202610101221"></script>
+<script defer src="data/more5.js?v=202610101221"></script>
+<script defer src="data/more6.js?v=202610101221"></script>
+<script defer src="data/more7.js?v=202610101221"></script>
+<script defer src="data/debrief.js?v=202610101221"></script>
+<script defer src="app.js?v=202610101221"></script>
 
 </html>

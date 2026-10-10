@@ -106,6 +106,7 @@ function route() {
 }
 function showView(name, scId) {
   ["home", "play", "zukan", "help", "teach"].forEach((v) => { $("v-" + v).hidden = v !== name; });
+  document.body.dataset.view = name;
   document.querySelectorAll("[data-nav]").forEach((a) => {
     const on = a.dataset.nav === name || (name === "play" && a.dataset.nav === "home");
     if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
@@ -696,7 +697,7 @@ function openScenario(id) {
     showCoach(begin);
   };
   /* スマホでは、開いたらスマホ画面が画面いっぱいに見える位置まで送る */
-  if (matchMedia("(max-width: 860px)").matches) requestAnimationFrame(() => document.querySelector(".phone-col").scrollIntoView({ block: "start" }));
+  if (matchMedia("(max-width: 860px)").matches) setTimeout(() => { if (!$("v-play").hidden) document.querySelector(".phone-col").scrollIntoView({ block: "start" }); }, 30);
 }
 const ICON_SAY = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></svg>`;
 const ICON_ACT = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>`;
