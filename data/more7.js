@@ -1,7 +1,7 @@
 /* 追加シナリオ（第8弾）：レビュー投稿の副業・SNS占い・ネットの子犬販売・個人間融資・スマホを契約して渡すバイト */
 (window.DL ||= { scenarios: [] }).scenarios.push(
 {
-  id: "review", genre: "kasegu", tag: "レビュー副業", title: "「星5のレビューを書くだけで報酬」", sub: "買って、書いて、返金＋報酬のはずが", isNew: true,
+  id: "review", genre: "kasegu", tag: "レビュー副業", title: "「星5のレビューを書くだけで報酬」", sub: "買って、書いて、返金＋報酬のはずが",
   mins: 4, level: 2, clock: "21:20",
   intro: "あなたは大学1年生。スキマ時間でできる副業を探していたら、SNSにDMが届きました。",
   cast: { jimu: { n: "レビュー案件｜事務局", i: "レ", h: 40, r: "DMの相手" } },
@@ -45,7 +45,7 @@
   }
 },
 {
-  id: "uranai", genre: "deai", tag: "SNS占い", title: "「あなたから、悪い気を感じます」", sub: "占い師を名のるDMと、開運ブレスレット", isNew: true,
+  id: "uranai", genre: "deai", tag: "SNS占い", title: "「あなたから、悪い気を感じます」", sub: "占い師を名のるDMと、開運ブレスレット",
   mins: 4, level: 2, clock: "0:40",
   intro: "あなたは大学2年生。最近、人間関係がうまくいかず、夜中にSNSで弱音を投稿してしまいました。すると、DMが届きます。",
   cast: { hoshino: { n: "占い師｜星乃", i: "星", h: 280, r: "DMの相手" }, ane: { n: "姉", i: "姉", h: 10, r: "家族" } },
@@ -100,7 +100,7 @@
   }
 },
 {
-  id: "pet", genre: "kau", tag: "子犬の譲渡", title: "「子犬、相場の半額でお譲りします」", sub: "SNSで見つけた、写真だけの子犬", isNew: true,
+  id: "pet", genre: "kau", tag: "子犬の譲渡", title: "「子犬、相場の半額でお譲りします」", sub: "SNSで見つけた、写真だけの子犬",
   mins: 3, level: 1, clock: "20:30",
   intro: "あなたは高校3年生。家族で子犬を迎えようと話していたところ。SNSで、かわいいトイプードルの写真を見つけました。",
   cast: { breeder: { n: "ブリーダー（？）", i: "犬", h: 30, r: "SNSのアカウント" } },
@@ -140,7 +140,7 @@
   }
 },
 {
-  id: "kojinyushi", genre: "kurashi", tag: "個人間融資", title: "「審査なし・即日、お金貸します」", sub: "家賃が足りない夜に見つけた投稿", isNew: true,
+  id: "kojinyushi", genre: "kurashi", tag: "個人間融資", title: "「審査なし・即日、お金貸します」", sub: "家賃が足りない夜に見つけた投稿",
   mins: 3, level: 2, clock: "23:50",
   intro: "あなたは専門学校の1年生。ひとり暮らしで、今月は家賃が3万円足りない。親には言いにくい…。SNSを見ていると、こんな投稿がありました。",
   cast: { ken: { n: "融資します｜けん", i: "け", h: 0, r: "SNSのアカウント" } },
@@ -180,7 +180,7 @@
   }
 },
 {
-  id: "keitai", genre: "kasegu", tag: "スマホ契約", title: "「スマホを契約して、渡すだけで5万円」", sub: "負担ゼロ、と言われたバイトの話", isNew: true,
+  id: "keitai", genre: "kasegu", tag: "スマホ契約", title: "「スマホを契約して、渡すだけで5万円」", sub: "負担ゼロ、と言われたバイトの話",
   mins: 3, level: 2, clock: "19:10",
   intro: "あなたは大学1年生。18歳になって、自分の名前でスマホの契約ができるようになりました。SNSで、こんなバイトの話がきます。",
   cast: { boss: { n: "高収入バイト｜担当", i: "担", h: 0, r: "SNSの相手" } },

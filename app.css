@@ -911,3 +911,18 @@ html[data-fs="l"] .log, html[data-fs="l"] .bub p { font-size: 1.0625rem; }
   .medals, .zcards { grid-template-columns: minmax(0, 1fr); }
   .tape-run .tr-in { font-size: var(--step-0); }
 }
+
+/* ---------- v13: 場面アイコン・苦手克服・連続日数・効果音 ---------- */
+.nt-app { display: inline-flex; align-items: center; gap: 6px; }
+.nt-ic { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 7px; background: hsl(var(--gh) var(--g-s) var(--g-l)); color: hsl(var(--gh) 60% var(--g-ls)); }
+.weak { margin-top: 18px; background: var(--surface); color: var(--ink); border: 2px solid var(--danger); border-radius: 22px 22px 22px 6px; padding: 16px 18px; display: grid; gap: 12px; }
+.weak-h { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: start; }
+.weak-h .ic { width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; font-family: var(--font-display); font-size: var(--step-1); background: var(--danger-soft); color: var(--danger); }
+.weak-h div { display: grid; gap: 2px; }
+.weak-h .eyebrow { color: var(--danger); }
+.weak-h b { font-size: var(--step-1); line-height: 1.45; }
+.weak-h span:last-child { font-size: var(--step--1); color: var(--muted); }
+.weak-recs { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.streak { display: inline-block; background: var(--accent); color: var(--on-accent); border-radius: 999px; padding: 0 10px; font-size: var(--step--2); }
+.soundbtn { min-height: 40px; border: 2px solid var(--ink); background: var(--surface); border-radius: 999px; padding: 4px 16px; font-weight: 700; cursor: pointer; }
+.soundbtn[aria-pressed="true"] { background: var(--ink); color: var(--surface); }

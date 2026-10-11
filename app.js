@@ -134,20 +134,78 @@ function scenarioCard(sc) {
   const f = firstMsg(sc);
   /* 一覧は「スマホの通知」に見立てる：アプリ名・時刻・送り主・最初のひとこと */
   return `<a class="scard${played ? "" : " unread"}" href="#${sc.id}" id="card-${sc.id}" style="--gh:${g.h}">
-    <div class="nt-head"><span class="nt-app">${esc(f.app)}</span><span class="nt-time">${esc(sc.clock || "")}</span>${badge}</div>
+    <div class="nt-head"><span class="nt-app"><span class="nt-ic" aria-hidden="true">${SCENE_ICON[f.type] || SCENE_ICON.dm}</span>${esc(f.app)}</span><span class="nt-time">${esc(sc.clock || "")}</span>${badge}</div>
     <div class="nt-body">${av(sc, f.who)}<div><b>${esc(f.name)}</b><p class="nt-prev">${esc(f.text)}</p></div></div>
     <div class="body"><span class="gtag">${esc(sc.tag)}</span><h3>${esc(sc.title)}</h3>
       <div class="meta"><span>約${sc.mins}分</span><span>むずかしさ <span class="lvl">${lvl(sc.level)}</span></span><span>結末 ${played}/${ne}</span><span>サイン ${caught}/${ns}</span></div>
       <div class="pbar" aria-hidden="true"><i style="width:${Math.round((played / ne) * 100)}%"></i></div>
     </div></a>`;
 }
+/* 場面の種類ごとのアイコン（一覧の通知カード用） */
+const svgI = (d) => `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+const SCENE_ICON = {
+  dm: svgI('<path d="M4 5h16v11H9l-5 4z"/>'),
+  talk: svgI('<path d="M4 5h16v11H9l-5 4z"/><path d="M8 10h8"/>'),
+  call: svgI('<path d="M6 3h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 12l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 4 5a2 2 0 0 1 2-2z"/>'),
+  live: svgI('<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.5 3-6 6-6s6 2.5 6 6M15 14.5c3 0 6 2 6 5.5"/>'),
+  web: svgI('<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/>'),
+  home: svgI('<path d="M4 11l8-7 8 7v9H4z"/>')
+};
+/* 苦手克服：いちばん見逃しが多い系統の、まだ気づけていないサインがある話をすすめる */
+function weakHTML() {
+  const stat = {};
+  SCENARIOS.forEach((sc) => Object.entries(sc.signs).forEach(([k, sg]) => {
+    const st = ((progress[sc.id] || {}).signs || {})[k];
+    const s = (stat[sg.cat] ||= { met: 0, caught: 0 });
+    if (st) { s.met++; if (st === "caught") s.caught++; }
+  }));
+  const cands = Object.entries(stat).filter(([, s]) => s.met >= 2).map(([c, s]) => ({ c, rate: s.caught / s.met, ...s })).sort((a, b) => a.rate - b.rate);
+  if (!cands.length || cands[0].rate >= 0.9) return "";
+  const w = cands[0], cat = CATS[w.c];
+  const recs = SCENARIOS.filter((sc) => Object.entries(sc.signs).some(([k, sg]) => sg.cat === w.c && ((progress[sc.id] || {}).signs || {})[k] !== "caught")).slice(0, 3);
+  if (!recs.length) return "";
+  return `<section class="weak" aria-label="苦手克服トレーニング"><div class="weak-h"><span class="ic" aria-hidden="true">${cat.ic}</span><div><span class="eyebrow">苦手克服トレーニング</span>
+    <b>あなたが見逃しやすいのは「${esc(cat.n)}」のサイン</b><span>これまで ${w.met}回出会って、気づけたのは ${w.caught}回。${esc(cat.d)}</span></div></div>
+    <div class="weak-recs">${recs.map((s) => `<a class="rec" href="#${s.id}"><small>${esc(s.tag)}・約${s.mins}分</small><b>${esc(s.title)}</b></a>`).join("")}</div></section>`;
+}
+/* 何日続けて体験しているか */
+const dayKey = (d) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+function markToday() {
+  const days = new Set(store.get("dl3-days", []) || []);
+  days.add(dayKey(new Date()));
+  store.set("dl3-days", [...days].slice(-120));
+}
+function streak() {
+  const days = new Set(store.get("dl3-days", []) || []);
+  const d = new Date();
+  if (!days.has(dayKey(d))) d.setDate(d.getDate() - 1);
+  let n = 0;
+  while (days.has(dayKey(d))) { n++; d.setDate(d.getDate() - 1); }
+  return n;
+}
+/* 効果音（オンにしたときだけ。ファイルは使わず、その場で音を作る） */
+let actx = null;
+function sfx(kind) {
+  if (!prefs.sound) return;
+  try {
+    actx ||= new (window.AudioContext || window.webkitAudioContext)();
+    const seq = { stop: [[520, 0, 0.09, "square"], [330, 0.11, 0.16, "square"]], ok: [[660, 0, 0.08, "sine"], [880, 0.09, 0.14, "sine"]], end: [[523, 0, 0.12, "triangle"], [659, 0.12, 0.12, "triangle"], [784, 0.24, 0.22, "triangle"]] }[kind] || [];
+    const t0 = actx.currentTime + 0.01;
+    seq.forEach(([f, at, dur, type]) => {
+      const o = actx.createOscillator(), g = actx.createGain();
+      o.type = type; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, t0 + at); g.gain.exponentialRampToValueAtTime(0.12, t0 + at + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t0 + at + dur);
+      o.connect(g).connect(actx.destination); o.start(t0 + at); o.stop(t0 + at + dur + 0.02);
+    });
+  } catch (e) {}
+}
 /* 最初に届くメッセージ（通知のプレビュー用） */
 function firstMsg(sc) {
-  let node = sc.nodes[sc.start], app = "", who = "", text = "";
+  let node = sc.nodes[sc.start], app = "", who = "", text = "", type = "";
   const seen = new Set();
   while (node && !seen.has(node)) {
     seen.add(node);
-    if (node.scene) { app = app || node.scene.app; who = who || node.scene.who; }
+    if (node.scene) { app = app || node.scene.app; who = who || node.scene.who; type = type || node.scene.type; }
     const m = (node.log || []).find((l) => l[0] === "them" || l[0] === "card");
     if (m) {
       if (m[0] === "them") { text = m[1]; if (m[2]) who = m[2]; } else { text = `${m[1]}：${m[2][0]}`; }
@@ -156,7 +214,7 @@ function firstMsg(sc) {
     node = node.choices && sc.nodes[node.choices[0].next];
   }
   const c = sc.cast[who] || {};
-  return { app: app || "メッセージ", who, name: c.n || "", text };
+  return { app: app || "メッセージ", who, name: c.n || "", text, type };
 }
 /* ヒーローのデモ：届いたメッセージに STOP のハンコが押される、を繰り返す */
 const DEMOS = [
@@ -231,7 +289,7 @@ function renderHome() {
   const last = lastId && byId(lastId);
   const contHTML = t.gotEnds
     ? `<div class="cont">${mascot("md")}<div class="t"><b>${t.cleared === SCENARIOS.length ? "全シナリオ クリア！ 残りの結末も探してみよう" : `${t.cleared} / ${SCENARIOS.length} シナリオ クリア`}</b>
-       <span>${next ? `次のおすすめ：${esc(next.title)}` : "サイン図鑑で、見逃したサインを見直そう"}</span></div>
+       <span>${streak() >= 2 ? `<b class="streak">${streak()}日つづけて体験中</b>　` : ""}${next ? `次のおすすめ：${esc(next.title)}` : "サイン図鑑で、見逃したサインを見直そう"}</span></div>
        ${last ? `<a class="btn small" href="#${last.id}">もう一度：${esc(last.tag)}</a>` : ""}
        ${next ? `<a class="btn small primary" href="#${next.id}">つづきから</a>` : `<a class="btn small primary" href="#zukan">図鑑を見る</a>`}</div>`
     : "";
@@ -259,6 +317,7 @@ function renderHome() {
   </div>
   ${contHTML}
   ${todaySignHTML()}
+  ${weakHTML()}
 
   <section class="sec bleed b-sun" id="quizSec" aria-label="タイプ診断">
     <div class="quiz">
@@ -926,6 +985,7 @@ function stopCard(signId, ok) {
       <h3 id="stopTitle">${esc(sg.t)}</h3><p>${esc(sg.d)}</p>
       <button type="button" id="stopGo">ストーリーにもどる</button></div>`;
     $("overlay").hidden = false;
+    sfx(ok ? "ok" : "stop");
     const done = () => { $("overlay").hidden = true; S.closeStop = null; resolve(); };
     $("stopGo").onclick = done;
     $("stopGo").focus({ preventScroll: true });
@@ -945,7 +1005,8 @@ function showEnd(id, n) {
   const isNewEnd = !p.ends.includes(id);
   if (isNewEnd) p.ends.push(id);
   if (n.end === "safe" && !Object.values(S.signs).includes("missed")) p.perfect = true;
-  if (n.end === "safe") confetti();
+  if (n.end === "safe") { confetti(); sfx("end"); }
+  markToday();
   saveProgress();
   setTimeout(checkAch, 1600);
   append(`<div class="end"><div class="tape"></div><div class="in"><span class="stamp s-${n.end}" aria-hidden="true">${STAMP[n.end]}</span><span class="label ${n.end}">結末｜${ENDLAB[n.end]}</span><h3>${esc(n.h)}</h3><p>${esc(n.p)}</p></div></div>`);
@@ -1182,6 +1243,9 @@ $("themeBtn").onclick = () => {
   savePrefs(); applyTheme(false);
 };
 applyTheme(true);
+function applySound() { $("soundBtn").setAttribute("aria-pressed", String(!!prefs.sound)); $("soundBtn").textContent = prefs.sound ? "効果音：オン" : "効果音：オフ"; }
+$("soundBtn").onclick = () => { prefs.sound = !prefs.sound; savePrefs(); applySound(); sfx("ok"); };
+applySound();
 document.addEventListener("keydown", (e) => {
   if (e.key !== "Escape") return;
   if (!$("result").hidden) closeResult();
