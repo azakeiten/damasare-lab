@@ -4,7 +4,7 @@
 set -e
 cd "$(dirname "$0")/.."
 URL="https://azakeiten.github.io/damasare-lab/"
-DESC="55本の分岐ストーリーで、副業・投資・闇バイト・推し活・当選詐欺・偽通販・家族を名のる電話などに「気づくサイン」を体験的に学ぶ。AZAKEI（麻経）制作。"
+DESC="SNSや電話で実際に起きている詐欺・消費者トラブルを、55本の選択式ストーリーと見抜きチャレンジで体験できる学習サイト。登録不要・無料・個人情報を集めません。AZAKEI（麻経）制作。"
 {
   cat <<EOF
 <!doctype html>
@@ -13,11 +13,11 @@ DESC="55本の分岐ストーリーで、副業・投資・闇バイト・推し
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="$DESC">
-<meta name="theme-color" content="#F1F4F8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#F6F8FA" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0D131A" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="だまされ体験ラボ">
-<meta property="og:title" content="だまされ体験ラボ｜その誘い、どこで見抜ける？">
+<meta property="og:title" content="だまされ体験ラボ｜だまされる前に、気づく練習を。">
 <meta property="og:description" content="$DESC">
 <meta property="og:url" content="$URL">
 <meta property="og:image" content="${URL}og.png">

@@ -101,11 +101,11 @@ function route() {
   const h = (location.hash || "").replace(/^#/, "") || "home";
   closeResult(true);
   if (byId(h)) return showView("play", h);
-  if (h === "zukan" || h === "help" || h === "teach") return showView(h);
+  if (h === "zukan" || h === "help" || h === "teach" || h === "challenge") return showView(h);
   showView("home");
 }
 function showView(name, scId) {
-  ["home", "play", "zukan", "help", "teach"].forEach((v) => { $("v-" + v).hidden = v !== name; });
+  ["home", "play", "zukan", "help", "teach", "challenge"].forEach((v) => { $("v-" + v).hidden = v !== name; });
   document.body.dataset.view = name;
   document.querySelectorAll("[data-nav]").forEach((a) => {
     const on = a.dataset.nav === name || (name === "play" && a.dataset.nav === "home");
@@ -116,6 +116,7 @@ function showView(name, scId) {
   if (name === "zukan") renderZukan();
   if (name === "help") renderHelp();
   if (name === "teach") renderTeach();
+  if (name === "challenge") renderChallenge();
   if (name === "play") openScenario(scId);
   window.scrollTo(0, 0);
 }
@@ -297,13 +298,14 @@ function renderHome() {
   $("v-home").innerHTML = `
   <div class="hero bleed b-hero">
     <div>
-      <div class="eyebrow">18歳からの消費者トラブル体験ゲーム</div>
-      <h1>その誘い、<br><em>どこで見抜ける？</em></h1>
-      <p class="lead">スマホに届いたメッセージに、あなたが返信して物語が動きます。副業、投資、推し活、恋愛、ひとり暮らし。${SCENARIOS.length}の場面を体験して、手口ではなく「おかしいと気づくサイン」を覚えよう。</p>
+      <div class="eyebrow">中高生・大学生のための消費者教育教材</div>
+      <h1>だまされる前に、<br><em>気づく練習を。</em></h1>
+      <p class="lead">SNSや電話で実際に起きている詐欺・消費者トラブルを、選択式のストーリーで体験できる学習サイトです。手口ではなく「おかしいと気づくサイン」を、${SCENARIOS.length}の場面で身につけます。</p>
       <div class="ctas">
         <a class="btn primary" href="#${(next || SCENARIOS[0]).id}" id="ctaStart">まずは体験してみる <small>約5分</small></a>
         <a class="btn" href="#quizSec" id="ctaQuiz">自分に近い話を診断</a>
       </div>
+      <ul class="trust" aria-label="このサイトについて"><li>登録不要・無料</li><li>個人情報を集めません</li><li>広告なし</li><li>記録はこの端末の中だけ</li></ul>
       <div class="hero-org">${orgBadge()}</div>
     </div>
     ${demoHTML()}
@@ -405,7 +407,7 @@ function renderSQ() {
     ${answered ? `<div class="sq-ans ${SQ.picked === it.sign.cat ? "ok" : "ng"}"><b>${SQ.picked === it.sign.cat ? "正解！" : "おしい！ 正解は「" + esc(CATS[it.sign.cat].n) + "」"}</b>
       <span>${esc(it.sign.t)}</span><p>${esc(it.sign.d)}</p>
       <div class="row-btns"><button class="btn small primary" type="button" id="sqNext">${SQ.i + 1 < SQ.items.length ? "次の問題" : "結果を見る"}</button><a class="btn small" href="#${it.sc.id}">この話を体験する</a></div></div>` : ""}`;
-  el.querySelectorAll("[data-c]").forEach((b) => (b.onclick = () => { SQ.picked = b.dataset.c; if (SQ.picked === it.sign.cat) SQ.score++; renderSQ(); const n = $("sqNext"); if (n) n.focus({ preventScroll: true }); }));
+  el.querySelectorAll("[data-c]").forEach((b) => (b.onclick = () => { SQ.picked = b.dataset.c; if (SQ.picked === it.sign.cat) { SQ.score++; addXP(5); } renderSQ(); const n = $("sqNext"); if (n) n.focus({ preventScroll: true }); }));
   if ($("sqNext")) $("sqNext").onclick = () => { SQ.i++; SQ.picked = null; renderSQ(); };
 }
 
@@ -958,6 +960,7 @@ async function choose(c) {
       (target.querySelector(".bub") || target).insertAdjacentHTML("beforeend", `<span class="flag-tag"><b>${cat.ic}</b>${esc(cat.n)}のサイン</span>`);
     }
     S.signs[c.sign] = c.ok ? "caught" : "missed";
+    S.xp = (S.xp || 0) + addXP(c.ok ? 10 : 3);
     const p = prog(S.sc.id);
     if (p.signs[c.sign] !== "caught") p.signs[c.sign] = S.signs[c.sign];
     saveProgress();
@@ -1004,6 +1007,7 @@ function showEnd(id, n) {
   const sc = S.sc, p = prog(sc.id);
   const isNewEnd = !p.ends.includes(id);
   if (isNewEnd) p.ends.push(id);
+  S.xp = (S.xp || 0) + addXP(isNewEnd ? 20 : 5);
   if (n.end === "safe" && !Object.values(S.signs).includes("missed")) p.perfect = true;
   if (n.end === "safe") { confetti(); sfx("end"); }
   markToday();
@@ -1086,6 +1090,7 @@ function openResult(id, n, isNewEnd) {
   $("resultSheet").innerHTML = `<div class="tape"></div><div class="in">
     <div class="rank">${mascot()}<div><small>判定</small><b id="resTitle">${esc(rk.r)}</b><span>${esc(rk.m)}</span></div><span class="stamp s-${n.end}" aria-hidden="true">${STAMP[n.end]}</span></div>
     <div><span class="label ${n.end}">結末｜${ENDLAB[n.end]}${isNewEnd ? "（はじめて回収！）" : ""}</span><p style="margin-top:6px;font-weight:700">${esc(n.h)}</p></div>
+    <p class="xpgain">見抜きポイント <b>+${S.xp || 0} XP</b>　${lvInfo().title}（Lv.${lvInfo().lv}）</p>
     <div class="resgrid"><div><b>${caught}</b><span>気づけたサイン</span></div><div><b>${missed}</b><span>見逃したサイン</span></div><div><b>${p.ends.length}/${endIds(sc).length}</b><span>回収した結末</span></div></div>
     ${S.hints ? `<p class="hintnote">${mascot("sm")}ミヌケのヒントを ${S.hints} 回使いました。次はヒントなしで挑戦してみよう。</p>` : ""}
     <div><div class="side-h"><h2>ストーリーマップ</h2><span>結末 ${p.ends.length} / ${endIds(sc).length}</span></div><div class="mapbox">${storyMap(sc, S.path, id)}${MAP_LEGEND}</div></div>
@@ -1219,6 +1224,148 @@ async function drawCard(sc, n, rk, caught, total) {
   } catch (e) { return null; }
 }
 
+/* ===== 見抜きレベル（経験値） ===== */
+const TITLES = [[1, "見習い"], [3, "気づき上手"], [5, "見抜き名人"], [8, "だまされ知らず"], [12, "見抜きマスター"], [16, "ラボの番人"], [21, "伝説の見抜き手"]];
+function lvInfo() {
+  const xp = store.get("dl3-xp", 0) || 0;
+  const lv = Math.floor(Math.sqrt(xp / 40)) + 1;
+  const cur = 40 * (lv - 1) ** 2, nxt = 40 * lv ** 2;
+  const title = TITLES.filter(([l]) => lv >= l).pop()[1];
+  return { xp, lv, title, pct: Math.round(((xp - cur) / (nxt - cur)) * 100), toNext: nxt - xp };
+}
+function addXP(n) {
+  const before = lvInfo().lv;
+  store.set("dl3-xp", (store.get("dl3-xp", 0) || 0) + n);
+  const after = lvInfo();
+  if (after.lv > before) setTimeout(() => toast(`レベルアップ！ Lv.${after.lv}「${after.title}」`), 600);
+  renderLvPill();
+  return n;
+}
+function renderLvPill() {
+  const i = lvInfo();
+  $("lvPill").innerHTML = `<b>Lv.${i.lv}</b><span class="lvbar"><i style="width:${i.pct}%"></i></span>`;
+  $("lvPill").title = `見抜きレベル ${i.lv}「${i.title}」 次のレベルまで ${i.toNext} XP`;
+}
+
+/* ===== 見抜きチャレンジ：あやしい？ だいじょうぶ？ ===== */
+let CH = null;
+function rng(seed) { let a = seed >>> 0; return () => { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+function chPools() {
+  const bad = sqPool().map((p) => {
+    const n = p.sc;
+    return { bad: true, app: firstMsg(n).app, from: p.who || "知らない相手", type: firstMsg(n).type, text: p.text, cat: p.sign.cat, head: p.sign.t, why: p.sign.d, src: n.id };
+  });
+  const tpl = (window.DL.templates || []).map((t) => ({ ...t, bad: true, tpl: true }));
+  const good = (window.DL.benign || []).map((b) => ({ ...b, bad: false }));
+  return { bad, tpl, good };
+}
+function fillTpl(t, r) {
+  const F = window.DL.fills || {};
+  const pick = (k) => { const a = F[k] || [k]; return a[Math.floor(r() * a.length)]; };
+  const sub = (s) => s.replace(/\{(\w+)\}/g, (_, k) => pick(k));
+  return { ...t, from: sub(t.from), text: sub(t.text), head: CATS[t.cat] ? CATS[t.cat].n + "のサイン" : "あやしいサイン" };
+}
+function chDraw(r) {
+  const P = CH.pools;
+  const x = r();
+  let it;
+  if (x < 0.38) it = { ...P.good[Math.floor(r() * P.good.length)] };
+  else if (x < 0.62) it = fillTpl(P.tpl[Math.floor(r() * P.tpl.length)], r);
+  else it = { ...P.bad[Math.floor(r() * P.bad.length)] };
+  const key = it.text;
+  if (CH.used.has(key) && CH.used.size < 120) return chDraw(r);
+  CH.used.add(key);
+  return it;
+}
+function startChallenge(mode) {
+  const today = new Date();
+  const seed = mode === "daily" ? Number(`${today.getFullYear()}${today.getMonth() + 1}${today.getDate()}`) : Math.floor(Math.random() * 1e9);
+  CH = { mode, r: rng(seed), pools: chPools(), used: new Set(), i: 0, score: 0, correct: 0, combo: 0, best: 0, lives: 3, total: mode === "daily" ? 10 : Infinity, cur: null, answered: null, xp: 0 };
+  CH.cur = chDraw(CH.r);
+  renderChallenge();
+}
+function chAnswer(saysBad) {
+  const it = CH.cur, right = saysBad === it.bad;
+  CH.answered = { saysBad, right };
+  if (right) { CH.combo++; CH.correct++; CH.best = Math.max(CH.best, CH.combo); const pts = 10 + Math.min(10, (CH.combo - 1) * 2); CH.score += pts; CH.xp += addXP(5); sfx("ok"); }
+  else { CH.combo = 0; if (CH.mode === "endless") CH.lives--; sfx("stop"); }
+  renderChallenge();
+}
+function chNext() {
+  CH.i++;
+  const over = CH.mode === "daily" ? CH.i >= CH.total : CH.lives <= 0;
+  if (over) { CH.over = true; chFinish(); }
+  else { CH.cur = chDraw(CH.r); CH.answered = null; }
+  renderChallenge();
+}
+function chFinish() {
+  if (CH.mode === "daily") {
+    const d = store.get("dl3-daily", {}) || {};
+    const k = dayKey(new Date());
+    if (!d[k]) { d[k] = CH.correct; store.set("dl3-daily", d); CH.xp += addXP(30); CH.firstToday = true; }
+  } else {
+    const best = store.get("dl3-endless", 0) || 0;
+    if (CH.score > best) { store.set("dl3-endless", CH.score); CH.newBest = true; }
+  }
+  markToday();
+}
+function chCard(it) {
+  return `<div class="ch-msg"><div class="ch-from"><span class="nt-ic" style="--gh:210" aria-hidden="true">${SCENE_ICON[it.type] || SCENE_ICON.dm}</span><b>${esc(it.from)}</b><span>${esc(it.app)}</span></div>
+    <p>${esc(it.text)}</p></div>`;
+}
+function renderChallenge() {
+  const el = $("v-challenge");
+  const lv = lvInfo();
+  const best = store.get("dl3-endless", 0) || 0;
+  const daily = (store.get("dl3-daily", {}) || {})[dayKey(new Date())];
+  const head = `<div class="help-hero bleed b-hero ch-hero"><div class="eyebrow">CHALLENGE</div><h1>見抜きチャレンジ</h1>
+    <p>届いたメッセージを見て、<b>あやしい</b>か<b>だいじょうぶ</b>かを判定しよう。ふつうの連絡もまざっています。問題は毎回変わるので、何度でも挑戦できます。</p>
+    <div class="ch-level"><div><span class="eyebrow">見抜きレベル</span><b>Lv.${lv.lv}　${esc(lv.title)}</b><span class="lvbar big"><i style="width:${lv.pct}%"></i></span><small>次のレベルまで ${lv.toNext} XP（合計 ${lv.xp} XP）</small></div></div></div>`;
+  if (!CH || (!CH.cur && !CH.over)) {
+    el.innerHTML = head + `<div class="ch-modes">
+      <div class="ch-mode"><span class="eyebrow">日替わり</span><h2>今日のチャレンジ</h2><p>今日の10問。同じ日なら、だれでも同じ問題です。最初の挑戦の結果が記録されます。</p>
+        <p class="ch-rec">${daily !== undefined ? `今日の記録：<b>${daily} / 10</b>` : "まだ挑戦していません"}</p>
+        <button class="btn primary" type="button" id="chDaily">今日の10問をはじめる</button></div>
+      <div class="ch-mode"><span class="eyebrow">何度でも</span><h2>エンドレス</h2><p>まちがえられるのは3回まで。連続で正解するとボーナス。どこまで見抜けるか挑戦しよう。</p>
+        <p class="ch-rec">最高記録：<b>${best} 点</b></p>
+        <button class="btn primary" type="button" id="chEndless">エンドレスをはじめる</button></div>
+    </div>
+    <div class="ch-xp"><h2>XP（経験値）のため方</h2><ul><li>シナリオでサインに気づく <b>+10</b>（見逃しても学べたら +3）</li><li>新しい結末を見る <b>+20</b></li><li>チャレンジ・クイズで正解 <b>+5</b></li><li>今日のチャレンジをクリア <b>+30</b></li></ul></div>`;
+    $("chDaily").onclick = () => startChallenge("daily");
+    $("chEndless").onclick = () => startChallenge("endless");
+    return;
+  }
+  if (CH.over) {
+    const isDaily = CH.mode === "daily";
+    const text = isDaily ? `だまされ体験ラボ「今日のチャレンジ」で ${CH.correct}/10 問 見抜けた！\n#だまされ体験ラボ\n${SHARE_URL}` : `だまされ体験ラボ「見抜きチャレンジ」で ${CH.score}点（${CH.correct}問正解・最大${CH.best}連続）！\n#だまされ体験ラボ\n${SHARE_URL}`;
+    el.innerHTML = head + `<div class="ch-board ch-end">${mascot("md")}<span class="eyebrow">${isDaily ? "今日のチャレンジ" : "エンドレス"}　結果</span>
+      <b class="ch-big">${isDaily ? `${CH.correct} / 10 問` : `${CH.score} 点`}</b>
+      <p>${isDaily ? (CH.correct >= 9 ? "すばらしい！ ほとんど見抜けました。" : CH.correct >= 6 ? "いい調子。まちがえた問題の解説を思い出そう。" : "まずはシナリオで、サインをじっくり体験してみよう。") : `${CH.correct}問正解・最大${CH.best}連続${CH.newBest ? "　自己ベスト更新！" : ""}`}</p>
+      <p class="xpgain">見抜きポイント <b>+${CH.xp} XP</b>${isDaily && !CH.firstToday ? "（今日の記録は最初の挑戦のまま）" : ""}</p>
+      <div class="row-btns"><a class="btn small" href="https://x.com/intent/post?text=${encodeURIComponent(text)}" target="_blank" rel="noopener">Xでシェア</a>
+        <a class="btn small" href="https://line.me/R/share?text=${encodeURIComponent(text)}" target="_blank" rel="noopener">LINEで送る</a>
+        <button class="btn small primary" type="button" id="chAgain">${isDaily ? "エンドレスに挑戦" : "もう一度"}</button>
+        <button class="btn small" type="button" id="chMenu">チャレンジの最初へ</button></div></div>`;
+    $("chAgain").onclick = () => startChallenge("endless");
+    $("chMenu").onclick = () => { CH = null; renderChallenge(); };
+    return;
+  }
+  const it = CH.cur, a = CH.answered;
+  const status = CH.mode === "daily" ? `<span>第 ${CH.i + 1} / 10 問</span>` : `<span class="lives" aria-label="のこりライフ ${CH.lives}">${"●".repeat(CH.lives)}<s>${"●".repeat(3 - CH.lives)}</s></span>`;
+  el.innerHTML = head + `<div class="ch-board">
+    <div class="ch-top">${status}<span>スコア <b>${CH.score}</b></span>${CH.combo >= 2 ? `<span class="combo">${CH.combo}連続！</span>` : ""}<button class="linkbtn" type="button" id="chQuit">やめる</button></div>
+    ${chCard(it)}
+    ${a ? `<div class="ch-ans ${a.right ? "ok" : "ng"}" role="status"><b>${a.right ? "正解！" : "ざんねん"}　これは${it.bad ? "あやしい" : "だいじょうぶ"}メッセージ</b>
+        ${it.bad ? `<span class="cat-tag">${esc(it.head || "")}</span>` : ""}<p>${esc(it.why || "")}</p>
+        ${it.src ? `<a class="linkbtn" href="#${it.src}">この話をシナリオで体験する</a>` : ""}
+        <button class="btn primary" type="button" id="chNextBtn">${(CH.mode === "daily" && CH.i + 1 >= 10) || (CH.mode === "endless" && CH.lives <= 0) ? "結果を見る" : "次のメッセージ"}</button></div>`
+      : `<div class="ch-btns"><button class="ch-b bad" type="button" id="chBad">あやしい</button><button class="ch-b good" type="button" id="chGood">だいじょうぶ</button></div>`}
+  </div>`;
+  $("chQuit").onclick = () => { CH = null; renderChallenge(); };
+  if (a) { $("chNextBtn").onclick = chNext; $("chNextBtn").focus({ preventScroll: true }); }
+  else { $("chBad").onclick = () => chAnswer(true); $("chGood").onclick = () => chAnswer(false); }
+}
+
 /* ===== 設定 ===== */
 document.querySelectorAll(".seg button").forEach((b) => (b.onclick = () => {
   prefs.tempo = b.dataset.t; savePrefs();
@@ -1255,6 +1402,7 @@ window.addEventListener("hashchange", route);
 
 if (ORG.name) { $("footOrg").hidden = false; $("footOrg").innerHTML = orgBadge(); }
 if (store.get("dl3-ach", null) === null) store.set("dl3-ach", achievements().filter((a) => a.got).map((a) => a.id));
+renderLvPill();
 applyFs();
 route();
 })();
