@@ -1064,3 +1064,39 @@ body { background-image: none; letter-spacing: .01em; }
 .xpgain b { color: var(--gold); font-weight: 900; }
 @media (max-width: 640px) { .ch-board { padding: 14px; } .ch-b { min-height: 58px; } }
 @media (max-width: 760px) { .botnav { grid-template-columns: repeat(5, 1fr); padding-inline: 4px; } .botnav a { font-size: 10px; } }
+
+/* ---------- v15: 3つの学び方・フッター・見くらべモード ---------- */
+.ways { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 26px; }
+@media (max-width: 760px) { .ways { grid-template-columns: minmax(0, 1fr); } }
+.way { position: relative; display: grid; gap: 6px; align-content: start; text-decoration: none; color: var(--ink); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 16px; padding: 18px 18px 16px; box-shadow: var(--shadow-1); transition: border-color .15s, transform .15s; }
+.way:hover { border-color: var(--brand); transform: translateY(-2px); }
+.way-n { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--brand-soft); color: var(--brand); font-weight: 900; }
+.way b { font-size: var(--step-1); font-weight: 900; }
+.way span:not(.way-n) { font-size: var(--step--1); color: var(--muted); line-height: 1.75; }
+.way i { font-style: normal; font-weight: 700; font-size: var(--step--1); color: var(--brand); margin-top: 4px; }
+
+.foot { padding-block: 40px 56px; }
+.foot-grid { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 28px; }
+@media (max-width: 860px) { .foot-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .foot-grid { grid-template-columns: minmax(0, 1fr); } }
+.foot-col { display: grid; gap: 8px; align-content: start; font-size: var(--step--1); line-height: 1.8; }
+.foot-h { color: var(--on-band-ink); font-weight: 900; font-size: var(--step-0); }
+.foot-links { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.foot a { color: var(--on-band-ink); text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--on-band-ink) 30%, transparent); }
+.foot a:hover { border-bottom-color: var(--gold); }
+.foot .org { border-bottom: 1.5px solid var(--gold); }
+.foot-help { display: flex; align-items: baseline; gap: 10px; }
+.foot-help b { font-size: var(--step-2); font-weight: 900; color: var(--on-band-ink); font-family: var(--font-display); }
+.foot-note { max-width: 1180px; margin: 28px auto 0; padding-top: 18px; border-top: 1px solid color-mix(in srgb, var(--on-band-ink) 18%, transparent); font-size: var(--step--2); line-height: 1.8; }
+
+.ch-board-wide { max-width: 860px; }
+.pair-q { font-weight: 900; font-size: var(--step-1); }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 640px) { .pair { grid-template-columns: minmax(0, 1fr); } }
+.pair-col { display: grid; gap: 8px; align-content: start; border-radius: 20px; padding: 6px; border: 2px solid transparent; }
+.pair-col.is-good { border-color: var(--safe); }
+.pair-col.is-bad { border-color: var(--danger); }
+.pair-tag { justify-self: center; font-weight: 900; font-size: var(--step--1); border-radius: 999px; padding: 2px 14px; color: var(--surface); }
+.is-good .pair-tag { background: var(--safe); } .is-bad .pair-tag { background: var(--danger); }
+.pair-pick { justify-self: stretch; }

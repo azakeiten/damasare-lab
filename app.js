@@ -317,6 +317,11 @@ function renderHome() {
     <div class="stat"><b>${t.gotEnds}<small style="font-size:.6em"> / ${t.ends}</small></b><span>回収した結末</span></div>
     <div class="stat"><b>${rate === null ? "—" : rate + "%"}</b><span>あなたの見抜き率</span></div>
   </div>
+  <section class="ways" aria-label="3つの学び方">
+    <a class="way" href="#${(next || SCENARIOS[0]).id}"><span class="way-n">1</span><b>体験する</b><span>スマホに届くメッセージに返信して、${SCENARIOS.length}のストーリーを進めます。選ぶたびに、かくれていたサインを解説。</span><i>シナリオをはじめる →</i></a>
+    <a class="way" href="#challenge"><span class="way-n">2</span><b>見抜く</b><span>「あやしい？ だいじょうぶ？」を判定するチャレンジ。日替わり・エンドレス・見くらべの3つの遊び方で、何度でも。</span><i>チャレンジする →</i></a>
+    <a class="way" href="#zukan"><span class="way-n">3</span><b>集める</b><span>出会ったサインは図鑑に。見抜きレベルと称号が上がり、苦手な系統もわかります。</span><i>図鑑を見る →</i></a>
+  </section>
   ${contHTML}
   ${todaySignHTML()}
   ${weakHTML()}
@@ -1280,8 +1285,25 @@ function chDraw(r) {
 function startChallenge(mode) {
   const today = new Date();
   const seed = mode === "daily" ? Number(`${today.getFullYear()}${today.getMonth() + 1}${today.getDate()}`) : Math.floor(Math.random() * 1e9);
-  CH = { mode, r: rng(seed), pools: chPools(), used: new Set(), i: 0, score: 0, correct: 0, combo: 0, best: 0, lives: 3, total: mode === "daily" ? 10 : Infinity, cur: null, answered: null, xp: 0 };
-  CH.cur = chDraw(CH.r);
+  CH = { mode, r: rng(seed), pools: chPools(), used: new Set(), i: 0, score: 0, correct: 0, combo: 0, best: 0, lives: 3, total: mode === "endless" ? Infinity : 10, cur: null, answered: null, xp: 0 };
+  CH.cur = mode === "pair" ? chDrawPair(CH.r) : chDraw(CH.r);
+  renderChallenge();
+}
+/* どっちが安全？：ふつうの連絡と、あやしいメッセージを1通ずつ並べる */
+function chDrawPair(r) {
+  const P = CH.pools;
+  let good = P.good[Math.floor(r() * P.good.length)];
+  for (let k = 0; k < 20 && CH.used.has(good.text); k++) good = P.good[Math.floor(r() * P.good.length)];
+  CH.used.add(good.text);
+  const bad = r() < 0.5 ? fillTpl(P.tpl[Math.floor(r() * P.tpl.length)], r) : { ...P.bad[Math.floor(r() * P.bad.length)] };
+  const pair = r() < 0.5 ? [{ ...good, bad: false }, bad] : [bad, { ...good, bad: false }];
+  return { pair };
+}
+function chAnswerPair(idx) {
+  const right = !CH.cur.pair[idx].bad;
+  CH.answered = { idx, right };
+  if (right) { CH.correct++; CH.combo++; CH.best = Math.max(CH.best, CH.combo); CH.score += 10; CH.xp += addXP(5); sfx("ok"); }
+  else { CH.combo = 0; sfx("stop"); }
   renderChallenge();
 }
 function chAnswer(saysBad) {
@@ -1293,9 +1315,9 @@ function chAnswer(saysBad) {
 }
 function chNext() {
   CH.i++;
-  const over = CH.mode === "daily" ? CH.i >= CH.total : CH.lives <= 0;
+  const over = CH.mode === "endless" ? CH.lives <= 0 : CH.i >= CH.total;
   if (over) { CH.over = true; chFinish(); }
-  else { CH.cur = chDraw(CH.r); CH.answered = null; }
+  else { CH.cur = CH.mode === "pair" ? chDrawPair(CH.r) : chDraw(CH.r); CH.answered = null; }
   renderChallenge();
 }
 function chFinish() {
@@ -1303,6 +1325,9 @@ function chFinish() {
     const d = store.get("dl3-daily", {}) || {};
     const k = dayKey(new Date());
     if (!d[k]) { d[k] = CH.correct; store.set("dl3-daily", d); CH.xp += addXP(30); CH.firstToday = true; }
+  } else if (CH.mode === "pair") {
+    const best = store.get("dl3-pair", 0) || 0;
+    if (CH.correct > best) { store.set("dl3-pair", CH.correct); CH.newBest = true; }
   } else {
     const best = store.get("dl3-endless", 0) || 0;
     if (CH.score > best) { store.set("dl3-endless", CH.score); CH.newBest = true; }
@@ -1329,10 +1354,46 @@ function renderChallenge() {
       <div class="ch-mode"><span class="eyebrow">何度でも</span><h2>エンドレス</h2><p>まちがえられるのは3回まで。連続で正解するとボーナス。どこまで見抜けるか挑戦しよう。</p>
         <p class="ch-rec">最高記録：<b>${best} 点</b></p>
         <button class="btn primary" type="button" id="chEndless">エンドレスをはじめる</button></div>
+      <div class="ch-mode"><span class="eyebrow">見くらべる</span><h2>どっちが安全？</h2><p>2通のメッセージのうち、安全なのはどっち？ ふつうの連絡と、あやしいメッセージの「ちがい」を見つける10問です。</p>
+        <p class="ch-rec">最高記録：<b>${store.get("dl3-pair", 0) || 0} / 10</b></p>
+        <button class="btn primary" type="button" id="chPair">見くらべる10問をはじめる</button></div>
     </div>
     <div class="ch-xp"><h2>XP（経験値）のため方</h2><ul><li>シナリオでサインに気づく <b>+10</b>（見逃しても学べたら +3）</li><li>新しい結末を見る <b>+20</b></li><li>チャレンジ・クイズで正解 <b>+5</b></li><li>今日のチャレンジをクリア <b>+30</b></li></ul></div>`;
     $("chDaily").onclick = () => startChallenge("daily");
     $("chEndless").onclick = () => startChallenge("endless");
+    $("chPair").onclick = () => startChallenge("pair");
+    return;
+  }
+  if (CH.over && CH.mode === "pair") {
+    const text = `だまされ体験ラボ「どっちが安全？」で ${CH.correct}/10 問 見抜けた！\n#だまされ体験ラボ\n${SHARE_URL}`;
+    el.innerHTML = head + `<div class="ch-board ch-end">${mascot("md")}<span class="eyebrow">どっちが安全？　結果</span>
+      <b class="ch-big">${CH.correct} / 10 問</b>
+      <p>${CH.correct >= 9 ? "ちがいがしっかり見えています。" : CH.correct >= 6 ? "いい調子。ふつうの連絡の「ふつうさ」も、見るポイントです。" : "まずは、ふつうの連絡がどんな形かを覚えるのが近道です。"}${CH.newBest ? "　自己ベスト更新！" : ""}</p>
+      <p class="xpgain">見抜きポイント <b>+${CH.xp} XP</b></p>
+      <div class="row-btns"><a class="btn small" href="https://x.com/intent/post?text=${encodeURIComponent(text)}" target="_blank" rel="noopener">Xでシェア</a>
+        <button class="btn small primary" type="button" id="chAgain">もう一度</button>
+        <button class="btn small" type="button" id="chMenu">チャレンジの最初へ</button></div></div>`;
+    $("chAgain").onclick = () => startChallenge("pair");
+    $("chMenu").onclick = () => { CH = null; renderChallenge(); };
+    return;
+  }
+  if (CH.mode === "pair") {
+    const [x, y] = CH.cur.pair, a = CH.answered;
+    const card = (it, i) => `<div class="pair-col ${a ? (it.bad ? "is-bad" : "is-good") : ""}">${chCard(it)}
+      ${a ? `<span class="pair-tag">${it.bad ? "あやしい" : "安全"}</span>` : `<button class="btn primary pair-pick" type="button" id="chPick${i}">こちらが安全</button>`}</div>`;
+    const bad = x.bad ? x : y;
+    el.innerHTML = head + `<div class="ch-board ch-board-wide">
+      <div class="ch-top"><span>第 ${CH.i + 1} / 10 問</span><span>正解 <b>${CH.correct}</b></span>${CH.combo >= 2 ? `<span class="combo">${CH.combo}連続！</span>` : ""}<button class="linkbtn" type="button" id="chQuit">やめる</button></div>
+      <p class="pair-q">安全なのは、どっち？</p>
+      <div class="pair">${card(x, 0)}${card(y, 1)}</div>
+      ${a ? `<div class="ch-ans ${a.right ? "ok" : "ng"}" role="status"><b>${a.right ? "正解！" : "ざんねん"}</b>
+          <span class="cat-tag">${esc(bad.head || "")}</span><p>あやしい方：${esc(bad.why || "")}</p>
+          <p>安全な方：${esc((x.bad ? y : x).why || "")}</p>
+          <button class="btn primary" type="button" id="chNextBtn">${CH.i + 1 >= 10 ? "結果を見る" : "次の2通"}</button></div>` : ""}
+    </div>`;
+    $("chQuit").onclick = () => { CH = null; renderChallenge(); };
+    if (a) { $("chNextBtn").onclick = chNext; $("chNextBtn").focus({ preventScroll: true }); }
+    else { $("chPick0").onclick = () => chAnswerPair(0); $("chPick1").onclick = () => chAnswerPair(1); }
     return;
   }
   if (CH.over) {
