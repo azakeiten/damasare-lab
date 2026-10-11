@@ -306,6 +306,7 @@ function renderHome() {
         <a class="btn" href="#quizSec" id="ctaQuiz">自分に近い話を診断</a>
       </div>
       <ul class="trust" aria-label="このサイトについて"><li>登録不要・無料</li><li>個人情報を集めません</li><li>広告なし</li><li>記録はこの端末の中だけ</li></ul>
+      ${todayChHTML()}
       <div class="hero-org">${orgBadge()}</div>
     </div>
     ${demoHTML()}
@@ -604,6 +605,7 @@ function renderHelp() {
       <li><b>これ以上払わない・送らない</b><span>「取り戻せます」と向こうから来る連絡は二次被害のサイン。相談先は自分で調べた公的な窓口へ。</span></li>
     </ol>
   </section>
+  ${wordsHTML()}
   <section class="sec" aria-label="断り方">
     <div class="sec-h"><h2>そのまま使える、断りのひとこと</h2><p>理由をくわしく説明しなくて大丈夫。短く、はっきり。</p></div>
     <div class="phrases">
@@ -653,6 +655,12 @@ function renderTeach() {
   <div class="help-hero bleed b-hero"><div class="eyebrow">FOR TEACHERS &amp; FAMILIES</div><h1>授業や家庭で使う</h1>
     <p style="color:var(--muted)">2022年4月から成年年齢は18歳になり、18歳になると親の同意なく契約できるかわりに、未成年者取消権が使えなくなりました。このページは、高校生から大学1年生くらいの人といっしょに体験し、話し合うためのガイドです。1シナリオは約3〜7分。登録やログインは不要です。</p>
     ${ORG.name ? `<div class="hero-org">${orgBadge()}</div>` : ""}</div>
+
+  <section class="sec present-cta" aria-label="スクリーンで出題する">
+    <div><span class="eyebrow">クラスみんなで</span><h2>スクリーンに映して、いっしょに見抜く</h2>
+      <p>大きな文字でメッセージを1通ずつ映します。「あやしいと思う人？」と手をあげてもらってから、答えと理由を表示できます。10問・約10分。</p></div>
+    <button class="btn primary" type="button" id="presentBtn">スクリーンモードをはじめる</button>
+  </section>
 
   <section class="sec qrsec" aria-label="教室で配る">
     <div class="qrbox" id="qrBox" aria-label="このページのQRコード"><span class="qr-wait">QRコードを準備中…</span></div>
@@ -715,6 +723,7 @@ function renderTeach() {
     catch (e) { const r = document.createRange(); r.selectNodeContents($("qrUrl")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); toast("選択しました。コピーしてください"); }
   };
   drawQR();
+  $("presentBtn").onclick = openPresent;
   $("sheetCopy").onclick = async () => {
     try { await navigator.clipboard.writeText(SHEET_TEXT); toast("コピーしました"); }
     catch (e) { const ta = $("sheetText"); ta.focus(); ta.select(); toast("選択しました。コピーしてください"); }
@@ -1426,6 +1435,62 @@ function renderChallenge() {
   if (a) { $("chNextBtn").onclick = chNext; $("chNextBtn").focus({ preventScroll: true }); }
   else { $("chBad").onclick = () => chAnswer(true); $("chGood").onclick = () => chAnswer(false); }
 }
+
+/* ===== ホームの「今日のチャレンジ」への近道 ===== */
+function todayChHTML() {
+  const d = (store.get("dl3-daily", {}) || {})[dayKey(new Date())];
+  return `<a class="today-ch" href="#challenge" id="todayCh"><span class="tc-ic" aria-hidden="true">${svgI('<path d="M13 3L5 14h6l-1 7 8-11h-6z"/>')}</span>
+    <span class="tc-tx"><small>今日のチャレンジ（10問・日替わり）</small><b>${d !== undefined ? `今日の記録 ${d} / 10　もう一度は「エンドレス」で` : "まだ挑戦していません。3分で挑戦"}</b></span><span class="tc-go" aria-hidden="true">→</span></a>`;
+}
+
+/* ===== ことば辞典（相談先ページ） ===== */
+function wordsHTML() {
+  const W = window.DL.words || [];
+  if (!W.length) return "";
+  return `<section class="sec" aria-label="知っておきたいことば"><div class="sec-h"><h2>知っておきたいことば</h2><p>ストーリーに出てくる制度や手口の名前を、やさしく説明します。正確な条件は、各機関のサイトや188で確認してください。</p></div>
+    <div class="words">${W.map((x) => `<details class="word"><summary><b>${esc(x.w)}</b>${x.r ? `<small>${esc(x.r)}</small>` : ""}</summary><p>${esc(x.d)}</p></details>`).join("")}</div></section>`;
+}
+
+/* ===== スクリーンモード：教室で、大きな画面に1通ずつ映して考える ===== */
+let PR = null;
+function openPresent() {
+  CH = { mode: "present", r: rng(Math.floor(Math.random() * 1e9)), pools: chPools(), used: new Set() };
+  PR = { i: 0, total: 10, cur: chDraw(CH.r), shown: false };
+  let el = $("present");
+  if (!el) { el = document.createElement("div"); el.id = "present"; el.className = "present"; el.setAttribute("role", "dialog"); el.setAttribute("aria-modal", "true"); el.setAttribute("aria-label", "スクリーンモード"); document.body.appendChild(el); }
+  el.hidden = false;
+  try { if (el.requestFullscreen) el.requestFullscreen().catch(() => {}); } catch (e) {}
+  renderPresent();
+}
+function closePresent() {
+  const el = $("present"); if (el) el.hidden = true;
+  try { if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); } catch (e) {}
+  CH = null; PR = null;
+}
+function renderPresent() {
+  const el = $("present"), it = PR.cur;
+  el.innerHTML = `<div class="pr-top"><span class="pr-brand">${mascot("sm")}だまされ体験ラボ</span><span class="pr-n">${PR.i + 1} / ${PR.total}</span><button class="pr-close" type="button" id="prClose">終了する</button></div>
+    <div class="pr-body">
+      <div class="pr-msg"><div class="pr-from"><span aria-hidden="true">${SCENE_ICON[it.type] || SCENE_ICON.dm}</span><b>${esc(it.from)}</b><span>${esc(it.app)}</span></div><p>${esc(it.text)}</p></div>
+      ${PR.shown ? `<div class="pr-ans ${it.bad ? "bad" : "good"}"><b>${it.bad ? "あやしい" : "だいじょうぶ"}</b>${it.bad && it.head ? `<span>${esc(it.head)}</span>` : ""}<p>${esc(it.why || "")}</p></div>`
+        : `<p class="pr-q">このメッセージ、あやしいと思う人？　だいじょうぶだと思う人？</p>`}
+    </div>
+    <div class="pr-foot">${PR.shown ? `<button class="btn primary pr-btn" type="button" id="prNext">${PR.i + 1 >= PR.total ? "おしまい" : "次のメッセージ"}</button>` : `<button class="btn primary pr-btn" type="button" id="prShow">答えを見る</button>`}</div>`;
+  $("prClose").onclick = closePresent;
+  if ($("prShow")) $("prShow").onclick = () => { PR.shown = true; renderPresent(); };
+  if ($("prNext")) $("prNext").onclick = () => {
+    if (PR.i + 1 >= PR.total) { el.innerHTML = `<div class="pr-top"><span class="pr-brand">${mascot("sm")}だまされ体験ラボ</span><button class="pr-close" type="button" id="prClose">終了する</button></div>
+      <div class="pr-body pr-end"><b>おつかれさまでした</b><p>今日のポイント：「急かす」「先にお金」「個人情報」「秘密にさせる」が出てきたら、いったん止まって、だれかに相談。</p><p class="pr-tel"><span>188</span>消費者ホットライン　<span>#9110</span>警察相談専用電話</p></div>`;
+      $("prClose").onclick = closePresent; return; }
+    PR.i++; PR.cur = chDraw(CH.r); PR.shown = false; renderPresent();
+  };
+  const b = $("prShow") || $("prNext"); if (b) b.focus({ preventScroll: true });
+}
+document.addEventListener("keydown", (e) => {
+  if (!PR || !$("present") || $("present").hidden) return;
+  if (e.key === "Escape") closePresent();
+  if (e.key === "ArrowRight" || e.key === " ") { const b = $("prShow") || $("prNext"); if (b) { e.preventDefault(); b.click(); } }
+});
 
 /* ===== 設定 ===== */
 document.querySelectorAll(".seg button").forEach((b) => (b.onclick = () => {
