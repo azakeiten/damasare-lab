@@ -99,12 +99,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "follower", "giftwari", "airdrop"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "follower", "giftwari", "airdrop"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
-  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "kakin", "gameacct", "liver"] },
+  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "kakin", "gameacct", "liver"] },
   { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "shukatsu", "course", "kyozai", "ryugaku"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym"] },
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -681,6 +681,7 @@ function renderHelp() {
       <li><b>これ以上払わない・送らない</b><span>「取り戻せます」と向こうから来る連絡は二次被害のサイン。相談先は自分で調べた公的な窓口へ。</span></li>
     </ol>
   </section>
+  ${phraseBookHTML()}
   ${wordsHTML()}
   <section class="sec" aria-label="断り方">
     <div class="sec-h"><h2>そのまま使える、断りのひとこと</h2><p>理由をくわしく説明しなくて大丈夫。短く、はっきり。</p></div>
@@ -693,6 +694,7 @@ function renderHelp() {
       <div class="phrase">「その話には興味がありません」<small>久しぶりの人からの「いい話」に</small></div>
     </div>
   </section>`;
+  bindPhraseBook();
 }
 
 /* ===== 授業で使う（先生・保護者向け） ===== */
@@ -1186,6 +1188,7 @@ async function choose(c, opt) {
     if (talkScene()) sendMe(mine); else { append(`<div class="act">${esc(mine)}</div>`); S.lastFrom = null; }
     append(`<div class="readchip">${mascot("sm")}<span><small>ミヌケの読み取り：${esc(opt.read || "いちばん近い選択")}</small><b>${esc(c.say || c.act)}</b></span></div>`);
     S.lastFrom = null;
+    if (opt.read === "断る・確かめる返信" && judgeReply(opt.myText).tone === "ok") savePhrase(opt.myText, S.sc.tag);
     if (mine !== opt.myText) append(`<div class="sys">本物の番号やアドレスは、練習でも書かないでね（この入力はどこにも送られません）</div>`);
   } else if (c.say) sendMe(c.say);
   else { append(`<div class="act">${esc(c.act)}</div>`); S.lastFrom = null; }
@@ -1584,6 +1587,109 @@ function chCard(it) {
   return `<div class="ch-msg"><div class="ch-from"><span class="nt-ic" style="--gh:210" aria-hidden="true">${SCENE_ICON[it.type] || SCENE_ICON.dm}</span><b>${esc(it.from)}</b><span>${esc(it.app)}</span></div>
     <p>${esc(it.text)}</p></div>`;
 }
+/* ===== ことばで返すトレーニング：あやしいメッセージに、自分の言葉で返信を書く ===== */
+let RT = null;
+function judgeReply(raw) {
+  const t = raw.normalize("NFKC").toLowerCase();
+  const safe = W_SAFE.filter((w) => t.includes(w)).length;
+  const risk = W_RISK.filter((w) => t.includes(w)).length;
+  const leak = /[0-9]{4,}|\S+@\S+/.test(t);
+  const asking = W_ASK.test(t);
+  const action = /相談|確認|確かめ|かけ直|公式|警察|188|9110|ブロック|通報|調べ/.test(t);
+  const short = [...raw].length <= 25;
+  if (leak) return { stars: 0, tone: "ng", h: "番号やアドレスが入っています", m: "練習でも、本物の番号やアドレスは書かないでね。実際のやり取りでは、相手に個人情報を渡さないのがいちばん大事です。" };
+  if (risk > safe) return { stars: 0, tone: "ng", h: "相手の話に乗ってしまう返信かも", m: "「はい」「お願いします」「払います」など、引き受ける言葉が入っています。いったん止まって、断るか確かめる返信にしてみよう。" };
+  if (safe > risk) {
+    const stars = 1 + (short ? 1 : 0) + (action ? 1 : 0);
+    const tips = [!short && "もう少し短くてもOK。理由をくわしく言わなくても断れます", !action && "「親に相談します」「公式で確かめます」のように、次にやることを足すとさらに強い"].filter(Boolean);
+    return { stars, tone: "ok", h: stars === 3 ? "短く、はっきり、確かめる。満点の返し！" : "断る・確かめる返信になっています", m: tips.length ? tips.join("。") + "。" : "この返しなら、相手も引き下がるしかありません。" };
+  }
+  if (asking) return { stars: 1, tone: "mid", h: "聞き返すのは、いい作戦", m: "相手の答えに、あやしさが出ることがあります。でも、最後は「断る」か「確かめる」で終わらせよう。" };
+  return { stars: 0, tone: "mid", h: "気持ちが伝わりにくいかも", m: "「やめておきます」「親に相談します」のように、断るのか、確かめるのかが分かる言葉を入れてみよう。" };
+}
+function savePhrase(text, from) {
+  const t = maskTx(text.trim());
+  if (!t) return false;
+  const list = store.get("dl3-phrases", []) || [];
+  if (list.some((x) => x.t === t)) return false;
+  list.unshift({ t, from: from || "", at: Date.now() });
+  store.set("dl3-phrases", list.slice(0, 60));
+  return true;
+}
+function startReply() {
+  const pool = shuffle(chPools().bad.filter((b) => DEBRIEF[b.src]));
+  const items = [], seen = new Set();
+  for (const b of pool) { if (items.length >= 5) break; if (!seen.has(b.src)) { seen.add(b.src); items.push(b); } }
+  RT = { items, i: 0, res: null, stars: 0, xp: 0, last: "" };
+  renderChallenge();
+  setTimeout(() => { const f = $("rtIn"); if (f) f.focus({ preventScroll: true }); }, 30);
+}
+function renderReply(el, head) {
+  if (RT.i >= RT.items.length) {
+    const max = RT.items.length * 3;
+    const best = Math.max(store.get("dl3-reply", 0) || 0, RT.stars);
+    store.set("dl3-reply", best);
+    el.innerHTML = head + `<div class="ch-board ch-end">${mascot("md")}<span class="eyebrow">ことばで返す　結果</span>
+      <b class="ch-big">★ ${RT.stars} / ${max}</b>
+      <p>${RT.stars >= max - 2 ? "自分の言葉で、しっかり断れています。" : RT.stars >= max / 2 ? "いい調子。短く、次にやることを入れると、もっと強い返しになります。" : "例の返しを参考に、短い「断りのひとこと」を自分の言葉にしてみよう。"}（自己ベスト ★${best}）</p>
+      <p class="xpgain">見抜きポイント <b>+${RT.xp} XP</b></p>
+      <div class="row-btns"><a class="btn small" href="#help" id="rtBook">ことば帳を見る</a>
+        <button class="btn small primary" type="button" id="rtAgain">もう一度（問題が変わります）</button>
+        <button class="btn small" type="button" id="rtMenu">チャレンジの最初へ</button></div></div>`;
+    $("rtAgain").onclick = () => startReply();
+    $("rtMenu").onclick = () => { RT = null; renderChallenge(); };
+    $("rtBook").onclick = () => { RT = null; };
+    return;
+  }
+  const it = RT.items[RT.i], r = RT.res, d = DEBRIEF[it.src] || {}, sc = byId(it.src);
+  el.innerHTML = head + `<div class="ch-board rt-board">
+    <div class="ch-top"><span>第 ${RT.i + 1} / ${RT.items.length} 問</span><span>★ <b>${RT.stars}</b></span><button class="linkbtn" type="button" id="rtQuit">やめる</button></div>
+    ${chCard(it)}
+    ${r ? `<div class="rt-mine"><span class="eyebrow">あなたの返信</span><p>${esc(maskTx(RT.last))}</p></div>
+      <div class="rt-res rt-${r.tone}"><div class="rt-stars" aria-label="${r.stars}つ星">${[0, 1, 2].map((k) => `<i class="${k < r.stars ? "on" : ""}">★</i>`).join("")}</div>
+        <b>${esc(r.h)}</b><p>${esc(r.m)}</p></div>
+      <div class="rt-why"><span class="eyebrow">このメッセージのサイン</span><b>${esc(it.head || "")}</b><p>${esc(it.why || "")}</p></div>
+      ${d.say ? `<div><span class="eyebrow">たとえば、こんな返し方</span><div class="db-say">${d.say.map((l) => `<span>${esc(l)}</span>`).join("")}</div></div>` : ""}
+      <div class="row-btns">${r.tone === "ok" ? `<button class="btn small" type="button" id="rtSave">わたしのことば帳に保存</button>` : ""}
+        ${sc ? `<a class="btn small" href="#${sc.id}">この話を体験する</a>` : ""}
+        <button class="btn small primary" type="button" id="rtNext">${RT.i + 1 < RT.items.length ? "次のメッセージ" : "結果を見る"}</button></div>`
+    : `<form class="rt-form" id="rtForm" autocomplete="off"><label for="rtIn" class="rt-q">あなたなら、どう返す？</label>
+        <div class="freebar"><input id="rtIn" type="text" maxlength="80" enterkeyhint="send" placeholder="自分の言葉で返信を書く（例：親に相談してから決めます）">
+          <button type="submit" aria-label="送信">${ICON_SEND}</button></div>
+        <p class="rt-note">書いた返信は、この端末の中だけで判定します。本物の個人情報は書かないでね。</p></form>`}
+  </div>`;
+  $("rtQuit").onclick = () => { RT = null; renderChallenge(); };
+  if (!r) {
+    $("rtForm").onsubmit = (e) => {
+      e.preventDefault();
+      const v = $("rtIn").value.trim(); if (!v) return;
+      RT.last = v; RT.res = judgeReply(v); RT.stars += RT.res.stars;
+      if (RT.res.stars) { RT.xp += addXP(RT.res.stars * 2); }
+      sfx(RT.res.tone === "ok" ? "ok" : "stop");
+      renderChallenge();
+      const n = $("rtNext"); if (n) n.focus({ preventScroll: true });
+    };
+  } else {
+    if ($("rtSave")) $("rtSave").onclick = () => { const ok = savePhrase(RT.last, sc ? sc.tag : ""); $("rtSave").disabled = true; $("rtSave").textContent = ok ? "保存しました" : "保存ずみです"; };
+    $("rtNext").onclick = () => { RT.i++; RT.res = null; RT.last = ""; renderChallenge(); setTimeout(() => { const f = $("rtIn"); if (f) f.focus({ preventScroll: true }); }, 30); };
+  }
+}
+/* わたしの断りことば帳（相談先のページ） */
+function phraseBookHTML() {
+  const list = store.get("dl3-phrases", []) || [];
+  return `<section class="sec" aria-label="わたしの断りことば帳" id="phraseBook">
+    <div class="sec-h"><h2>わたしの断りことば帳</h2><p>チャレンジの「ことばで返す」や、体験の中で自分の言葉で書いた「断る・確かめる」返信が集まります。この端末の中だけに保存されます。</p></div>
+    ${list.length ? `<div class="pbook">${list.map((x, i) => `<div class="pb-item"><p>「${esc(x.t)}」</p><small>${esc(x.from || "")}</small><button class="linkbtn" type="button" data-pdel="${i}" aria-label="「${esc(x.t)}」を消す">消す</button></div>`).join("")}</div>`
+      : `<div class="jr-empty">${mascot("md")}<span>まだありません。チャレンジの「ことばで返す」で、自分の断りのひとことを作ってみよう。</span><a class="btn small primary" href="#challenge" id="pbGo">ことばで返すへ</a></div>`}
+  </section>`;
+}
+function bindPhraseBook() {
+  document.querySelectorAll("[data-pdel]").forEach((b) => (b.onclick = () => {
+    const list = store.get("dl3-phrases", []) || [];
+    list.splice(+b.dataset.pdel, 1); store.set("dl3-phrases", list);
+    $("phraseBook").outerHTML = phraseBookHTML(); bindPhraseBook();
+  }));
+}
 function renderChallenge() {
   const el = $("v-challenge");
   const lv = lvInfo();
@@ -1592,6 +1698,7 @@ function renderChallenge() {
   const head = `<div class="help-hero bleed b-hero ch-hero"><div class="eyebrow">CHALLENGE</div><h1>見抜きチャレンジ</h1>
     <p>届いたメッセージを見て、<b>あやしい</b>か<b>だいじょうぶ</b>かを判定しよう。ふつうの連絡もまざっています。問題は毎回変わるので、何度でも挑戦できます。</p>
     <div class="ch-level"><div><span class="eyebrow">見抜きレベル</span><b>Lv.${lv.lv}　${esc(lv.title)}</b><span class="lvbar big"><i style="width:${lv.pct}%"></i></span><small>次のレベルまで ${lv.toNext} XP（合計 ${lv.xp} XP）</small></div></div></div>`;
+  if (RT) return renderReply(el, head);
   if (!CH || (!CH.cur && !CH.over)) {
     el.innerHTML = head + `<div class="ch-modes">
       <div class="ch-mode"><span class="eyebrow">日替わり</span><h2>今日のチャレンジ</h2><p>今日の10問。同じ日なら、だれでも同じ問題です。最初の挑戦の結果が記録されます。</p>
@@ -1603,11 +1710,15 @@ function renderChallenge() {
       <div class="ch-mode"><span class="eyebrow">見くらべる</span><h2>どっちが安全？</h2><p>2通のメッセージのうち、安全なのはどっち？ ふつうの連絡と、あやしいメッセージの「ちがい」を見つける10問です。</p>
         <p class="ch-rec">最高記録：<b>${store.get("dl3-pair", 0) || 0} / 10</b></p>
         <button class="btn primary" type="button" id="chPair">見くらべる10問をはじめる</button></div>
+      <div class="ch-mode ch-mode-new"><span class="eyebrow">書いて練習</span><h2>ことばで返す</h2><p>あやしいメッセージに、自分の言葉で返信を書く5問。断れているか、短くはっきりしているかを★3つで判定します。</p>
+        <p class="ch-rec">最高記録：<b>★ ${store.get("dl3-reply", 0) || 0} / 15</b></p>
+        <button class="btn primary" type="button" id="chReply">ことばで返す5問をはじめる</button></div>
     </div>
     <div class="ch-xp"><h2>XP（経験値）のため方</h2><ul><li>シナリオでサインに気づく <b>+10</b>（見逃しても学べたら +3）</li><li>新しい結末を見る <b>+20</b></li><li>チャレンジ・クイズで正解 <b>+5</b></li><li>今日のチャレンジをクリア <b>+30</b></li></ul></div>`;
     $("chDaily").onclick = () => startChallenge("daily");
     $("chEndless").onclick = () => startChallenge("endless");
     $("chPair").onclick = () => startChallenge("pair");
+    $("chReply").onclick = () => startReply();
     return;
   }
   if (CH.over && CH.mode === "pair") {
