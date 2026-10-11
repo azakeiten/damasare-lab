@@ -67,7 +67,7 @@ const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
-const byId = (id) => SCENARIOS.find((s) => s.id === id);
+const byId = (id) => SCENARIOS.find((s) => s.id === id) || (/^mix-\d+$/.test(id || "") ? genScenario(+id.slice(4)) : null);
 const endIds = (sc) => Object.keys(sc.nodes).filter((k) => sc.nodes[k].end);
 const mascot = (cls) => `<svg class="mascot ${cls || ""}" aria-hidden="true"><use href="#minuke"></use></svg>`;
 const lvl = (n) => "★".repeat(n) + "☆".repeat(3 - n);
@@ -173,6 +173,7 @@ function talkText(sc, n) {
 function route() {
   const h = (location.hash || "").replace(/^#/, "") || "home";
   closeResult(true);
+  if (h === "mix") { location.replace("#mix-" + Math.floor(Math.random() * 1e9)); return; }
   if (byId(h)) return showView("play", h);
   if (h === "zukan" || h === "help" || h === "teach" || h === "challenge") return showView(h);
   showView("home");
@@ -398,6 +399,7 @@ function renderHome() {
     <a class="way" href="#zukan"><span class="way-n">3</span><b>集める</b><span>出会ったサインは図鑑に。見抜きレベルと称号が上がり、苦手な系統もわかります。</span><i>図鑑を見る →</i></a>
   </section>
   ${contHTML}
+  ${mixHTML()}
   ${coursesHTML()}
   ${todaySignHTML()}
   ${weakHTML()}
@@ -1031,7 +1033,7 @@ async function playNode(id) {
     $("clock").textContent = S.clock;
     append(`<div class="timechip">${esc(n.time)}</div>`);
   }
-  if (n.end) return showEnd(id, n);
+  if (n.end) return endFlow(id, n);
   waitingUI();
   for (const it of n.log) { await showItem(it); if (my !== RUN) return; }
   choicesUI(n);
@@ -1080,7 +1082,7 @@ function nodeInfo(n) {
   /* 相手が家族や友だちなど「だます側」でないときは、共通の聞き返しは出さない */
   const wc = who && S.sc.cast[who];
   const ally = !!(wc && /祖|おばあ|おじい|母|父|姉|兄|弟|妹|友|同級生|先生|本物|公式|親|家族|カード裏/.test(wc.n + (wc.r || "")));
-  return { risky, safe, rcat, who, askQ: own ? own[0] : ASKQ[rcat], press: own ? own.slice(1) : PRESS[rcat],
+  return { risky, safe, rcat, who, ally, askQ: own ? own[0] : ASKQ[rcat], press: own ? own.slice(1) : PRESS[rcat],
     canAsk: !!(risky && who && talkScene() && (own || (ASKQ[rcat] && !ally)) && (S.asked[S.node] || 0) < 2),
     canTalk: !!(risky && safe && rcat !== "soudan" && !/相談/.test(safe.say || safe.act)) };
 }
@@ -1141,7 +1143,7 @@ async function askBack(n, text, typed) {
 async function consult(n, typed) {
   const my = S.run, info = nodeInfo(n), safe = info.safe;
   lockComposer();
-  if (typed) sendMe(maskTx(typed));
+  if (typed) { sendMe(maskTx(typed)); if (info.who && !info.ally && talkScene()) { await pause(300); if (my !== RUN) return; await showReaction(typed, info.who); if (my !== RUN) return; } }
   else { append(`<div class="act">${inPerson() ? "いったん待ってもらって、家族や友だちに相談した" : "返事をする前に、家族や友だちに相談した"}</div>`); S.lastFrom = null; }
   await pause(500); if (my !== RUN) return;
   const adv = safe.act ? `「${safe.act.replace(/[。！!…]+$/, "")}のがいいと思う」` : `「『${safe.say}』って返してみたら？」`;
@@ -1186,6 +1188,9 @@ async function choose(c, opt) {
   S.hist.push({ node: S.node, text: opt.histText || (mine ? `「${mine}」` : c.say || c.act), sign: c.sign, ok: c.ok, scene: S.scene, clock: S.clock, signsBefore: Object.assign({}, S.signs) });
   if (mine) {
     if (talkScene()) sendMe(mine); else { append(`<div class="act">${esc(mine)}</div>`); S.lastFrom = null; }
+    /* 書いた言葉に、相手がその場で反応する（相手がだます側のときだけ） */
+    const ni = nodeInfo(S.sc.nodes[S.node]);
+    if (talkScene() && ni.who && !ni.ally) { await pause(300); if (my !== RUN) return; await showReaction(opt.myText, ni.who); if (my !== RUN) return; }
     append(`<div class="readchip">${mascot("sm")}<span><small>ミヌケの読み取り：${esc(opt.read || "いちばん近い選択")}</small><b>${esc(c.say || c.act)}</b></span></div>`);
     S.lastFrom = null;
     if (opt.read === "断る・確かめる返信" && judgeReply(opt.myText).tone === "ok") savePhrase(opt.myText, S.sc.tag);
@@ -1194,7 +1199,7 @@ async function choose(c, opt) {
   else { append(`<div class="act">${esc(c.act)}</div>`); S.lastFrom = null; }
   if (c.sign && S.sc.signs[c.sign]) {
     /* サインがかくれていたメッセージに印をつける */
-    const target = [...$("log").querySelectorAll(".row.them:not(.typing), .shot")].pop();
+    const target = [...$("log").querySelectorAll(".row.them:not(.typing):not(.react), .shot")].pop();
     const cat = CATS[S.sc.signs[c.sign].cat];
     if (target && !target.classList.contains("flag") && cat) {
       target.classList.add("flag", c.ok ? "flag-ok" : "flag-ng");
@@ -1236,6 +1241,171 @@ function stopCard(signId, ok) {
     S.closeStop = done;
   });
 }
+/* ===== 自分の言葉への「相手の反応」：書いた内容に合わせて、相手がその場で返してくる ===== */
+const ALLY_RE = /祖|おばあ|おじい|母|父|姉|兄|弟|妹|友|同級生|先生|本物|公式|親|家族|カード裏/;
+const REACT = [
+  [/警察|110|9110/, "警察？ そんな大げさな話じゃないですよ"],
+  [/188|消費生活|消費者/, "そういう窓口に言っても、どうにもなりませんよ"],
+  [/親|家族|母|父|ママ|パパ|兄|姉|先生|おばあ|おじい/, "ご家族に話すと、話がややこしくなりますよ"],
+  [/友/, "友だちに話さなくても、だいじょうぶですよ"],
+  [/公式|確認|確かめ|調べ|かけ直|折り返|検索/, "確認しなくてもだいじょうぶです。こちらが担当ですから"],
+  [/書面|契約書|持ち帰/, "書面は、あとでちゃんとお渡ししますから"],
+  [/考え|保留|待って|あとで|後で/, "考えている時間はないんです。今決めてもらえますか"],
+  [/怪し|あやし|詐欺|さぎ|おかしい/, "あやしいなんて、ひどいなあ。ちゃんとした話ですよ"]
+];
+function reactTo(raw) {
+  const mine = maskTx(raw.trim());
+  const j = judgeReply(raw);
+  const quote = [...mine].length <= 18 ? `「${mine.replace(/[。！!？?]+$/, "")}」…ですか。` : "";
+  const live = inPerson();
+  if (/[0-9]{4,}|\S+@\S+/.test(raw)) return { k: "them", t: "ありがとうございます。こちらで確認しますね" };
+  if (/ブロック|通報|無視|スルー/.test(raw)) return { k: "narr", t: live ? "（相手は一瞬だまりこんだ）" : "（既読がついたまま、返事が止まった）" };
+  if (j.tone === "ng") return { k: "them", t: "ありがとうございます！ では、さっそく進めますね" };
+  if (j.tone === "ok") {
+    const hit = REACT.find(([re]) => re.test(raw));
+    return { k: "them", t: quote + (hit ? hit[1] : "でも、本当にいいんですか？ あとで後悔しますよ") };
+  }
+  return null;
+}
+async function showReaction(raw, who) {
+  const r = reactTo(raw);
+  if (!r) return;
+  if (r.k === "them") { await showItem(["them", r.t, who]); const row = [...$("log").querySelectorAll(".row.them:not(.typing)")].pop(); if (row) row.classList.add("react"); }
+  else await showItem(["narr", r.t]);
+}
+
+/* ===== 相手はあきらめない：早く見抜いて「被害なし」になったとき、相手が別の手口でもう一度近づいてくる ===== */
+const ENC_REFUSE = "その話はお断りします。もう連絡しないでください";
+const ENC_GIVE = "…やっぱり、もう少し話を聞かせてください";
+function encoreSigns() {
+  const sc = S.sc, cand = new Set();
+  Object.values(sc.nodes).forEach((n) => (n.choices || []).forEach((c) => { if (c.ok === false && c.sign) cand.add(c.sign); }));
+  Object.entries(sc.signs).forEach(([k, s]) => { if (s.re) cand.add(k); });
+  return [...cand].filter((k) => !S.signs[k] && sc.signs[k] && sc.signs[k].cat !== "soudan").slice(0, 2);
+}
+function encoreScene() {
+  const st = S.sc.nodes[S.sc.start].scene;
+  if (!st || !["dm", "talk", "call", "live"].includes(st.type) || !st.who) return null;
+  const c = S.sc.cast[st.who];
+  return c && !ALLY_RE.test(c.n + (c.r || "")) ? st : null;
+}
+function encoreChoice(note) {
+  return new Promise((resolve) => {
+    const ph = "自分の言葉で返信（例：もう連絡しないでください）";
+    $("composer").innerHTML = `<div class="q"><span>しつこい相手。どうする？</span></div>
+      ${note ? `<div class="readnote" role="status">${mascot("sm")}<span>${note}</span></div>` : ""}
+      <div class="choices">
+        <button class="choice say" type="button" id="ch-enc-0"><span class="ch-key" aria-hidden="true">A</span><span class="ch-tx"><small>返信する</small><span>${ENC_REFUSE}</span></span><span class="ch-ic" aria-hidden="true">${ICON_SAY}</span></button>
+        <button class="choice say" type="button" id="ch-enc-1"><span class="ch-key" aria-hidden="true">B</span><span class="ch-tx"><small>返信する</small><span>${ENC_GIVE}</span></span><span class="ch-ic" aria-hidden="true">${ICON_SAY}</span></button>
+        <button class="choice do" type="button" id="ch-enc-2"><span class="ch-key" aria-hidden="true">C</span><span class="ch-tx"><small>行動する</small><span>${inPerson() ? "その場を離れて、家族に話す" : "返信せずにブロックして、通報する"}</span></span><span class="ch-ic" aria-hidden="true">${ICON_ACT}</span></button>
+      </div>
+      <form class="freebar" id="freeForm" autocomplete="off"><label class="sr" for="freeIn">自分の言葉で返信する</label>
+        <input id="freeIn" type="text" maxlength="80" enterkeyhint="send" placeholder="${ph}"><button type="submit" aria-label="送信">${ICON_SEND}</button></form>`;
+    $("ch-enc-0").onclick = () => resolve({ ok: true, say: ENC_REFUSE });
+    $("ch-enc-1").onclick = () => resolve({ ok: false, say: ENC_GIVE });
+    $("ch-enc-2").onclick = () => resolve({ ok: true, act: $("ch-enc-2").querySelector(".ch-tx > span").textContent });
+    $("freeForm").onsubmit = (e) => {
+      e.preventDefault();
+      const v = $("freeIn").value.trim(); if (!v) return;
+      const j = judgeReply(v);
+      if (j.tone === "mid") return resolve({ retry: true, mine: v });
+      resolve({ ok: j.tone === "ok", mine: v });
+    };
+  });
+}
+async function runEncore() {
+  const my = S.run, keys = encoreSigns(), scn = encoreScene();
+  if (!keys.length || !scn) return;
+  await pause(500); if (my !== RUN) return;
+  append(`<div class="encore-div"><span>でも、相手はあきらめない…</span></div>`);
+  S.scene = null; setScene(scn);
+  append(`<div class="timechip">数日後</div>`);
+  let won = 0;
+  for (const k of keys) {
+    const sg = S.sc.signs[k];
+    const line = sg.re || (sg.ask && sg.ask[1]) || (PRESS[sg.cat] || PRESS.jouken)[0];
+    await showItem(["them", line, scn.who]); if (my !== RUN) return;
+    let res = await encoreChoice();
+    while (res.retry) {
+      lockComposer(); sendMe(maskTx(res.mine)); await pause(400); if (my !== RUN) return;
+      await showItem(["them", (PRESS[sg.cat] || PRESS.jouken)[1], scn.who]); if (my !== RUN) return;
+      res = await encoreChoice(`「${esc(maskTx(res.mine))}」だと、断っているのか伝わらなかったみたい。はっきり返してみよう。`);
+    }
+    if (my !== RUN) return;
+    lockComposer();
+    if (res.mine) { sendMe(maskTx(res.mine)); if (res.ok && judgeReply(res.mine).tone === "ok") savePhrase(res.mine, S.sc.tag); await pause(300); await showReaction(res.mine, scn.who); }
+    else if (res.say) sendMe(res.say);
+    else { append(`<div class="act">${esc(res.act)}</div>`); S.lastFrom = null; }
+    if (my !== RUN) return;
+    const target = [...$("log").querySelectorAll(".row.them:not(.typing):not(.react)")].pop();
+    const cat = CATS[sg.cat];
+    if (target && !target.classList.contains("flag") && cat) {
+      target.classList.add("flag", res.ok ? "flag-ok" : "flag-ng");
+      target.querySelector(".bub").insertAdjacentHTML("beforeend", `<span class="flag-tag"><b>${cat.ic}</b>${esc(cat.n)}のサイン</span>`);
+    }
+    S.signs[k] = res.ok ? "caught" : "missed";
+    const p = prog(S.sc.id); if (p.signs[k] !== "caught") p.signs[k] = S.signs[k]; saveProgress();
+    S.xp = (S.xp || 0) + addXP(res.ok ? 10 : 3);
+    await pause(400); if (my !== RUN) return;
+    await stopCard(k, res.ok); if (my !== RUN) return;
+    append(`<div class="chip ${res.ok ? "ok" : "ng"}"><i></i><span>サイン：${esc(sg.t)}　<b>${res.ok ? "気づけた" : "見逃した"}</b></span></div>`);
+    renderSide(k); renderDots();
+    if (res.ok) won++;
+    else { await showItem(["narr", "…あぶない。もう一度考えて、やっぱりきっぱり断った"]); if (my !== RUN) return; }
+  }
+  await showItem(["narr", "それから、相手からの連絡は来なくなった"]); if (my !== RUN) return;
+  if (won === keys.length) { S.xp = (S.xp || 0) + addXP(10); append(`<div class="chip ok"><i></i><span><b>しつこい相手も撃退！</b>　ボーナス +10 XP</span></div>`); }
+}
+
+/* ===== 毎回ちがう話：材料を組み合わせて、遊ぶたびに新しいストーリーを作る ===== */
+const GEN_CACHE = {};
+function genScenario(seed) {
+  const id = "mix-" + seed;
+  if (GEN_CACHE[id]) return GEN_CACHE[id];
+  const G = window.DL && window.DL.gen;
+  if (!G) return null;
+  const r = rng(seed);
+  const pick = (a) => a[Math.floor(r() * a.length)];
+  const vals = {};
+  const fill = (s) => String(s).replace(/\{(\w+)\}/g, (_, k) => (vals[k] ||= pick(G.fills[k] || [k])));
+  const h = G.hooks[Math.floor(r() * G.hooks.length)];
+  const rest = h.beats.map((_, i) => i).slice(1).map((i) => [i, r()]).sort((a, b) => a[1] - b[1]);
+  const idx = [0, ...rest.slice(0, 2).map((x) => x[0]).sort((a, b) => a - b)];
+  const extra = rest.slice(2).map((x) => x[0]);
+  const used = idx.map((i) => h.beats[i]);
+  const clock = fill("{time}");
+  const signs = {};
+  used.forEach((b, i) => { signs["s" + i] = { cat: b.cat, t: b.t, d: b.d, re: fill(b.say[b.say.length - 1]) }; });
+  extra.forEach((i, j) => { const b = h.beats[i]; signs["x" + j] = { cat: b.cat, t: b.t, d: b.d, re: fill(b.say[b.say.length - 1]) }; });
+  signs.report = { cat: "soudan", t: "被害にあっても、ひとりで抱えない", d: "やり取りや支払いの記録を残して、家族や188、警察（#9110）に相談すれば、取れる手段が見つかることもあります。" };
+  const beatNode = (b, i, extraLog) => ({
+    log: [...(extraLog || []), ...b.say.map((l) => ["them", fill(l)])],
+    choices: [{ say: fill(b.safe), next: "e" + (i + 1), sign: "s" + i, ok: true }, { say: fill(b.risky), next: i < 2 ? "n" + (i + 2) : "n4", sign: "s" + i, ok: false }]
+  });
+  const nodes = {
+    n1: Object.assign({ scene: Object.assign({}, h.scene, { who: "opp" }), time: clock }, beatNode(used[0], 0, h.open.map((l) => ["them", fill(l)]))),
+    n2: beatNode(used[1], 1),
+    n3: beatNode(used[2], 2),
+    n4: { scene: { type: "home", app: "自分の部屋" }, time: "数日後", log: [["narr", fill(h.harm)]], choices: [
+      { act: "家族に話して、警察と188に相談する", next: "e4", sign: "report", ok: true },
+      { act: "恥ずかしくて、だれにも言えない", next: "e5", sign: "report", ok: false }] }
+  };
+  [["e1", "safe", "s1"], ["e2", "safe", "s2"], ["e3", "safe", "s3"], ["e4", "partial", "p"], ["e5", "bad", "b"]].forEach(([k, end, e]) => { nodes[k] = { end, h: fill(h.ends[e][0]), p: fill(h.ends[e][1]) }; });
+  const sc = { id, gen: true, seed, genre: h.genre, tag: h.tag, title: fill(h.title), sub: fill(h.sub), mins: 3, level: 2, clock, intro: fill(h.intro),
+    cast: { opp: { n: fill(h.opp.n), i: h.opp.i, h: h.opp.h, r: h.opp.r } }, signs, start: "n1", nodes };
+  DEBRIEF[id] = Object.assign({}, h.db, { flow: used.map((b) => b.t) });
+  return (GEN_CACHE[id] = sc);
+}
+function mixHTML() {
+  const n = (window.DL && window.DL.gen && window.DL.gen.hooks.length) || 0;
+  if (!n) return "";
+  const plays = Object.keys(progress).filter((k) => /^mix-/.test(k)).length;
+  return `<section class="mix bleed b-brand" aria-label="毎回ちがう話">
+    <div class="mix-in"><div><span class="eyebrow">ENDLESS STORY</span><h2>毎回ちがう話</h2>
+      <p>${n}の場面と、いくつもの手口を組み合わせて、開くたびに新しいストーリーが生まれます。全部のシナリオを遊び終わっても、終わりはありません。</p>
+      ${plays ? `<p class="mix-rec">これまでに <b>${plays}</b> 話を体験</p>` : ""}</div>
+      <a class="btn primary big" href="#mix" id="mixGo">新しい話をはじめる</a></div></section>`;
+}
 function rankOf(endType, caught, missed) {
   const met = caught + missed, rate = met ? caught / met : 0;
   if (endType === "safe" && rate >= 0.99) return { r: "見抜きマスター", m: "完ぺき！ 最初のサインから見抜けたね。この感覚をまわりにも教えてあげて。" };
@@ -1243,6 +1413,11 @@ function rankOf(endType, caught, missed) {
   if (endType === "partial") return { r: "ギリギリ回避", m: "被害は少し出たけど、最後に止まれた。どこで気づけたらよかったか、もう一度見てみよう。" };
   if (rate >= 0.5) return { r: "あと一歩", m: "気づけたサインもあったのに、流れに乗せられてしまった。次は別の選択で。" };
   return { r: "ヒヤリ体験", m: "これが現実なら大変。でも体験だからこそ、ここで覚えられる。サインを見直してもう一回！" };
+}
+async function endFlow(id, n) {
+  const my = S.run;
+  if (n.end === "safe" && !S.encored) { S.encored = true; await runEncore(); if (my !== RUN) return; }
+  showEnd(id, n);
 }
 function showEnd(id, n) {
   const sc = S.sc, p = prog(sc.id);
@@ -1375,7 +1550,7 @@ function openResult(id, n, isNewEnd) {
     </div>
     <div class="resbtns">
       <button class="btn" type="button" id="resRetry">別の選択でもう一度</button>
-      <a class="btn primary" href="#${next.id}" id="resNext">${cn && cn.s ? "コースの次へ" : "次へ"}：${esc(next.tag)}</a>
+      ${sc.gen ? `<a class="btn primary" href="#mix" id="resNext">もう1話：毎回ちがう話</a>` : `<a class="btn primary" href="#${next.id}" id="resNext">${cn && cn.s ? "コースの次へ" : "次へ"}：${esc(next.tag)}</a>`}
     </div>
     <button class="qback" type="button" id="resClose" style="justify-self:center">閉じて会話を見返す</button>
   </div>`;
