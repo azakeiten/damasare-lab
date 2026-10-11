@@ -99,11 +99,11 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "follower", "giftwari", "airdrop"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "follower", "giftwari", "airdrop"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
   { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "kakin", "gameacct", "liver"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "shukatsu", "course", "kyozai", "ryugaku"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi"] },
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "shukatsu", "course", "kyozai", "ryugaku"] },
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi", "yosou", "seikei"] },
   { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
@@ -1572,6 +1572,27 @@ function genScenario(seed) {
   DEBRIEF[id] = Object.assign({}, h.db, { flow: used.map((b) => b.t) });
   return (GEN_CACHE[id] = sc);
 }
+/* ===== 手口の解剖：この相手が、どの手口を何回使ってきたか ===== */
+function tacticsHTML(sc) {
+  const met = Object.entries(S.signs).map(([k, v]) => ({ cat: (sc.signs[k] || {}).cat, v })).filter((x) => x.cat && x.cat !== "soudan");
+  if (!met.length) return "";
+  const by = {};
+  met.forEach((x) => (by[x.cat] ||= []).push(x.v));
+  const rows = Object.entries(by).sort((a, b) => b[1].length - a[1].length);
+  const st = sc.nodes[sc.start].scene || {};
+  const c = st.who && sc.cast[st.who];
+  const opp = c && !ALLY_RE.test(c.n + (c.r || "")) ? c : null;
+  const caught = met.filter((x) => x.v === "caught").length;
+  return `<div class="tactics">
+    <div class="tc-head">${opp ? `<span class="tc-av">${av(sc, st.who)}<i aria-hidden="true">?</i></span>` : ""}
+      <div><span class="eyebrow">手口の解剖</span><b>${opp ? esc(opp.n.replace(/（？）/g, "")) + " が使ってきた手口" : "この話に出てきた手口"}</b>
+      <span>${rows.length}種類・${met.length}回。いちばん多かったのは「${esc(CATS[rows[0][0]].n)}」。あなたが見抜けたのは ${caught}/${met.length}</span></div></div>
+    <ul class="tc-rows">${rows.map(([cat, vs], i) => `<li style="--d:${i}"><span class="tc-ic" aria-hidden="true">${CATS[cat].ic}</span><span class="tc-n">${esc(CATS[cat].n)}</span>
+      <span class="tc-dots">${vs.map((v) => `<i class="${v}" title="${v === "caught" ? "気づけた" : "見逃した"}"></i>`).join("")}</span><span class="tc-c">${vs.filter((v) => v === "caught").length}/${vs.length}</span></li>`).join("")}</ul>
+    <p class="tc-leg"><i class="caught"></i>気づけた　<i class="missed"></i>見逃した</p></div>`;
+}
+/* 今日の1話：日付で決まる「毎回ちがう話」。同じ日なら、だれでも同じ話 */
+function todaySeed() { const d = new Date(); return (d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate()) * 7 + 13; }
 function mixHTML() {
   const n = (window.DL && window.DL.gen && window.DL.gen.hooks.length) || 0;
   if (!n) return "";
@@ -1580,7 +1601,10 @@ function mixHTML() {
     <div class="mix-in"><div><span class="eyebrow">ENDLESS STORY</span><h2>毎回ちがう話</h2>
       <p>${n}の場面と、いくつもの手口を組み合わせて、開くたびに新しいストーリーが生まれます。全部のシナリオを遊び終わっても、終わりはありません。</p>
       ${plays ? `<p class="mix-rec">これまでに <b>${plays}</b> 話を体験</p>` : ""}</div>
-      <a class="btn primary big" href="#mix" id="mixGo">新しい話をはじめる</a></div></section>`;
+      <div class="mix-btns">
+        ${(() => { const id = "mix-" + todaySeed(), sc = byId(id), done = !!(progress[id] && (progress[id].ends || []).length);
+          return sc ? `<a class="mix-today${done ? " done" : ""}" href="#${id}" id="mixToday"><span class="eyebrow">今日の1話${done ? "　体験ずみ" : ""}</span><b>${esc(sc.tag)}</b><span>${esc(sc.title)}</span></a>` : ""; })()}
+        <a class="btn primary big" href="#mix" id="mixGo">新しい話をはじめる</a></div></div></section>`;
 }
 function rankOf(endType, caught, missed) {
   const met = caught + missed, rate = met ? caught / met : 0;
@@ -1719,6 +1743,7 @@ function openResult(id, n, isNewEnd) {
       <button type="button" role="tab" id="rtab-2" data-tab="2" aria-selected="false" aria-controls="rpane-2">伝える・シェア</button>
     </div>
     <div class="rpane" role="tabpanel" id="rpane-0" aria-labelledby="rtab-0">
+    ${tacticsHTML(sc)}
     <div><div class="side-h"><h2>ストーリーマップ</h2><span>結末 ${p.ends.length} / ${endIds(sc).length}</span></div><div class="mapbox">${storyMap(sc, S.path, id)}${MAP_LEGEND}</div></div>
     ${missed ? `<div><div class="side-h"><h2>見逃したサイン</h2></div><ul class="signs">${ids.filter((k) => S.signs[k] === "missed").map((k) => `<li><span class="st missed">見逃した</span><b>${esc(sc.signs[k].t)}</b><span class="d">${esc(sc.signs[k].d)}</span></li>`).join("")}</ul></div>` : ""}
     ${S.hist.length ? `<div><div class="side-h"><h2>あなたが通ったルート</h2><span>分かれ道からやり直せます</span></div>
