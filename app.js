@@ -1093,9 +1093,16 @@ function choicesUI(n, note) {
   const hintSign = n.choices.map((c) => c.sign && S.sc.signs[c.sign]).find(Boolean);
   const info = nodeInfo(n);
   const keys = "ABCDEFGH"; let k = 0;
-  const main = order.map((i) => {
-    const c = n.choices[i];
-    return `<button class="choice ${c.say ? "say" : "do"}" type="button" id="ch-${S.node}-${i}" data-i="${i}"><span class="ch-key" aria-hidden="true">${keys[k++]}</span><span class="ch-tx"><small>${c.say ? "返信する" : "行動する"}</small><span>${esc(c.say || c.act)}</span></span><span class="ch-ic" aria-hidden="true">${c.say ? ICON_SAY : ICON_ACT}</span></button>`;
+  /* 大きな選択肢は3つ：もとの2つに「ためらう」を足す。ためらうと、相手は手口を変えてくる */
+  S.hes ||= {}; S.hpos ||= {};
+  const canHes = !!(info.risky && info.safe && n.choices.length === 2 && !S.hes[S.node] && !S.pending);
+  const hesT = talkScene() ? (inPerson() ? "うーん…少し考えさせてください" : "うーん…ちょっと考えさせて") : "すぐには決めず、もう一度よく読む";
+  const slots = order.map((i) => ({ i }));
+  if (canHes) { if (S.hpos[S.node] === undefined) S.hpos[S.node] = Math.floor(Math.random() * 3); slots.splice(S.hpos[S.node], 0, { h: true }); }
+  const main = slots.map((s) => {
+    if (s.h) return `<button class="choice ${talkScene() ? "say" : "do"} hes" type="button" id="ch-${S.node}-hes"><span class="ch-key" aria-hidden="true">${keys[k++]}</span><span class="ch-tx"><small>${talkScene() ? "返信する" : "行動する"}</small><span>${esc(hesT)}</span></span><span class="ch-ic" aria-hidden="true">${talkScene() ? ICON_SAY : ICON_ACT}</span></button>`;
+    const c = n.choices[s.i];
+    return `<button class="choice ${c.say ? "say" : "do"}" type="button" id="ch-${S.node}-${s.i}" data-i="${s.i}"><span class="ch-key" aria-hidden="true">${keys[k++]}</span><span class="ch-tx"><small>${c.say ? "返信する" : "行動する"}</small><span>${esc(c.say || c.act)}</span></span><span class="ch-ic" aria-hidden="true">${c.say ? ICON_SAY : ICON_ACT}</span></button>`;
   }).join("");
   const askT = info.canAsk ? ((S.asked[S.node] || 0) ? "まだ納得できない。もう一度たずねる" : info.askQ) : "";
   /* 選択肢のほかに取れる行動：聞き返す・相談する・調べる・時間をおく・記録を残す */
@@ -1122,6 +1129,7 @@ function choicesUI(n, note) {
   }));
   const ab = $(`ch-${S.node}-ask`); if (ab) ab.onclick = () => askBack(n, askT);
   const tb = $(`ch-${S.node}-talk`); if (tb) tb.onclick = () => consult(n);
+  const hb = $(`ch-${S.node}-hes`); if (hb) hb.onclick = () => hesitate(n, hesT);
   [["search", searchUp], ["wait", waitUp], ["memo", memoUp]].forEach(([x, f]) => { const b = $(`ch-${S.node}-${x}`); if (b) b.onclick = () => f(n); });
   $("freeForm").onsubmit = (e) => { e.preventDefault(); const v = $("freeIn").value.trim(); if (v) freeReply(n, v); };
   if ($("hintBtn")) $("hintBtn").onclick = () => {
@@ -1189,6 +1197,79 @@ async function memoUp(n) {
   append(`<div class="chip ok"><i></i><span>記録を残した（${S.evidence}件）　相談するときの大事な証拠になります</span></div>`);
   await pause(300); if (my !== RUN) return;
   choicesUI(n);
+}
+/* ===== 相手の演出：ためらう・通知・取り消し・被害 ===== */
+/* ためらったときに、相手が出してくる「ゆずった条件」や「気持ちへのうったえ」 */
+const COMPROMISE = {
+  umai: "わかりました。あなたにだけ、特別に条件をもっとよくしますね",
+  isogi: "じゃあ、今日の夜までは待ちます。でも、それを過ぎたらもう無理ですよ",
+  himitsu: "じゃあ、だれにも言わずに、ふたりだけで決めよう？",
+  kane: "じゃあ、最初は半分だけでもいいですよ。それなら負担も少ないでしょう？",
+  kojin: "じゃあ、名前と生年月日だけでもいいので、教えてもらえますか",
+  kankei: "信じてくれないんだ…。ちょっとさみしいな",
+  jouken: "細かい条件は、あとでちゃんと説明しますから。まずは形だけ",
+  tsuuchi: "これは正式なお手続きです。ご不安なら、まずは確認だけでも"
+};
+async function hesitate(n, text) {
+  const my = S.run, info = nodeInfo(n);
+  lockComposer();
+  S.hes[S.node] = true;
+  if (talkScene()) sendMe(text); else { append(`<div class="act">${esc(text)}</div>`); S.lastFrom = null; }
+  await pause(500); if (my !== RUN) return;
+  if (talkScene() && info.who && !info.ally) {
+    /* 一度打ちかけて取り消す → 言い方を変えて、ゆずった条件を出してくる */
+    if (!inPerson()) {
+      append(`<div class="row them unsent"><span class="av-slot"></span><span class="bub"><p>メッセージの送信を取り消しました</p></span></div>`);
+      S.lastFrom = null;
+      await pause(700); if (my !== RUN) return;
+    }
+    await showItem(["them", COMPROMISE[info.rcat] || COMPROMISE.kane, info.who]); if (my !== RUN) return;
+    choicesUI(n, "ためらうと、相手は条件をゆるめたり、気持ちにうったえたりしてきます。「少しだけなら」と思わせるのも、よくある手口です。");
+  } else {
+    await showItem(["think", "（読み返すと、さっきは流していた言葉が、なんだか気になる…）"]); if (my !== RUN) return;
+    choicesUI(n, "すぐに決めないのは、いい判断。もう一度見て、どれにするか選ぼう。");
+  }
+}
+/* スマホ画面の上から出てくる通知 */
+function pushNote(app, title, text, tone) {
+  const scr = $("screen");
+  if (!scr) return;
+  const el = document.createElement("div");
+  el.className = "pushn" + (tone ? " " + tone : "");
+  el.setAttribute("role", "status");
+  el.innerHTML = `<span class="pn-app">${esc(app)}<i>いま</i></span><b>${esc(title)}</b><span class="pn-tx">${esc(text)}</span>`;
+  scr.appendChild(el);
+  setTimeout(() => el.classList.add("out"), reduced ? 2600 : 3200);
+  setTimeout(() => el.remove(), reduced ? 2700 : 3600);
+}
+function hitScreen() {
+  const scr = $("screen");
+  if (!scr || reduced) return;
+  scr.classList.remove("hit"); void scr.offsetWidth; scr.classList.add("hit");
+  setTimeout(() => scr.classList.remove("hit"), 900);
+}
+/* 被害の知らせ：どんなサインを見逃したかで、通知の中身を変える */
+const HARM = {
+  kojin: ["カード会社", "ご利用のお知らせ", "海外のサイトで ¥48,000 のご利用がありました"],
+  tsuuchi: ["カード会社", "ご利用のお知らせ", "見覚えのないサイトで ¥36,500 のご利用がありました"],
+  jouken: ["メール", "ご契約ありがとうございます", "お支払い総額 ¥330,000（分割24回）"],
+  default: ["銀行アプリ", "お振込みのお知らせ", "¥50,000 のお振込みが完了しました。残高が減っています"]
+};
+const HARM_TEXT = {
+  kane: "言われるままにお金を払ってしまった。もう戻ってこない",
+  kojin: "伝えてしまった情報から、カードの情報を抜き取られた",
+  tsuuchi: "リンク先で入力した情報を抜き取られた",
+  umai: "「もうかる」という言葉にのって、お金を払ってしまった",
+  isogi: "急かされるまま手続きして、お金を失った",
+  himitsu: "だれにも相談しないまま話が進み、お金を失った",
+  kankei: "相手を信じて、お金を渡してしまった",
+  jouken: "よく読まないままサインして、高額な契約をしてしまった"
+};
+function harmFx(cat) {
+  const h = HARM[cat] || HARM.default;
+  pushNote(h[0], h[1], h[2], "bad");
+  hitScreen();
+  sfx("stop");
 }
 function lockComposer() { $("composer").querySelectorAll("button, input").forEach((b) => (b.disabled = true)); }
 /* 聞き返す：相手は答えずに、別の言い方でせかしてくる。そこにもサインが出る */
@@ -1386,9 +1467,17 @@ async function runEncore() {
   S.scene = null; setScene(scn);
   append(`<div class="timechip">数日後</div>`);
   let won = 0;
+  let first = true;
   for (const k of keys) {
     const sg = S.sc.signs[k];
     const line = sg.re || (sg.ask && sg.ask[1]) || (PRESS[sg.cat] || PRESS.jouken)[0];
+    /* 最初は、画面の上に「新着」の通知として届く */
+    if (first && scn.type !== "live") {
+      const c = S.sc.cast[scn.who] || {};
+      pushNote(scn.app || "メッセージ", scn.type === "call" ? `着信：${c.n || ""}` : c.n || "新着メッセージ", scn.type === "call" ? "また、あの番号から…" : [...line].slice(0, 22).join("") + "…");
+      await pause(1200); if (my !== RUN) return;
+    }
+    first = false;
     await showItem(["them", line, scn.who]); if (my !== RUN) return;
     let res = await encoreChoice();
     while (res.retry) {
@@ -1416,10 +1505,20 @@ async function runEncore() {
     append(`<div class="chip ${res.ok ? "ok" : "ng"}"><i></i><span>サイン：${esc(sg.t)}　<b>${res.ok ? "気づけた" : "見逃した"}</b></span></div>`);
     renderSide(k); renderDots();
     if (res.ok) won++;
-    else { await showItem(["narr", "…あぶない。もう一度考えて、やっぱりきっぱり断った"]); if (my !== RUN) return; }
+    else {
+      /* 流されたら、ちゃんと失敗にする：被害の通知が届き、相手は消える */
+      await pause(500); if (my !== RUN) return;
+      harmFx(sg.cat);
+      await pause(900); if (my !== RUN) return;
+      await showItem(["narr", HARM_TEXT[sg.cat] || HARM_TEXT.kane]); if (my !== RUN) return;
+      if (!inPerson()) append(`<div class="sys">相手のアカウントは、もう見つからない</div>`);
+      return { fail: sg };
+    }
   }
-  await showItem(["narr", "それから、相手からの連絡は来なくなった"]); if (my !== RUN) return;
+  await showItem(["narr", inPerson() ? "それから、相手が来ることはなかった" : "それから、相手からの連絡は来なくなった"]); if (my !== RUN) return;
+  if (!inPerson()) append(`<div class="sys">相手のアカウントは、いつの間にか消えていた</div>`);
   if (won === keys.length) { S.xp = (S.xp || 0) + addXP(10); append(`<div class="chip ok"><i></i><span><b>しつこい相手も撃退！</b>　ボーナス +10 XP</span></div>`); }
+  return { won: true };
 }
 
 /* ===== 毎回ちがう話：材料を組み合わせて、遊ぶたびに新しいストーリーを作る ===== */
@@ -1455,7 +1554,7 @@ function genScenario(seed) {
   });
   const waitNode = (b, i) => ({
     log: asCard ? [["think", "（少し考えてみる。もう一度、画面をよく見てみよう）"]]
-      : [["them", (PRESS[b.cat] || PRESS.isogi)[1]], ["think", "（考える時間も、くれないみたい…）"]],
+      : [["them", COMPROMISE[b.cat] || PRESS.isogi[1]], ["think", "（言い方を変えてきた…）"]],
     choices: pair(b, i)
   });
   const nodes = {
@@ -1493,12 +1592,35 @@ function rankOf(endType, caught, missed) {
 }
 async function endFlow(id, n) {
   const my = S.run;
-  if (n.end === "safe" && !S.encored) { S.encored = true; await runEncore(); if (my !== RUN) return; }
+  if (n.end === "safe" && !S.encored) {
+    S.encored = true;
+    const r = await runEncore(); if (my !== RUN) return;
+    if (r && r.fail) {
+      /* 一度は見抜けたのに、しつこさに負けた → 被害の結末にする */
+      const bad = { end: "bad", h: "しつこさに負けて、被害にあってしまった", p: `最初は見抜けていたのに、相手は別の手口でもどってきた。「${r.fail.t}」――ここで流されてしまった。一度断っても、相手は何度でも来る。何度来ても、同じように断ってOK。被害にあったら、すぐに家族と188・警察（#9110）へ。` };
+      S.node = id + "~enc";
+      return showEnd(S.node, bad);
+    }
+  }
+  /* 被害はなくても、サインを2つ以上見逃していたら「ギリギリ」としてあつかう */
+  const missedN = Object.values(S.signs).filter((v) => v === "missed").length;
+  if (n.end === "safe" && missedN >= 2) {
+    n = Object.assign({}, n, { end: "partial", lab: "被害なし（ギリギリ）", p: `${n.p} ただし、見逃したサインが${missedN}つ。かなり危ないところまで進んでいました。` });
+
+  }
+  if (n.end === "bad") {
+    /* 被害の結末：お金や情報が抜き取られた通知が届く */
+    const miss = [...S.hist].reverse().find((h) => h.sign && h.ok === false);
+    const cat = miss ? S.sc.signs[miss.sign].cat : "kane";
+    await pause(300); if (my !== RUN) return;
+    if (cat === "soudan") hitScreen(); else harmFx(cat);
+    await pause(1000); if (my !== RUN) return;
+  }
   showEnd(id, n);
 }
 function showEnd(id, n) {
   const sc = S.sc, p = prog(sc.id);
-  const isNewEnd = !p.ends.includes(id);
+  const isNewEnd = !String(id).includes("~") && !p.ends.includes(id);
   if (isNewEnd) p.ends.push(id);
   S.xp = (S.xp || 0) + addXP(isNewEnd ? 20 : 5);
   if (n.end === "safe" && !Object.values(S.signs).includes("missed")) p.perfect = true;
@@ -1507,7 +1629,7 @@ function showEnd(id, n) {
   saveProgress();
   { const ks = Object.keys(sc.signs); logPlay(sc, id, n, ks.filter((k) => S.signs[k] === "caught").length, ks.filter((k) => S.signs[k] === "missed").length); }
   setTimeout(checkAch, 1600);
-  append(`<div class="end"><div class="tape"></div><div class="in"><span class="stamp s-${n.end}" aria-hidden="true">${STAMP[n.end]}</span><span class="label ${n.end}">結末｜${ENDLAB[n.end]}</span><h3>${esc(n.h)}</h3><p>${esc(n.p)}</p></div></div>`);
+  append(`<div class="end"><div class="tape"></div><div class="in"><span class="stamp s-${n.end}" aria-hidden="true">${STAMP[n.end]}</span><span class="label ${n.end}">結末｜${n.lab || ENDLAB[n.end]}</span><h3>${esc(n.h)}</h3><p>${esc(n.p)}</p></div></div>`);
   $("composer").innerHTML = `<div class="pair">
     <button class="choice go" type="button" id="btn-result">結果を見る</button>
     <button class="choice" type="button" id="btn-retry"><small>同じシナリオ</small><span>別の選択でもう一度</span></button></div>`;
@@ -1585,7 +1707,7 @@ function openResult(id, n, isNewEnd) {
   const talk = talkText(sc, n);
   $("resultSheet").innerHTML = `<div class="tape"></div><div class="in">
     <div class="rank">${mascot()}<div><small>判定</small><b id="resTitle">${esc(rk.r)}</b><span>${esc(rk.m)}</span></div><span class="stamp s-${n.end}" aria-hidden="true">${STAMP[n.end]}</span></div>
-    <div><span class="label ${n.end}">結末｜${ENDLAB[n.end]}${isNewEnd ? "（はじめて回収！）" : ""}</span><p style="margin-top:6px;font-weight:700">${esc(n.h)}</p></div>
+    <div><span class="label ${n.end}">結末｜${n.lab || ENDLAB[n.end]}${isNewEnd ? "（はじめて回収！）" : ""}</span><p style="margin-top:6px;font-weight:700">${esc(n.h)}</p></div>
     <p class="xpgain">見抜きポイント <b>+${S.xp || 0} XP</b>　${lvInfo().title}（Lv.${lvInfo().lv}）</p>
     <div class="resgrid"><div><b>${caught}</b><span>気づけたサイン</span></div><div><b>${missed}</b><span>見逃したサイン</span></div><div><b>${p.ends.length}/${endIds(sc).length}</b><span>回収した結末</span></div></div>
     ${S.hints ? `<p class="hintnote">${mascot("sm")}ミヌケのヒントを ${S.hints} 回使いました。次はヒントなしで挑戦してみよう。</p>` : ""}

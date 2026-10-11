@@ -1403,3 +1403,55 @@ body { background-image: none; letter-spacing: .01em; }
 .call-t, .call-keys span { background: rgba(245, 247, 250, .12); }
 .h-call .call-t { color: #F5F7FA; }
 .call-keys .end { background: #CE3A2E; color: #fff; }
+
+/* ===== v24：3つの大きな選択肢・小さな「ほかの行動」・相手の演出 ===== */
+/* ためらう選択肢は、点線のふちで「様子見」らしく */
+.choice.hes { border-style: dashed; }
+.choice.hes .ch-key { background: var(--surface); color: var(--muted); border: 1.5px solid var(--line-strong); }
+
+/* ほかの行動は、どの画面でも小さなチップに */
+.acts { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.acts-h { flex: 0 0 auto; margin: 0 4px 0 2px; font-size: 11px; }
+.act-chip { flex: 0 0 auto; min-height: 34px; padding: 3px 12px 3px 4px; border-radius: 999px; gap: 6px; border-width: 1px; }
+.act-chip .ac-ic { width: 26px; height: 26px; border-radius: 50%; }
+.act-chip .ac-ic svg { width: 15px; height: 15px; }
+.act-chip .ac-tx small { display: none; }
+.act-chip .ac-tx b { font-size: 12.5px; white-space: nowrap; }
+.act-chip .ch-key { display: none; }
+
+/* 通知のバナー：スマホ画面の上からすべりこむ */
+.pushn { position: absolute; z-index: 6; top: 40px; left: 10px; right: 10px; display: grid; gap: 1px; padding: 10px 14px 11px; border-radius: 16px;
+  background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--line); box-shadow: 0 12px 28px -10px rgba(0, 0, 0, .45); animation: pnIn .38s cubic-bezier(.2, .9, .3, 1.2) both; }
+.pushn.out { animation: pnOut .35s ease-in both; }
+.pn-app { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: .04em; }
+.pn-app i { font-style: normal; font-weight: 400; }
+.pushn b { font-size: 14px; line-height: 1.4; }
+.pn-tx { font-size: 13px; line-height: 1.5; color: var(--ink); }
+.pushn.bad { border-color: color-mix(in srgb, var(--danger) 55%, transparent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 25%, transparent), 0 12px 28px -10px rgba(0, 0, 0, .45); }
+.pushn.bad b { color: var(--danger); }
+@keyframes pnIn { from { transform: translateY(-120%); opacity: 0; } }
+@keyframes pnOut { to { transform: translateY(-120%); opacity: 0; } }
+
+/* 被害のとき：画面がゆれて、赤くにじむ */
+.screen.hit { animation: shake .55s cubic-bezier(.36, .07, .19, .97) both; }
+.screen.hit::after { content: ""; position: absolute; inset: 0; z-index: 5; pointer-events: none; border-radius: inherit;
+  box-shadow: inset 0 0 60px 10px color-mix(in srgb, var(--danger) 55%, transparent); animation: redflash .9s ease-out both; }
+@keyframes shake { 10%, 90% { transform: translateX(-2px); } 20%, 80% { transform: translateX(4px); } 30%, 50%, 70% { transform: translateX(-7px); } 40%, 60% { transform: translateX(7px); } }
+@keyframes redflash { from { opacity: 1; } to { opacity: 0; } }
+
+/* 送信取り消しのメッセージ */
+.row.unsent .bub { background: transparent; border: 1px dashed var(--line-strong); box-shadow: none; }
+.row.unsent .bub p { color: var(--muted); font-size: 12.5px; font-style: italic; }
+
+@media (prefers-reduced-motion: reduce) { .pushn, .pushn.out { animation: none; } .screen.hit, .screen.hit::after { animation: none; } }
+@media (max-width: 560px) { .acts { flex-wrap: nowrap; } }
+/* スマホ：大きな選択肢3つ＋小さな行動＋入力欄が、ひと目で収まるように */
+@media (max-width: 560px) {
+  .choices { gap: 6px; }
+  .choice { min-height: 46px; padding: 7px 10px 7px 8px; }
+  .choice .ch-tx small { display: none; }
+  .choice .ch-tx > span { line-height: 1.45; }
+  .acts { flex: 0 0 auto; min-height: 40px; align-items: center; }
+  .composer .q { font-size: 12px; }
+}
