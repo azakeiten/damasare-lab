@@ -99,11 +99,11 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "follower", "giftwari", "airdrop"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "follower", "giftwari", "airdrop"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
   { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "kakin", "gameacct", "liver"] },
   { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "shukatsu", "course", "kyozai", "ryugaku"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi", "yosou", "seikei"] },
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga"] },
   { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
@@ -1593,6 +1593,39 @@ function tacticsHTML(sc) {
 }
 /* 今日の1話：日付で決まる「毎回ちがう話」。同じ日なら、だれでも同じ話 */
 function todaySeed() { const d = new Date(); return (d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate()) * 7 + 13; }
+/* ===== 裏側：通った会話を、だます側の「台本」として見る。メッセージごとに、相手のねらいを書きこむ ===== */
+const AIM = {
+  umai: "得をすると思わせて、話にのせる", isogi: "考える時間をなくして、すぐ決めさせる", himitsu: "まわりに相談させず、止められないようにする",
+  kane: "取り返せない方法で、お金を払わせる", kojin: "個人情報やカードの情報を手に入れる", kankei: "親しさや好意で、断りにくくする",
+  jouken: "大事な条件を見せずに、契約させる", tsuuchi: "本物の連絡だと思わせて、信用させる", soudan: "相談させずに、ひとりで決めさせる"
+};
+function scriptHTML(sc) {
+  const seen = new Set(), rows = [];
+  S.path.forEach((id) => {
+    if (seen.has(id)) return; seen.add(id);
+    const n = sc.nodes[id];
+    if (!n || n.end || !n.log) return;
+    const sgKey = ((n.choices || []).find((c) => c.ok === false && c.sign) || (n.choices || []).find((c) => c.sign) || {}).sign;
+    const sg = sgKey && sc.signs[sgKey];
+    const who0 = (n.scene && n.scene.who) || null;
+    const lines = n.log.filter((l) => l[0] === "them" || l[0] === "card").map((l) => {
+      if (l[0] === "card") return { who: l[1], text: l[2].join("／") };
+      const c = sc.cast[l[2] || who0] || {};
+      if (ALLY_RE.test((c.n || "") + (c.r || ""))) return null;
+      return { who: c.n || "", text: l[1] };
+    }).filter(Boolean).slice(-2);
+    if (!lines.length) return;
+    rows.push({ lines, sg, mine: S.signs[sgKey] });
+  });
+  if (!rows.length) return `<p class="ura-lead">この話では、相手の台本を表示できる場面がありませんでした。</p>`;
+  return `<div class="ura"><p class="ura-lead">あなたが通った会話を、<b>だます側の目線</b>で見てみよう。赤い線のところが、そのメッセージにこめられた相手の「ねらい」です。</p>
+    <ol class="ura-list">${rows.map((r, i) => `<li style="--d:${i}">
+      <div class="ura-msgs">${r.lines.map((l) => `<div class="ura-msg"><span class="ura-who">${esc(l.who)}</span><p>${esc(l.text)}</p></div>`).join("")}</div>
+      ${r.sg ? `<div class="ura-aim ${r.mine || ""}"><span class="ura-tag">${CATS[r.sg.cat].ic} ${esc(CATS[r.sg.cat].n)}</span><b>ねらい：${esc(AIM[r.sg.cat] || "")}</b>
+        <span>${esc(r.sg.t)}</span>${r.mine ? `<em>${r.mine === "caught" ? "あなたは見抜いた" : "あなたは見逃した"}</em>` : ""}</div>`
+        : `<div class="ura-aim none"><b>ねらい：話を進めて、信用させる</b></div>`}
+    </li>`).join("")}</ol></div>`;
+}
 function mixHTML() {
   const n = (window.DL && window.DL.gen && window.DL.gen.hooks.length) || 0;
   if (!n) return "";
@@ -1739,8 +1772,9 @@ function openResult(id, n, isNewEnd) {
     ${cn ? `<div class="co-res">${cn.s ? `<span class="eyebrow">コース「${esc(cn.c.n)}」</span><b>${cn.done} / ${cn.all} 本クリア</b><span>次は「${esc(cn.s.tag)}」の話です。</span>` : `<span class="eyebrow">コース修了</span><b>「${esc(cn.c.n)}」を全部体験しました</b><span>ホームの「学びのコース」で、ほかのコースにも挑戦してみよう。</span>`}<span class="co-bar" aria-hidden="true"><i style="width:${Math.round(cn.done / cn.all * 100)}%"></i></span></div>` : ""}
     <div class="rtabs" role="tablist" aria-label="結果の見かた">
       <button type="button" role="tab" id="rtab-0" data-tab="0" aria-selected="true" aria-controls="rpane-0">ふりかえり</button>
-      <button type="button" role="tab" id="rtab-1" data-tab="1" aria-selected="false" aria-controls="rpane-1">まとめ</button>
-      <button type="button" role="tab" id="rtab-2" data-tab="2" aria-selected="false" aria-controls="rpane-2">伝える・シェア</button>
+      <button type="button" role="tab" id="rtab-1" data-tab="1" aria-selected="false" aria-controls="rpane-1">裏側</button>
+      <button type="button" role="tab" id="rtab-2" data-tab="2" aria-selected="false" aria-controls="rpane-2">まとめ</button>
+      <button type="button" role="tab" id="rtab-3" data-tab="3" aria-selected="false" aria-controls="rpane-3">伝える</button>
     </div>
     <div class="rpane" role="tabpanel" id="rpane-0" aria-labelledby="rtab-0">
     ${tacticsHTML(sc)}
@@ -1753,9 +1787,12 @@ function openResult(id, n, isNewEnd) {
         <button class="linkbtn" type="button" data-replay="${i}" id="replay-${i}">ここから</button></li>`).join("")}</ol></div>` : ""}
     </div>
     <div class="rpane" role="tabpanel" id="rpane-1" aria-labelledby="rtab-1" hidden>
-    ${DEBRIEF[sc.id] ? debriefHTML(sc) : ""}
+    ${scriptHTML(sc)}
     </div>
     <div class="rpane" role="tabpanel" id="rpane-2" aria-labelledby="rtab-2" hidden>
+    ${DEBRIEF[sc.id] ? debriefHTML(sc) : ""}
+    </div>
+    <div class="rpane" role="tabpanel" id="rpane-3" aria-labelledby="rtab-3" hidden>
     <div class="talkbox"><div class="side-h" style="margin:0"><h2>家族や友だちに話してみよう</h2></div>
       <p class="talk-lead">知っている人が多いほど、だまされにくくなります。体験したことを、身近な人にひとこと伝えてみよう。</p>
       <p class="talk-msg" id="talkMsg">${esc(talk)}</p>
