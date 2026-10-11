@@ -1092,20 +1092,26 @@ function choicesUI(n, note) {
   const order = (S.order[S.node] ||= n.choices.map((_, i) => i).sort(() => Math.random() - 0.5));
   const hintSign = n.choices.map((c) => c.sign && S.sc.signs[c.sign]).find(Boolean);
   const info = nodeInfo(n);
-  const keys = "ABCDEF"; let k = 0;
+  const keys = "ABCDEFGH"; let k = 0;
   const main = order.map((i) => {
     const c = n.choices[i];
     return `<button class="choice ${c.say ? "say" : "do"}" type="button" id="ch-${S.node}-${i}" data-i="${i}"><span class="ch-key" aria-hidden="true">${keys[k++]}</span><span class="ch-tx"><small>${c.say ? "返信する" : "行動する"}</small><span>${esc(c.say || c.act)}</span></span><span class="ch-ic" aria-hidden="true">${c.say ? ICON_SAY : ICON_ACT}</span></button>`;
   }).join("");
   const askT = info.canAsk ? ((S.asked[S.node] || 0) ? "まだ納得できない。もう一度たずねる" : info.askQ) : "";
-  const extra = [
-    info.canAsk ? `<button class="choice extra" type="button" id="ch-${S.node}-ask" data-x="ask"><span class="ch-key" aria-hidden="true">${keys[k++]}</span><span class="ch-tx"><small>聞き返す</small><span>${esc(askT)}</span></span><span class="ch-ic" aria-hidden="true">${ICON_ASK}</span></button>` : "",
-    info.canTalk ? `<button class="choice extra" type="button" id="ch-${S.node}-talk" data-x="talk"><span class="ch-key" aria-hidden="true">${keys[k++]}</span><span class="ch-tx"><small>相談する</small><span>${inPerson() ? "いったん待ってもらって、家族や友だちに相談する" : "返事をする前に、家族や友だちに相談する"}</span></span><span class="ch-ic" aria-hidden="true">${ICON_TALK}</span></button>` : ""
-  ].join("");
+  /* 選択肢のほかに取れる行動：聞き返す・相談する・調べる・時間をおく・記録を残す */
+  S.searched ||= {}; S.waited ||= {}; S.memo ||= {};
+  const sgn = info.risky ? S.sc.signs[info.risky.sign] : hintSign;
+  const acts = [];
+  if (info.canAsk) acts.push(["ask", "聞き返す", askT, ICON_ASK]);
+  if (info.canTalk) acts.push(["talk", "相談する", inPerson() ? "待ってもらって、家族や友だちに相談" : "返事の前に、家族や友だちに相談", ICON_TALK]);
+  if (sgn && !S.searched[S.node]) acts.push(["search", "調べる", "ネットで、似た話がないか検索", ICON_SEARCH]);
+  if (info.risky && !S.waited[S.node]) acts.push(["wait", "時間をおく", "すぐには返事をしない", ICON_WAIT]);
+  if (!S.memo[S.node] && S.scene && S.scene.type !== "home") acts.push(["memo", "記録を残す", inPerson() ? "相手の名前や話をメモする" : "画面をスクリーンショット", ICON_MEMO]);
+  const extra = acts.map(([x, t, sub, ic]) => `<button class="act-chip" type="button" id="ch-${S.node}-${x}" data-x="${x}"><span class="ch-key" aria-hidden="true">${keys[k++]}</span><span class="ac-ic" aria-hidden="true">${ic}</span><span class="ac-tx"><b>${t}</b><small>${esc(sub)}</small></span></button>`).join("");
   const ph = talkScene() ? "自分の言葉で返信（例：親に相談します）" : "自分ならどうする？（例：公式サイトで確かめる）";
   $("composer").innerHTML = `<div class="q"><span>あなたならどうする？</span>${hintSign ? `<button class="linkbtn hintbtn" type="button" id="hintBtn">${mascot("sm")}ミヌケのヒント</button>` : ""}</div>
     ${note ? `<div class="readnote" role="status">${mascot("sm")}<span>${note}</span></div>` : ""}
-    <div class="choices">${main}</div>${extra ? `<div class="extras">${extra}</div>` : ""}
+    <div class="choices">${main}</div>${extra ? `<div class="acts" role="group" aria-label="ほかの行動"><span class="acts-h">ほかの行動</span>${extra}</div>` : ""}
     <form class="freebar" id="freeForm" autocomplete="off"><label class="sr" for="freeIn">${talkScene() ? "自分の言葉で返信する" : "自分ならどうするか書く"}</label>
       <input id="freeIn" type="text" maxlength="80" enterkeyhint="send" placeholder="${ph}" value="${esc(S.pending || "")}">
       <button type="submit" id="freeSend" aria-label="送信">${ICON_SEND}</button></form>
@@ -1116,6 +1122,7 @@ function choicesUI(n, note) {
   }));
   const ab = $(`ch-${S.node}-ask`); if (ab) ab.onclick = () => askBack(n, askT);
   const tb = $(`ch-${S.node}-talk`); if (tb) tb.onclick = () => consult(n);
+  [["search", searchUp], ["wait", waitUp], ["memo", memoUp]].forEach(([x, f]) => { const b = $(`ch-${S.node}-${x}`); if (b) b.onclick = () => f(n); });
   $("freeForm").onsubmit = (e) => { e.preventDefault(); const v = $("freeIn").value.trim(); if (v) freeReply(n, v); };
   if ($("hintBtn")) $("hintBtn").onclick = () => {
     const cat = CATS[hintSign.cat];
@@ -1124,6 +1131,64 @@ function choicesUI(n, note) {
   };
   const firstBtn = $("composer").querySelector("button.choice");
   if (firstBtn && document.activeElement && document.activeElement.closest && document.activeElement.closest("#composer")) firstBtn.focus({ preventScroll: true });
+}
+/* ===== 選択肢のほかの行動：調べる・時間をおく・記録を残す（物語は分かれず、その場面にもどってくる） ===== */
+const ICON_SEARCH = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg>`;
+const ICON_WAIT = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>`;
+const ICON_MEMO = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg>`;
+function searchWord(info) {
+  const scn = S.scene || {};
+  if (scn.type === "web" && /[a-z0-9-]+\.[a-z]{2,}/i.test(scn.status || "")) return scn.status;
+  const c = info.who && S.sc.cast[info.who];
+  const nm = c ? c.n.replace(/（？）|\(\?\)/g, "").trim() : "";
+  return (nm && nm.length <= 14 ? nm + " " : "") + S.sc.tag;
+}
+async function searchUp(n) {
+  const my = S.run, info = nodeInfo(n);
+  const sg = info.risky ? S.sc.signs[info.risky.sign] : n.choices.map((c) => c.sign && S.sc.signs[c.sign]).find(Boolean);
+  lockComposer();
+  S.searched[S.node] = true;
+  const q = searchWord(info);
+  append(`<div class="act">「${esc(q)}」で検索してみた</div>`); S.lastFrom = null;
+  if (!S.didSearch) { S.didSearch = true; S.xp = (S.xp || 0) + addXP(2); }
+  await pause(600); if (my !== RUN) return;
+  const cat = CATS[sg.cat];
+  append(`<div class="shot wide search-res"><div class="t">検索結果</div><ul>
+    <li><b>注意喚起のページ</b>『${esc(sg.t)}』に注意。${esc(sg.d)}</li>
+    <li><b>SNSの書きこみ</b>「同じような連絡が来た。あやしいと思って無視した」</li>
+    <li><b>相談窓口</b>困ったときは、消費者ホットライン188・警察相談専用電話#9110へ</li></ul></div>`);
+  S.lastFrom = null;
+  await pause(1100); if (my !== RUN) return;
+  await showItem(["think", "（調べてみると、同じような話がいくつも出てくる…）"]); if (my !== RUN) return;
+  choicesUI(n, "調べるのは、とても強い方法。名前や番号、文面で検索すると、同じ手口の注意喚起が見つかることがあります。");
+}
+async function waitUp(n) {
+  const my = S.run, info = nodeInfo(n);
+  lockComposer();
+  S.waited[S.node] = true;
+  append(`<div class="act">すぐには返事をせず、少し時間をおくことにした</div>`); S.lastFrom = null;
+  await pause(500); if (my !== RUN) return;
+  append(`<div class="timechip">しばらくして</div>`);
+  if (info.who && !info.ally && talkScene()) {
+    await showItem(["them", PRESS.isogi[0], info.who]); if (my !== RUN) return;
+    await showItem(["think", "（時間をおいたら、急かしてきた…）"]); if (my !== RUN) return;
+    choicesUI(n, "時間をおくと、相手が急かしてくることがあります。急かすこと自体が、あやしいサインです。");
+  } else {
+    await showItem(["think", "（時間をおいて見直すと、さっきは気づかなかったところが目に入る…）"]); if (my !== RUN) return;
+    choicesUI(n, "時間をおくと、冷静になれます。「今すぐ」と言われても、いったん止まってだいじょうぶ。");
+  }
+}
+async function memoUp(n) {
+  const my = S.run;
+  lockComposer();
+  S.memo[S.node] = true;
+  S.evidence = (S.evidence || 0) + 1;
+  append(`<div class="act">${inPerson() ? "相手の名前や話したことを、スマホにメモした" : "画面をスクリーンショットして保存した"}</div>`); S.lastFrom = null;
+  if (S.evidence === 1) S.xp = (S.xp || 0) + addXP(2);
+  await pause(400); if (my !== RUN) return;
+  append(`<div class="chip ok"><i></i><span>記録を残した（${S.evidence}件）　相談するときの大事な証拠になります</span></div>`);
+  await pause(300); if (my !== RUN) return;
+  choicesUI(n);
 }
 function lockComposer() { $("composer").querySelectorAll("button, input").forEach((b) => (b.disabled = true)); }
 /* 聞き返す：相手は答えずに、別の言い方でせかしてくる。そこにもサインが出る */
@@ -1378,14 +1443,26 @@ function genScenario(seed) {
   used.forEach((b, i) => { signs["s" + i] = { cat: b.cat, t: b.t, d: b.d, re: fill(b.say[b.say.length - 1]) }; });
   extra.forEach((i, j) => { const b = h.beats[i]; signs["x" + j] = { cat: b.cat, t: b.t, d: b.d, re: fill(b.say[b.say.length - 1]) }; });
   signs.report = { cat: "soudan", t: "被害にあっても、ひとりで抱えない", d: "やり取りや支払いの記録を残して、家族や188、警察（#9110）に相談すれば、取れる手段が見つかることもあります。" };
+  /* アプリの画面の場面は、吹き出しではなく画面のカードで見せる */
+  const asCard = h.scene.type === "web";
+  const lines = (arr) => (asCard ? (arr.length ? [["card", fill(h.opp.n), arr.map(fill)]] : []) : arr.map((l) => ["them", fill(l)]));
+  const say = (t) => (asCard ? { act: fill(t) } : { say: fill(t) });
+  const pair = (b, i) => [Object.assign(say(b.safe), { next: "e" + (i + 1), sign: "s" + i, ok: true }), Object.assign(say(b.risky), { next: i < 2 ? "n" + (i + 2) : "n4", sign: "s" + i, ok: false })];
+  /* 3つめの選択：「少し考えさせて」。相手はせかしてきて、もう一度えらぶ */
   const beatNode = (b, i, extraLog) => ({
-    log: [...(extraLog || []), ...b.say.map((l) => ["them", fill(l)])],
-    choices: [{ say: fill(b.safe), next: "e" + (i + 1), sign: "s" + i, ok: true }, { say: fill(b.risky), next: i < 2 ? "n" + (i + 2) : "n4", sign: "s" + i, ok: false }]
+    log: [...(extraLog || []), ...lines(b.say)],
+    choices: [...pair(b, i), Object.assign(say(asCard ? "すぐには決めず、少し考える" : "少し考えさせてください"), { next: "w" + i })]
+  });
+  const waitNode = (b, i) => ({
+    log: asCard ? [["think", "（少し考えてみる。もう一度、画面をよく見てみよう）"]]
+      : [["them", (PRESS[b.cat] || PRESS.isogi)[1]], ["think", "（考える時間も、くれないみたい…）"]],
+    choices: pair(b, i)
   });
   const nodes = {
-    n1: Object.assign({ scene: Object.assign({}, h.scene, { who: "opp" }), time: clock }, beatNode(used[0], 0, h.open.map((l) => ["them", fill(l)]))),
+    n1: Object.assign({ scene: Object.assign({}, h.scene, { who: "opp" }), time: clock }, beatNode(used[0], 0, lines(h.open))),
     n2: beatNode(used[1], 1),
     n3: beatNode(used[2], 2),
+    w0: waitNode(used[0], 0), w1: waitNode(used[1], 1), w2: waitNode(used[2], 2),
     n4: { scene: { type: "home", app: "自分の部屋" }, time: "数日後", log: [["narr", fill(h.harm)]], choices: [
       { act: "家族に話して、警察と188に相談する", next: "e4", sign: "report", ok: true },
       { act: "恥ずかしくて、だれにも言えない", next: "e5", sign: "report", ok: false }] }
@@ -1512,6 +1589,7 @@ function openResult(id, n, isNewEnd) {
     <p class="xpgain">見抜きポイント <b>+${S.xp || 0} XP</b>　${lvInfo().title}（Lv.${lvInfo().lv}）</p>
     <div class="resgrid"><div><b>${caught}</b><span>気づけたサイン</span></div><div><b>${missed}</b><span>見逃したサイン</span></div><div><b>${p.ends.length}/${endIds(sc).length}</b><span>回収した結末</span></div></div>
     ${S.hints ? `<p class="hintnote">${mascot("sm")}ミヌケのヒントを ${S.hints} 回使いました。次はヒントなしで挑戦してみよう。</p>` : ""}
+    ${S.evidence ? `<p class="hintnote">${mascot("sm")}記録を ${S.evidence} 件残しました。${n.end === "safe" ? "何もなくても、記録はあとで役に立つことがあります。" : "相談するとき、この記録が大事な証拠になります。"}</p>` : ""}
     ${cn ? `<div class="co-res">${cn.s ? `<span class="eyebrow">コース「${esc(cn.c.n)}」</span><b>${cn.done} / ${cn.all} 本クリア</b><span>次は「${esc(cn.s.tag)}」の話です。</span>` : `<span class="eyebrow">コース修了</span><b>「${esc(cn.c.n)}」を全部体験しました</b><span>ホームの「学びのコース」で、ほかのコースにも挑戦してみよう。</span>`}<span class="co-bar" aria-hidden="true"><i style="width:${Math.round(cn.done / cn.all * 100)}%"></i></span></div>` : ""}
     <div class="rtabs" role="tablist" aria-label="結果の見かた">
       <button type="button" role="tab" id="rtab-0" data-tab="0" aria-selected="true" aria-controls="rpane-0">ふりかえり</button>
@@ -2075,7 +2153,7 @@ document.addEventListener("keydown", (e) => {
   if (!$("overlay").hidden || !$("result").hidden) return;
   const i = "abcdef".indexOf(e.key.toLowerCase());
   if (i < 0 || e.key.length !== 1) return;
-  const b = [...$("composer").querySelectorAll("button.choice[id^='ch-']")].filter((x) => !x.disabled)[i];
+  const b = [...$("composer").querySelectorAll("button[id^='ch-']")].filter((x) => !x.disabled)[i];
   if (b) { e.preventDefault(); b.click(); }
 });
 document.addEventListener("keydown", (e) => {
