@@ -1328,3 +1328,15 @@ body { background-image: none; letter-spacing: .01em; }
 .pb-item p { margin: 0; font-weight: 700; line-height: 1.7; padding-right: 48px; }
 .pb-item small { color: var(--muted); font-size: 12px; }
 .pb-item .linkbtn { position: absolute; top: 10px; right: 10px; min-height: 28px; padding: 2px 10px; }
+
+/* ===== v21：結果画面のタブ ===== */
+.rtabs { position: sticky; top: -1px; z-index: 2; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 4px;
+  border-radius: 14px; background: var(--bg); border: 1px solid var(--line); box-shadow: 0 6px 14px -12px rgba(0, 0, 0, .35); }
+.rtabs button { border: 0; background: transparent; color: var(--muted); font: inherit; font-weight: 700; font-size: var(--step--1);
+  padding: 9px 4px; border-radius: 10px; cursor: pointer; min-height: 40px; transition: background .15s, color .15s; }
+.rtabs button:hover { color: var(--ink); }
+.rtabs button[aria-selected="true"] { background: var(--surface); color: var(--brand); box-shadow: var(--shadow-1); }
+.rtabs button:focus-visible { outline: 2.5px solid var(--brand); outline-offset: 1px; }
+.rpane { display: grid; gap: 18px; }
+@media (prefers-reduced-motion: no-preference) { .rpane:not([hidden]) { animation: paneIn .25s ease-out; } }
+@keyframes paneIn { from { opacity: 0; transform: translateY(6px); } }

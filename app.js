@@ -99,11 +99,11 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "follower", "giftwari", "airdrop"] },
-  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "follower", "giftwari", "airdrop"] },
+  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
   { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "kakin", "gameacct", "liver"] },
   { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "shukatsu", "course", "kyozai", "ryugaku"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym"] },
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi"] },
   { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
@@ -394,7 +394,7 @@ function renderHome() {
   </div>
   <section class="ways" aria-label="3つの学び方">
     <a class="way" href="#${(next || SCENARIOS[0]).id}"><span class="way-n">1</span><b>体験する</b><span>スマホに届くメッセージに返信して、${SCENARIOS.length}のストーリーを進めます。選ぶたびに、かくれていたサインを解説。</span><i>シナリオをはじめる →</i></a>
-    <a class="way" href="#challenge"><span class="way-n">2</span><b>見抜く</b><span>「あやしい？ だいじょうぶ？」を判定するチャレンジ。日替わり・エンドレス・見くらべの3つの遊び方で、何度でも。</span><i>チャレンジする →</i></a>
+    <a class="way" href="#challenge"><span class="way-n">2</span><b>見抜く</b><span>「あやしい？ だいじょうぶ？」を判定するチャレンジ。日替わり・エンドレス・見くらべ・ことばで返すの4つの遊び方で、何度でも。</span><i>チャレンジする →</i></a>
     <a class="way" href="#zukan"><span class="way-n">3</span><b>集める</b><span>出会ったサインは図鑑に。見抜きレベルと称号が上がり、苦手な系統もわかります。</span><i>図鑑を見る →</i></a>
   </section>
   ${contHTML}
@@ -1262,7 +1262,7 @@ function showEnd(id, n) {
   $("btn-result").onclick = () => openResult(id, n, isNewEnd);
   $("btn-retry").onclick = () => { openScenario(sc.id); };
   renderSide(); renderDots();
-  setTimeout(() => { if (S && S.sc === sc && S.node === id) openResult(id, n, isNewEnd); }, reduced || factor() === 0 ? 300 : 1400);
+  setTimeout(() => { if (S && S.sc === sc && S.node === id && $("result").hidden) openResult(id, n, isNewEnd); }, reduced || factor() === 0 ? 300 : 1400);
 }
 
 /* 「被害なし」の結末で、テープ色の紙吹雪を少しだけ */
@@ -1337,6 +1337,13 @@ function openResult(id, n, isNewEnd) {
     <p class="xpgain">見抜きポイント <b>+${S.xp || 0} XP</b>　${lvInfo().title}（Lv.${lvInfo().lv}）</p>
     <div class="resgrid"><div><b>${caught}</b><span>気づけたサイン</span></div><div><b>${missed}</b><span>見逃したサイン</span></div><div><b>${p.ends.length}/${endIds(sc).length}</b><span>回収した結末</span></div></div>
     ${S.hints ? `<p class="hintnote">${mascot("sm")}ミヌケのヒントを ${S.hints} 回使いました。次はヒントなしで挑戦してみよう。</p>` : ""}
+    ${cn ? `<div class="co-res">${cn.s ? `<span class="eyebrow">コース「${esc(cn.c.n)}」</span><b>${cn.done} / ${cn.all} 本クリア</b><span>次は「${esc(cn.s.tag)}」の話です。</span>` : `<span class="eyebrow">コース修了</span><b>「${esc(cn.c.n)}」を全部体験しました</b><span>ホームの「学びのコース」で、ほかのコースにも挑戦してみよう。</span>`}<span class="co-bar" aria-hidden="true"><i style="width:${Math.round(cn.done / cn.all * 100)}%"></i></span></div>` : ""}
+    <div class="rtabs" role="tablist" aria-label="結果の見かた">
+      <button type="button" role="tab" id="rtab-0" data-tab="0" aria-selected="true" aria-controls="rpane-0">ふりかえり</button>
+      <button type="button" role="tab" id="rtab-1" data-tab="1" aria-selected="false" aria-controls="rpane-1">まとめ</button>
+      <button type="button" role="tab" id="rtab-2" data-tab="2" aria-selected="false" aria-controls="rpane-2">伝える・シェア</button>
+    </div>
+    <div class="rpane" role="tabpanel" id="rpane-0" aria-labelledby="rtab-0">
     <div><div class="side-h"><h2>ストーリーマップ</h2><span>結末 ${p.ends.length} / ${endIds(sc).length}</span></div><div class="mapbox">${storyMap(sc, S.path, id)}${MAP_LEGEND}</div></div>
     ${missed ? `<div><div class="side-h"><h2>見逃したサイン</h2></div><ul class="signs">${ids.filter((k) => S.signs[k] === "missed").map((k) => `<li><span class="st missed">見逃した</span><b>${esc(sc.signs[k].t)}</b><span class="d">${esc(sc.signs[k].d)}</span></li>`).join("")}</ul></div>` : ""}
     ${S.hist.length ? `<div><div class="side-h"><h2>あなたが通ったルート</h2><span>分かれ道からやり直せます</span></div>
@@ -1344,13 +1351,16 @@ function openResult(id, n, isNewEnd) {
         <span class="rt-mark" aria-hidden="true">${h.sign ? (h.ok ? "◎" : "▲") : "・"}</span>
         <div class="rt-body"><span class="rt-text">${esc(h.text)}</span>${h.sign ? `<span class="rt-sign">${h.ok ? "気づけた" : "見逃した"}：${esc(sc.signs[h.sign].t)}</span>` : ""}</div>
         <button class="linkbtn" type="button" data-replay="${i}" id="replay-${i}">ここから</button></li>`).join("")}</ol></div>` : ""}
+    </div>
+    <div class="rpane" role="tabpanel" id="rpane-1" aria-labelledby="rtab-1" hidden>
     ${DEBRIEF[sc.id] ? debriefHTML(sc) : ""}
+    </div>
+    <div class="rpane" role="tabpanel" id="rpane-2" aria-labelledby="rtab-2" hidden>
     <div class="talkbox"><div class="side-h" style="margin:0"><h2>家族や友だちに話してみよう</h2></div>
       <p class="talk-lead">知っている人が多いほど、だまされにくくなります。体験したことを、身近な人にひとこと伝えてみよう。</p>
       <p class="talk-msg" id="talkMsg">${esc(talk)}</p>
       <div class="sharebtns"><button class="btn small" type="button" id="talkCopy">このひとことをコピー</button>
         <a class="btn small" id="talkLine" href="https://line.me/R/share?text=${encodeURIComponent(talk + "\n" + url)}" target="_blank" rel="noopener">LINEで家族に送る</a></div></div>
-    ${cn ? `<div class="co-res">${cn.s ? `<span class="eyebrow">コース「${esc(cn.c.n)}」</span><b>${cn.done} / ${cn.all} 本クリア</b><span>次は「${esc(cn.s.tag)}」の話です。</span>` : `<span class="eyebrow">コース修了</span><b>「${esc(cn.c.n)}」を全部体験しました</b><span>ホームの「学びのコース」で、ほかのコースにも挑戦してみよう。</span>`}<span class="co-bar" aria-hidden="true"><i style="width:${Math.round(cn.done / cn.all * 100)}%"></i></span></div>` : ""}
     <div class="sharebox">
       <div class="side-h" style="margin:0"><h2>結果をシェアする</h2></div>
       <img id="shareImg" alt="結果カードの画像：${esc(sc.title)}／${esc(rk.r)}／気づけたサイン ${caught}/${met}">
@@ -1362,6 +1372,7 @@ function openResult(id, n, isNewEnd) {
         <button class="btn small" type="button" id="shareCopy">文章をコピー</button>
       </div>
     </div>
+    </div>
     <div class="resbtns">
       <button class="btn" type="button" id="resRetry">別の選択でもう一度</button>
       <a class="btn primary" href="#${next.id}" id="resNext">${cn && cn.s ? "コースの次へ" : "次へ"}：${esc(next.tag)}</a>
@@ -1369,6 +1380,21 @@ function openResult(id, n, isNewEnd) {
     <button class="qback" type="button" id="resClose" style="justify-self:center">閉じて会話を見返す</button>
   </div>`;
   $("result").hidden = false;
+  /* 結果のタブ：ふりかえり／まとめ／伝える・シェア（左右キーでも移動） */
+  const tabs = [...$("resultSheet").querySelectorAll("[data-tab]")];
+  const pick = (i, focus) => {
+    tabs.forEach((b, k) => { b.setAttribute("aria-selected", String(k === i)); b.tabIndex = k === i ? 0 : -1; $("rpane-" + k).hidden = k !== i; });
+    if (focus) tabs[i].focus();
+    /* 新しいタブの中身が、タブのすぐ下から見えるように送る */
+    const sh = $("resultSheet"), bar = sh.querySelector(".rtabs"), pane = $("rpane-" + i);
+    const gap = pane.getBoundingClientRect().top - bar.getBoundingClientRect().bottom;
+    if (gap < 0) sh.scrollTo({ top: sh.scrollTop + gap - 12, behavior: reduced ? "auto" : "smooth" });
+  };
+  tabs.forEach((b, k) => {
+    b.tabIndex = k === 0 ? 0 : -1;
+    b.onclick = () => pick(k);
+    b.onkeydown = (e) => { if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); pick((k + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length, true); } };
+  });
   $("shareCopy").onclick = async () => {
     try { await navigator.clipboard.writeText(full); toast("コピーしました"); }
     catch (e) { const ta = $("shareText"); ta.focus(); ta.select(); toast("選択しました。コピーしてください"); }
