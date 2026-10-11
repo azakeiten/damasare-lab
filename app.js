@@ -99,12 +99,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "follower", "giftwari", "airdrop"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "follower", "giftwari", "airdrop"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
   { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "kakin", "gameacct", "liver"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "shukatsu", "course", "kyozai", "ryugaku"] },
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "shukatsu", "course", "kyozai", "ryugaku"] },
   { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel"] }
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -922,6 +922,7 @@ function renderMap() {
   $("mapBox").innerHTML = storyMap(S.sc, S.path, S.node) + MAP_LEGEND;
 }
 
+let CALL_T = 0;
 function setHead() {
   const sc = S.sc, scn = S.scene || {};
   const keys = [scn.who, ...(scn.also || [])].filter((k) => k && sc.cast[k]);
@@ -930,8 +931,26 @@ function setHead() {
   else if (scn.type === "home") { name = scn.name || "ひとりの時間"; status = status || "スマホを見ながら考えている"; }
   else { name = scn.name || (scn.who && sc.cast[scn.who] ? sc.cast[scn.who].n : ""); }
   const avs = scn.type === "home" ? `<span class="av ghost" aria-hidden="true">家</span>` : `<span class="avs">${keys.map((k) => av(sc, k)).join("")}</span>`;
-  $("head").innerHTML = `<span class="chev" aria-hidden="true">‹</span>${avs}
-    <span class="who"><b>${esc(name)}</b>${status ? `<span>${esc(status)}</span>` : ""}</span><span class="app">${esc(scn.app || "")}</span>`;
+  clearInterval(CALL_T);
+  const head = $("head");
+  const isUrl = scn.type === "web" && /[a-z0-9-]+\.[a-z]{2,}/i.test(status);
+  head.className = "head" + (scn.type === "call" ? " h-call" : isUrl ? " h-web" : "");
+  if (scn.type === "call") {
+    /* 通話中の画面：大きなアイコンと、進んでいく通話時間 */
+    head.innerHTML = `<div class="call-top">${avs}<span class="who"><b>${esc(name)}</b><span>${esc(status || scn.app || "")}</span></span>
+      <span class="call-t" aria-hidden="true"><i></i><span id="callT">0:00</span></span></div>
+      <div class="call-keys" aria-hidden="true"><span>消音</span><span>キーパッド</span><span>スピーカー</span><span class="end">終了</span></div>`;
+    const t0 = Date.now();
+    CALL_T = setInterval(() => { const el = $("callT"); if (!el) return clearInterval(CALL_T); const s = Math.floor((Date.now() - t0) / 1000); el.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; }, 1000);
+  } else if (isUrl) {
+    /* ブラウザ：アドレスバーにURLを大きく。正しいかどうかは自分で確かめる */
+    head.innerHTML = `<div class="urlbar"><span class="url-ic" aria-hidden="true">${svgI('<rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>')}</span>
+      <span class="url"><span class="sr">アドレス：</span>${esc(status.replace(/^https?:\/\//, ""))}</span><span class="app">${esc(scn.app || "")}</span></div>
+      <div class="url-tip">${mascot("sm")}<span>URL（アドレス）も、確かめるポイント</span></div>`;
+  } else {
+    head.innerHTML = `<span class="chev" aria-hidden="true">‹</span>${avs}
+    <span class="who"><b>${esc(name)}</b>${status ? `<span${/登録されていません|知らない/.test(status) ? ` class="warnst"` : ""}>${esc(status)}</span>` : ""}</span><span class="app">${esc(scn.app || "")}</span>`;
+  }
   $("screen").dataset.scene = scn.type || "dm";
 }
 function setScene(scn) {
@@ -1056,8 +1075,11 @@ function nodeInfo(n) {
   const lastThem = [...n.log].reverse().find((l) => l[0] === "them");
   const who = lastThem ? (lastThem[2] || (S.scene || {}).who) : null;
   const own = risky && S.sc.signs[risky.sign].ask;
+  /* 相手が家族や友だちなど「だます側」でないときは、共通の聞き返しは出さない */
+  const wc = who && S.sc.cast[who];
+  const ally = !!(wc && /祖|おばあ|おじい|母|父|姉|兄|弟|妹|友|同級生|先生|本物|公式|親|家族|カード裏/.test(wc.n + (wc.r || "")));
   return { risky, safe, rcat, who, askQ: own ? own[0] : ASKQ[rcat], press: own ? own.slice(1) : PRESS[rcat],
-    canAsk: !!(risky && who && talkScene() && (own || ASKQ[rcat]) && (S.asked[S.node] || 0) < 2),
+    canAsk: !!(risky && who && talkScene() && (own || (ASKQ[rcat] && !ally)) && (S.asked[S.node] || 0) < 2),
     canTalk: !!(risky && safe && rcat !== "soudan" && !/相談/.test(safe.say || safe.act)) };
 }
 const inPerson = () => ["call", "live"].includes((S.scene || {}).type);
