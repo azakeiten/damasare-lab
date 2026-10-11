@@ -380,6 +380,7 @@ function renderHome() {
       </div>
       <ul class="trust" aria-label="このサイトについて"><li>登録不要・無料</li><li>個人情報を集めません</li><li>広告なし</li><li>記録はこの端末の中だけ</li></ul>
       ${todayChHTML()}
+      <a class="newpill" href="#${(next || SCENARIOS[0]).id}"><b>NEW</b>選択肢をえらぶだけでなく、聞き返したり、自分の言葉で返信したりできるようになりました</a>
       <div class="hero-org">${orgBadge()}</div>
     </div>
     ${demoHTML()}
@@ -843,7 +844,7 @@ function openScenario(id) {
     playNode(sc.start);
   };
   $("goBtn").onclick = () => {
-    if (store.get("dl3-coach", false)) return begin();
+    if (store.get("dl3-coach2", false)) return begin();
     showCoach(begin);
   };
   /* スマホでは、開いたらスマホ画面が画面いっぱいに見える位置まで送る */
@@ -859,14 +860,14 @@ function showCoach(done) {
   stop.innerHTML = `<div class="tape"></div><div class="in">
     <div class="v">${mascot("md")}<div><b id="stopTitle">遊び方</b><span>3つだけ覚えればOK</span></div></div>
     <ol class="coach-steps">
-      <li><b>返信か、行動をえらぶ</b><span>メッセージが届いたら、下のボタンから選ぼう。正解の位置は毎回変わるよ。</span></li>
+      <li><b>返し方は、いろいろ</b><span>選択肢をえらぶほかに、<em>聞き返す</em>・<em>相談する</em>もできるよ。いちばん下の入力欄に<em>自分の言葉</em>で書けば、ミヌケが読み取って物語が進むよ。</span></li>
       <li><b>選ぶたびに「STOP」</b><span>そこにかくれていたサインを、ミヌケが解説するよ。</span></li>
-      <li><b>迷ったら「ミヌケのヒント」</b><span>結末やサインは、図鑑と称号に集まっていくよ。</span></li>
+      <li><b>迷ったら「ミヌケのヒント」</b><span>結末やサインは、図鑑と称号に集まっていくよ。本物の個人情報は書かないでね。</span></li>
     </ol>
     <button type="button" id="coachGo">わかった、はじめる</button></div>`;
   $("overlay").hidden = false;
   $("coachGo").focus({ preventScroll: true });
-  const close = () => { $("overlay").hidden = true; S.closeStop = null; store.set("dl3-coach", true); done(); };
+  const close = () => { $("overlay").hidden = true; S.closeStop = null; store.set("dl3-coach2", true); done(); };
   $("coachGo").onclick = close;
   S.closeStop = close;
 }
@@ -1018,27 +1019,153 @@ function waitingUI() {
   $("composer").innerHTML = `<div class="waiting"><span>会話が進んでいます…</span><button class="linkbtn" type="button" id="skipBtn">すぐ表示</button></div>`;
   $("skipBtn").onclick = () => { S.skip = true; };
 }
-function choicesUI(n) {
+/* ===== 返信の幅：えらぶ・聞き返す・相談する・自分の言葉で返す ===== */
+const ICON_ASK = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M10 8.6a2 2 0 1 1 2.6 1.9c-.4.2-.6.5-.6.9v.4M12 13.6v.1"/></svg>`;
+const ICON_TALK = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 20c0-3.3 2.5-5.5 5.5-5.5s5.5 2.2 5.5 5.5M14.5 14.6c2.8 0 6 1.8 6 5.4"/></svg>`;
+const ICON_SEND = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M3.4 20.4 21 12 3.4 3.6 3.4 10l12.6 2-12.6 2z"/></svg>`;
+/* 聞き返したときの、こちらの質問と、相手の返し（サインの系統ごと） */
+const ASKQ = {
+  umai: "そんなにうまい話、本当にあるんですか？", isogi: "どうして、そんなに急ぐんですか？", himitsu: "どうして、だれにも言っちゃだめなんですか？",
+  kane: "お金のことなので、家族に確認してからでもいいですか？", kojin: "どうして、それを教える必要があるんですか？", kankei: "ちょっと考えさせてもらってもいい？",
+  jouken: "条件を、書面で見せてもらえますか？", tsuuchi: "本当に、公式からの連絡ですか？"
+};
+const PRESS = {
+  umai: ["本当ですよ。もうたくさんの人がやってます", "こんなチャンス、めったにないですよ。もったいない"],
+  isogi: ["今日中じゃないと間に合わないんです。急いでください", "考えている時間はないですよ。枠が埋まっちゃいます"],
+  himitsu: ["これは、ほかの人には言わないでくださいね", "家族に話すと話がややこしくなるので、ここだけで"],
+  kane: ["いえ、急ぎなので今お願いします", "確認しなくてもだいじょうぶです。こちらでちゃんとやりますから"],
+  kojin: ["確認のためなので、だいじょうぶですよ", "決まりなので、みなさんにお願いしているんです"],
+  kankei: ["え、信じてくれないの？ ちょっと悲しいな", "あなただから話してるんだよ。ほかの人には頼めない"],
+  jouken: ["細かいことは、あとでちゃんと説明しますね", "だいじょうぶ、ほかの人もみんなそうしてますから"],
+  tsuuchi: ["正式なお知らせです。ご安心ください", "公式の案内です。早めに手続きをお願いします"]
+};
+const ASK_THINK = ["（…質問の答えに、なってない気がする）", "（さっきと同じことを、言い方を変えて言ってるだけ…？）"];
+/* 自由入力の読み取りに使うことば */
+const W_SAFE = ["断","やめ","無理","むり","結構","けっこう","遠慮","いらない","要らない","しない","しません","ない","ません","確認","確かめ","たしかめ","調べ","しらべ","検索","公式","かけ直","かけなお","折り返","相談","親","家族","母","父","おかあ","おとう","ママ","パパ","兄","姉","友","先生","学校","学生課","188","110","9110","警察","消費","ブロック","通報","無視","スルー","切る","切り","閉じ","削除","消す","保留","考え","待って","まって","後で","あとで","怪し","あやし","詐欺","さぎ","おかしい","書面","契約書","持ち帰","比べ","くらべ","会って","手渡し","止め","とめ","解約","返品","クーリング"];
+const W_RISK = ["はい","お願いします","おねがい","わかりました","分かりました","了解","りょうかい","ok","オッケー","いいよ","いいですよ","いいですね","やります","やりたい","参加します","参加したい","買います","買う","買いたい","払います","払う","はらう","振り込みます","振り込む","振込します","送金","送ります","送る","教えます","渡します","渡す","契約します","登録します","登録する","インストール","ダウンロード","開く","開きます","ひらく","タップ","押す","押します","行きます","行く","信じ","ぜひ","申し込","入ります","応募","任せ","まかせ","よろしく","乗ります","のります"];
+const W_ASK = /[?？]$|なんで|なぜ|どうして|本当|ほんと|ホント|どこ|だれ|誰|何の|なにの|くわしく|詳しく|証拠|根拠|会社名|名前は/;
+const grams = (s) => { s = s.normalize("NFKC").replace(/[\s、。！？!?「」『』…・]/g, ""); const g = new Set(); for (let i = 0; i < s.length - 1; i++) g.add(s.slice(i, i + 2)); return g; };
+const simOf = (a, b) => { const A = grams(a), B = grams(b); let k = 0; A.forEach((x) => { if (B.has(x)) k++; }); return k / Math.max(1, Math.min(A.size, B.size)); };
+const maskTx = (t) => t.replace(/[0-9０-９]{4,}/g, (m) => "●".repeat(m.length)).replace(/\S+@\S+/g, "●●●@●●●");
+const talkScene = () => ["dm", "talk", "call", "live"].includes((S.scene || {}).type);
+
+function nodeInfo(n) {
+  const risky = n.choices.find((c) => c.ok === false && c.sign && S.sc.signs[c.sign]);
+  const safe = n.choices.find((c) => c.ok === true);
+  const rcat = risky ? S.sc.signs[risky.sign].cat : null;
+  const lastThem = [...n.log].reverse().find((l) => l[0] === "them");
+  const who = lastThem ? (lastThem[2] || (S.scene || {}).who) : null;
+  const own = risky && S.sc.signs[risky.sign].ask;
+  return { risky, safe, rcat, who, askQ: own ? own[0] : ASKQ[rcat], press: own ? own.slice(1) : PRESS[rcat],
+    canAsk: !!(risky && who && talkScene() && (own || ASKQ[rcat]) && (S.asked[S.node] || 0) < 2),
+    canTalk: !!(risky && safe && rcat !== "soudan" && !/相談/.test(safe.say || safe.act)) };
+}
+const inPerson = () => ["call", "live"].includes((S.scene || {}).type);
+function choicesUI(n, note) {
+  S.asked ||= {};
   const order = (S.order[S.node] ||= n.choices.map((_, i) => i).sort(() => Math.random() - 0.5));
   const hintSign = n.choices.map((c) => c.sign && S.sc.signs[c.sign]).find(Boolean);
-  $("composer").innerHTML = `<div class="q"><span>あなたならどうする？</span>${hintSign ? `<button class="linkbtn hintbtn" type="button" id="hintBtn">${mascot("sm")}ミヌケのヒント</button>` : ""}</div>` + order.map((i) => {
+  const info = nodeInfo(n);
+  const keys = "ABCDEF"; let k = 0;
+  const main = order.map((i) => {
     const c = n.choices[i];
-    return `<button class="choice ${c.say ? "say" : "do"}" type="button" id="ch-${S.node}-${i}" data-i="${i}"><span class="ch-ic" aria-hidden="true">${c.say ? ICON_SAY : ICON_ACT}</span><span class="ch-tx"><small>${c.say ? "返信する" : "行動する"}</small><span>${esc(c.say || c.act)}</span></span></button>`;
+    return `<button class="choice ${c.say ? "say" : "do"}" type="button" id="ch-${S.node}-${i}" data-i="${i}"><span class="ch-key" aria-hidden="true">${keys[k++]}</span><span class="ch-tx"><small>${c.say ? "返信する" : "行動する"}</small><span>${esc(c.say || c.act)}</span></span><span class="ch-ic" aria-hidden="true">${c.say ? ICON_SAY : ICON_ACT}</span></button>`;
   }).join("");
-  $("composer").querySelectorAll("[data-i]").forEach((b) => (b.onclick = () => choose(n.choices[+b.dataset.i])));
+  const askT = info.canAsk ? ((S.asked[S.node] || 0) ? "まだ納得できない。もう一度たずねる" : info.askQ) : "";
+  const extra = [
+    info.canAsk ? `<button class="choice extra" type="button" id="ch-${S.node}-ask" data-x="ask"><span class="ch-key" aria-hidden="true">${keys[k++]}</span><span class="ch-tx"><small>聞き返す</small><span>${esc(askT)}</span></span><span class="ch-ic" aria-hidden="true">${ICON_ASK}</span></button>` : "",
+    info.canTalk ? `<button class="choice extra" type="button" id="ch-${S.node}-talk" data-x="talk"><span class="ch-key" aria-hidden="true">${keys[k++]}</span><span class="ch-tx"><small>相談する</small><span>${inPerson() ? "いったん待ってもらって、家族や友だちに相談する" : "返事をする前に、家族や友だちに相談する"}</span></span><span class="ch-ic" aria-hidden="true">${ICON_TALK}</span></button>` : ""
+  ].join("");
+  const ph = talkScene() ? "自分の言葉で返信（例：親に相談します）" : "自分ならどうする？（例：公式サイトで確かめる）";
+  $("composer").innerHTML = `<div class="q"><span>あなたならどうする？</span>${hintSign ? `<button class="linkbtn hintbtn" type="button" id="hintBtn">${mascot("sm")}ミヌケのヒント</button>` : ""}</div>
+    ${note ? `<div class="readnote" role="status">${mascot("sm")}<span>${note}</span></div>` : ""}
+    <div class="choices">${main}</div>${extra ? `<div class="extras">${extra}</div>` : ""}
+    <form class="freebar" id="freeForm" autocomplete="off"><label class="sr" for="freeIn">${talkScene() ? "自分の言葉で返信する" : "自分ならどうするか書く"}</label>
+      <input id="freeIn" type="text" maxlength="80" enterkeyhint="send" placeholder="${ph}" value="${esc(S.pending || "")}">
+      <button type="submit" id="freeSend" aria-label="送信">${ICON_SEND}</button></form>
+    <p class="kbdhint">キーボードの <kbd>A</kbd>〜<kbd>${keys[k - 1]}</kbd> でもえらべます</p>`;
+  $("composer").querySelectorAll("[data-i]").forEach((b) => (b.onclick = () => {
+    const c = n.choices[+b.dataset.i], t = S.pending; S.pending = null;
+    choose(c, t ? { myText: t, read: "あなたがえらんだ選択" } : null);
+  }));
+  const ab = $(`ch-${S.node}-ask`); if (ab) ab.onclick = () => askBack(n, askT);
+  const tb = $(`ch-${S.node}-talk`); if (tb) tb.onclick = () => consult(n);
+  $("freeForm").onsubmit = (e) => { e.preventDefault(); const v = $("freeIn").value.trim(); if (v) freeReply(n, v); };
   if ($("hintBtn")) $("hintBtn").onclick = () => {
     const cat = CATS[hintSign.cat];
     S.hints = (S.hints || 0) + 1;
     $("hintBtn").outerHTML = `<span class="hint" role="status">${mascot("sm")}<span>この場面には「<b>${esc(cat.n)}</b>」のサインがかくれているかも。${esc(cat.d)}</span></span>`;
   };
-  const firstBtn = $("composer").querySelector("button");
+  const firstBtn = $("composer").querySelector("button.choice");
   if (firstBtn && document.activeElement && document.activeElement.closest && document.activeElement.closest("#composer")) firstBtn.focus({ preventScroll: true });
 }
-async function choose(c) {
+function lockComposer() { $("composer").querySelectorAll("button, input").forEach((b) => (b.disabled = true)); }
+/* 聞き返す：相手は答えずに、別の言い方でせかしてくる。そこにもサインが出る */
+async function askBack(n, text, typed) {
+  const my = S.run, info = nodeInfo(n);
+  lockComposer();
+  const nth = (S.asked[S.node] = (S.asked[S.node] || 0) + 1);
+  sendMe(typed ? maskTx(typed) : text);
+  if (nth === 1) S.xp = (S.xp || 0) + addXP(2);
+  await pause(500); if (my !== RUN) return;
+  const lines = info.press;
+  await showItem(["them", lines[(nth - 1) % lines.length], info.who]); if (my !== RUN) return;
+  await showItem(["think", ASK_THINK[(nth - 1) % ASK_THINK.length]]); if (my !== RUN) return;
+  choicesUI(n, nth === 1 ? "聞き返すと、相手の本音が見えることがあります。答えの中にもサインがないか、見てみよう。" : null);
+}
+/* 相談する：信頼できる人のアドバイスを受けて、気づける側の選択へ */
+async function consult(n, typed) {
+  const my = S.run, info = nodeInfo(n), safe = info.safe;
+  lockComposer();
+  if (typed) sendMe(maskTx(typed));
+  else { append(`<div class="act">${inPerson() ? "いったん待ってもらって、家族や友だちに相談した" : "返事をする前に、家族や友だちに相談した"}</div>`); S.lastFrom = null; }
+  await pause(500); if (my !== RUN) return;
+  const adv = safe.act ? `「${safe.act.replace(/[。！!…]+$/, "")}のがいいと思う」` : `「『${safe.say}』って返してみたら？」`;
+  await showItem(["narr", `相談したら、${adv}とアドバイスをもらった`]); if (my !== RUN) return;
+  choose(safe, { histText: "家族や友だちに相談した" });
+}
+/* 自分の言葉で返す：ことばから「断る・確かめる」か「受け入れる」かを読み取って進める */
+function freeReply(n, raw) {
+  const t = raw.normalize("NFKC").toLowerCase();
+  const info = nodeInfo(n);
+  let safe = W_SAFE.filter((w) => t.includes(w)).length;
+  let risk = W_RISK.filter((w) => t.includes(w)).length;
+  const leak = /[0-9]{4,}|\S+@\S+/.test(t);
+  if (leak) risk += 2;
+  const asking = W_ASK.test(t);
+  if (asking && !leak && risk === 0 && safe <= 1 && info.canAsk && !/相談|確認|確かめ|かけ直|警察|188/.test(t)) return askBack(n, "", raw);
+  if (asking && risk === 0) safe++;
+  if (info.canTalk && /相談/.test(t) && risk === 0) return consult(n, raw);
+  let pick = null, how = "";
+  const best = (list) => {
+    const sc = list.map((c) => [c, simOf(raw, c.say || c.act)]).sort((a, b) => b[1] - a[1]);
+    return sc.length === 1 || (sc[0] && sc[0][1] > 0 && sc[0][1] > sc[1][1]) ? sc[0][0] : null;
+  };
+  const goods = n.choices.filter((c) => c.ok === true), bads = n.choices.filter((c) => c.ok === false);
+  if (goods.length && bads.length && safe !== risk) {
+    const group = safe > risk ? goods : bads;
+    pick = best(group) || group[0]; how = safe > risk ? "断る・確かめる返信" : "相手の話に乗る返信";
+  } else {
+    pick = best(n.choices); how = "いちばん近い選択";
+  }
+  if (!pick) {
+    S.pending = raw;
+    return choicesUI(n, `「${esc(maskTx(raw))}」は、下のどれにいちばん近い？ えらぶと、あなたの言葉のまま返信します。`);
+  }
+  choose(pick, { myText: raw, read: how });
+}
+async function choose(c, opt) {
+  opt ||= {};
   const my = S.run;
-  $("composer").querySelectorAll("button").forEach((b) => (b.disabled = true));
-  S.hist.push({ node: S.node, text: c.say || c.act, sign: c.sign, ok: c.ok, scene: S.scene, clock: S.clock, signsBefore: Object.assign({}, S.signs) });
-  if (c.say) sendMe(c.say);
+  lockComposer();
+  const mine = opt.myText ? maskTx(opt.myText) : null;
+  S.hist.push({ node: S.node, text: opt.histText || (mine ? `「${mine}」` : c.say || c.act), sign: c.sign, ok: c.ok, scene: S.scene, clock: S.clock, signsBefore: Object.assign({}, S.signs) });
+  if (mine) {
+    if (talkScene()) sendMe(mine); else { append(`<div class="act">${esc(mine)}</div>`); S.lastFrom = null; }
+    append(`<div class="readchip">${mascot("sm")}<span><small>ミヌケの読み取り：${esc(opt.read || "いちばん近い選択")}</small><b>${esc(c.say || c.act)}</b></span></div>`);
+    S.lastFrom = null;
+    if (mine !== opt.myText) append(`<div class="sys">本物の番号やアドレスは、練習でも書かないでね（この入力はどこにも送られません）</div>`);
+  } else if (c.say) sendMe(c.say);
   else { append(`<div class="act">${esc(c.act)}</div>`); S.lastFrom = null; }
   if (c.sign && S.sc.signs[c.sign]) {
     /* サインがかくれていたメッセージに印をつける */
@@ -1607,6 +1734,16 @@ applyTheme(true);
 function applySound() { $("soundBtn").setAttribute("aria-pressed", String(!!prefs.sound)); $("soundBtn").textContent = prefs.sound ? "効果音：オン" : "効果音：オフ"; }
 $("soundBtn").onclick = () => { prefs.sound = !prefs.sound; savePrefs(); applySound(); sfx("ok"); };
 applySound();
+/* 選択肢は A〜F のキーでもえらべる（入力欄に書いているときはのぞく） */
+document.addEventListener("keydown", (e) => {
+  if (document.body.dataset.view !== "play" || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+  if (!$("overlay").hidden || !$("result").hidden) return;
+  const i = "abcdef".indexOf(e.key.toLowerCase());
+  if (i < 0 || e.key.length !== 1) return;
+  const b = [...$("composer").querySelectorAll("button.choice[id^='ch-']")].filter((x) => !x.disabled)[i];
+  if (b) { e.preventDefault(); b.click(); }
+});
 document.addEventListener("keydown", (e) => {
   if (e.key !== "Escape") return;
   if (!$("result").hidden) closeResult();
