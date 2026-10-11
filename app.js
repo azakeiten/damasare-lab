@@ -96,6 +96,79 @@ function totals() {
   return { signs, ends, gotEnds, caught, met, cleared };
 }
 
+/* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
+const COURSES = [
+  { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "follower", "giftwari", "airdrop"] },
+  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
+  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "kakin", "gameacct", "liver"] },
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "shukatsu", "course", "kyozai", "ryugaku"] },
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo"] },
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel"] }
+];
+const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
+const courseOf = (c) => c.s.map(byId).filter(Boolean);
+function coursesHTML() {
+  return `<section class="sec" aria-label="学びのコース"><div class="sec-h"><h2>学びのコース</h2><p>テーマごとに、話を順番にまとめました。気になるところから、ひとつずつ。</p></div>
+    <div class="courses">${COURSES.map((c) => {
+      const list = courseOf(c), done = list.filter((s) => cleared(s.id)).length, nx = list.find((s) => !cleared(s.id));
+      const pct = Math.round((done / list.length) * 100);
+      return `<a class="course${done === list.length ? " done" : ""}${prefs.course === c.id ? " on" : ""}" href="#${(nx || list[0]).id}" data-course="${c.id}">
+        <div class="co-top"><b>${esc(c.n)}</b><span class="co-n">${done === list.length ? "修了" : `${done} / ${list.length}`}</span></div>
+        <span class="co-d">${esc(c.d)}</span>
+        <span class="co-bar" aria-hidden="true"><i style="width:${pct}%"></i></span>
+        <span class="co-dots" aria-hidden="true">${list.map((s) => `<i class="${cleared(s.id) ? "ok" : ""}" title="${esc(s.tag)}"></i>`).join("")}</span>
+        <i class="co-go">${done === list.length ? "もう一度ふりかえる →" : nx ? `次：${esc(nx.tag)} →` : ""}</i></a>`;
+    }).join("")}</div></section>`;
+}
+function bindCourses(root) {
+  root.querySelectorAll("[data-course]").forEach((a) => a.addEventListener("click", () => { prefs.course = a.dataset.course; savePrefs(); }));
+}
+/* いま進めているコースの、次の話（なければ null） */
+function courseNext(sc) {
+  const c = COURSES.find((x) => x.id === prefs.course);
+  if (!c || !c.s.includes(sc.id)) return null;
+  const list = courseOf(c);
+  const nx = list.find((s) => s !== sc && !cleared(s.id));
+  return nx ? { c, s: nx, done: list.filter((s) => cleared(s.id)).length, all: list.length } : { c, s: null, done: list.length, all: list.length };
+}
+
+/* ふりかえり帳：体験の記録を、新しい順に */
+function logPlay(sc, id, n, caught, missed) {
+  const log = store.get("dl3-log", []) || [];
+  log.push({ id: sc.id, e: id, end: n.end, c: caught, m: missed, t: Date.now() });
+  store.set("dl3-log", log.slice(-300));
+}
+function journalHTML() {
+  const log = (store.get("dl3-log", []) || []).filter((x) => byId(x.id)).slice().reverse();
+  const head = `<div class="sec-h"><h2>ふりかえり帳</h2><p>あなたが体験した話と、たどりついた結末の記録です。この端末の中だけに保存されます。</p></div>`;
+  if (!log.length) return `<section class="sec" aria-label="ふりかえり帳">${head}<div class="jr-empty">${mascot("md")}<span>まだ記録がありません。シナリオを1本体験すると、ここに残ります。</span><a class="btn small primary" href="#${(nextUnplayed() || SCENARIOS[0]).id}">体験してみる</a></div></section>`;
+  const fmt = (t) => { const d = new Date(t); return `${d.getMonth() + 1}月${d.getDate()}日`; };
+  const days = [];
+  log.slice(0, 40).forEach((x) => { const k = fmt(x.t); let g = days.find((d) => d.k === k); if (!g) days.push((g = { k, items: [] })); g.items.push(x); });
+  const cnt = { safe: 0, partial: 0, bad: 0 }; log.forEach((x) => cnt[x.end]++);
+  return `<section class="sec" aria-label="ふりかえり帳">${head}
+    <div class="jr-sum"><span><b>${log.length}</b>回の体験</span><span class="safe"><b>${cnt.safe}</b>被害なし</span><span class="partial"><b>${cnt.partial}</b>最小限</span><span class="bad"><b>${cnt.bad}</b>被害にあった</span></div>
+    <div class="journal">${days.map((d) => `<div class="jr-day"><span class="jr-date">${d.k}</span><ul>${d.items.map((x) => {
+      const sc = byId(x.id), node = sc.nodes[x.e] || {};
+      const tm = new Date(x.t), hm = `${tm.getHours()}:${String(tm.getMinutes()).padStart(2, "0")}`;
+      return `<li class="jr-${x.end}"><span class="jr-dot" aria-hidden="true"></span><div><small>${hm}　${esc(sc.tag)}　<span class="label ${x.end}">${ENDLAB[x.end]}</span></small>
+        <b>${esc(node.h || sc.title)}</b><span>気づけたサイン ${x.c}・見逃したサイン ${x.m}</span></div><a class="linkbtn" href="#${sc.id}">もう一度</a></li>`;
+    }).join("")}</ul></div>`).join("")}</div>
+    ${log.length > 40 ? `<p class="hint">新しい40件を表示しています。</p>` : ""}</section>`;
+}
+
+/* 家族や友だちに話すための、ひとこと */
+function talkText(sc, n) {
+  const d = DEBRIEF[sc.id] || {};
+  const sign = Object.values(sc.signs)[0];
+  return `「${sc.tag}」のトラブルを体験できる教材をやってみたよ。` +
+    (d.point ? `ポイントは「${d.point}」。` : "") +
+    (sign ? `たとえば「${sign.t}」はあやしいサインなんだって。` : "") +
+    (d.say && d.say[0] ? `こう言われたら「${d.say[0]}」って返せばいいらしい。` : "") +
+    `困ったら188（消費者ホットライン）に相談できるよ。`;
+}
+
 /* ===== ルーティング（#home / #zukan / #help / #シナリオID） ===== */
 function route() {
   const h = (location.hash || "").replace(/^#/, "") || "home";
@@ -324,6 +397,7 @@ function renderHome() {
     <a class="way" href="#zukan"><span class="way-n">3</span><b>集める</b><span>出会ったサインは図鑑に。見抜きレベルと称号が上がり、苦手な系統もわかります。</span><i>図鑑を見る →</i></a>
   </section>
   ${contHTML}
+  ${coursesHTML()}
   ${todaySignHTML()}
   ${weakHTML()}
 
@@ -359,7 +433,7 @@ function renderHome() {
     <div style="margin-top:18px"><a class="btn small" href="#zukan">サイン図鑑で集めたサインを見る</a></div>
   </section>`;
 
-  renderFilters(); renderLib(); bindLibTools(); renderQuiz(); renderSQ(); runDemo();
+  renderFilters(); renderLib(); bindLibTools(); renderQuiz(); renderSQ(); runDemo(); bindCourses($("v-home"));
   $("ctaQuiz").onclick = (e) => { e.preventDefault(); $("quizSec").scrollIntoView({ behavior: reduced ? "auto" : "smooth" }); };
 }
 /* サインあてクイズ：各シナリオの「サインつきの選択」の直前に出るメッセージを問題にする */
@@ -569,6 +643,7 @@ function renderZukan() {
     </div>
   </div>
   ${achHTML()}
+  ${journalHTML()}
   ${catRows.map((r) => `<section class="zgroup" aria-label="${esc(r.c.n)}">
     <div class="zgroup-h"><span class="ic" aria-hidden="true">${r.c.ic}</span><div><b>${esc(r.c.n)}</b><span>${esc(r.c.d)}</span></div></div>
     <div class="zcards">${r.items.map((x) => {
@@ -581,7 +656,7 @@ function renderZukan() {
     ${resetArmed ? `<button class="btn small" type="button" id="resetCancel">やめる</button>` : ""}</div>`;
   $("resetBtn").onclick = () => {
     if (!resetArmed) { resetArmed = true; return renderZukan(); }
-    progress = {}; saveProgress(); resetArmed = false; renderZukan(); toast("記録をリセットしました");
+    progress = {}; saveProgress(); store.set("dl3-log", []); resetArmed = false; renderZukan(); toast("記録をリセットしました");
   };
   if ($("resetCancel")) $("resetCancel").onclick = () => { resetArmed = false; renderZukan(); };
 }
@@ -1026,6 +1101,7 @@ function showEnd(id, n) {
   if (n.end === "safe") { confetti(); sfx("end"); }
   markToday();
   saveProgress();
+  { const ks = Object.keys(sc.signs); logPlay(sc, id, n, ks.filter((k) => S.signs[k] === "caught").length, ks.filter((k) => S.signs[k] === "missed").length); }
   setTimeout(checkAch, 1600);
   append(`<div class="end"><div class="tape"></div><div class="in"><span class="stamp s-${n.end}" aria-hidden="true">${STAMP[n.end]}</span><span class="label ${n.end}">結末｜${ENDLAB[n.end]}</span><h3>${esc(n.h)}</h3><p>${esc(n.p)}</p></div></div>`);
   $("composer").innerHTML = `<div class="pair">
@@ -1100,7 +1176,9 @@ function openResult(id, n, isNewEnd) {
   const url = `${SHARE_URL}#${sc.id}`;
   const full = `${text}\n${url}`;
   const idx = SCENARIOS.indexOf(sc);
-  const next = SCENARIOS.slice(idx + 1).concat(SCENARIOS.slice(0, idx)).find((s) => !(progress[s.id] && (progress[s.id].ends || []).length)) || SCENARIOS[(idx + 1) % SCENARIOS.length];
+  const cn = courseNext(sc);
+  const next = (cn && cn.s) || SCENARIOS.slice(idx + 1).concat(SCENARIOS.slice(0, idx)).find((s) => !(progress[s.id] && (progress[s.id].ends || []).length)) || SCENARIOS[(idx + 1) % SCENARIOS.length];
+  const talk = talkText(sc, n);
   $("resultSheet").innerHTML = `<div class="tape"></div><div class="in">
     <div class="rank">${mascot()}<div><small>判定</small><b id="resTitle">${esc(rk.r)}</b><span>${esc(rk.m)}</span></div><span class="stamp s-${n.end}" aria-hidden="true">${STAMP[n.end]}</span></div>
     <div><span class="label ${n.end}">結末｜${ENDLAB[n.end]}${isNewEnd ? "（はじめて回収！）" : ""}</span><p style="margin-top:6px;font-weight:700">${esc(n.h)}</p></div>
@@ -1115,6 +1193,12 @@ function openResult(id, n, isNewEnd) {
         <div class="rt-body"><span class="rt-text">${esc(h.text)}</span>${h.sign ? `<span class="rt-sign">${h.ok ? "気づけた" : "見逃した"}：${esc(sc.signs[h.sign].t)}</span>` : ""}</div>
         <button class="linkbtn" type="button" data-replay="${i}" id="replay-${i}">ここから</button></li>`).join("")}</ol></div>` : ""}
     ${DEBRIEF[sc.id] ? debriefHTML(sc) : ""}
+    <div class="talkbox"><div class="side-h" style="margin:0"><h2>家族や友だちに話してみよう</h2></div>
+      <p class="talk-lead">知っている人が多いほど、だまされにくくなります。体験したことを、身近な人にひとこと伝えてみよう。</p>
+      <p class="talk-msg" id="talkMsg">${esc(talk)}</p>
+      <div class="sharebtns"><button class="btn small" type="button" id="talkCopy">このひとことをコピー</button>
+        <a class="btn small" id="talkLine" href="https://line.me/R/share?text=${encodeURIComponent(talk + "\n" + url)}" target="_blank" rel="noopener">LINEで家族に送る</a></div></div>
+    ${cn ? `<div class="co-res">${cn.s ? `<span class="eyebrow">コース「${esc(cn.c.n)}」</span><b>${cn.done} / ${cn.all} 本クリア</b><span>次は「${esc(cn.s.tag)}」の話です。</span>` : `<span class="eyebrow">コース修了</span><b>「${esc(cn.c.n)}」を全部体験しました</b><span>ホームの「学びのコース」で、ほかのコースにも挑戦してみよう。</span>`}<span class="co-bar" aria-hidden="true"><i style="width:${Math.round(cn.done / cn.all * 100)}%"></i></span></div>` : ""}
     <div class="sharebox">
       <div class="side-h" style="margin:0"><h2>結果をシェアする</h2></div>
       <img id="shareImg" alt="結果カードの画像：${esc(sc.title)}／${esc(rk.r)}／気づけたサイン ${caught}/${met}">
@@ -1128,7 +1212,7 @@ function openResult(id, n, isNewEnd) {
     </div>
     <div class="resbtns">
       <button class="btn" type="button" id="resRetry">別の選択でもう一度</button>
-      <a class="btn primary" href="#${next.id}" id="resNext">次へ：${esc(next.tag)}</a>
+      <a class="btn primary" href="#${next.id}" id="resNext">${cn && cn.s ? "コースの次へ" : "次へ"}：${esc(next.tag)}</a>
     </div>
     <button class="qback" type="button" id="resClose" style="justify-self:center">閉じて会話を見返す</button>
   </div>`;
@@ -1136,6 +1220,10 @@ function openResult(id, n, isNewEnd) {
   $("shareCopy").onclick = async () => {
     try { await navigator.clipboard.writeText(full); toast("コピーしました"); }
     catch (e) { const ta = $("shareText"); ta.focus(); ta.select(); toast("選択しました。コピーしてください"); }
+  };
+  $("talkCopy").onclick = async () => {
+    try { await navigator.clipboard.writeText(talk); toast("コピーしました"); }
+    catch (e) { const r = document.createRange(); r.selectNodeContents($("talkMsg")); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); toast("選択しました。コピーしてください"); }
   };
   $("resRetry").onclick = () => { closeResult(); openScenario(sc.id); };
   $("resultSheet").querySelectorAll("[data-replay]").forEach((b) => (b.onclick = () => replayFrom(+b.dataset.replay)));
