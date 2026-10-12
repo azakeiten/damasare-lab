@@ -99,11 +99,11 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "follower", "giftwari", "airdrop"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "follower", "giftwari", "airdrop"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
-  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "kakin", "gameacct", "liver"] },
+  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "kakin", "gameacct", "liver"] },
   { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "shukatsu", "course", "kyozai", "ryugaku"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga"] },
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai"] },
   { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
@@ -507,10 +507,34 @@ function todaySignHTML() {
     <div class="today-body"><span class="ic" aria-hidden="true">${cat ? cat.ic : "!"}</span><div><b>${esc(x.sg.t)}</b><p>${esc(x.sg.d)}</p>
     <a class="btn small" href="#${x.sc.id}">このサインが出てくる話：${esc(x.sc.title)}</a></div></div></div>`;
 }
+/* 場面の種類で探す：メッセージ・電話・対面・ウェブ */
+const SCENE_GROUP = { dm: "msg", talk: "msg", call: "call", live: "live", web: "web", home: "web" };
+const SCENE_GN = { all: "すべての場面", msg: "メッセージ", call: "電話", live: "対面", web: "ウェブ・アプリ" };
+let libScene = "all", libNew = false;
+const libList = () => {
+  const q = libQ.trim().toLowerCase();
+  let list = SCENARIOS.filter((s) => filter === "all" || s.genre === filter);
+  if (libScene !== "all") list = list.filter((s) => SCENE_GROUP[firstMsg(s).type] === libScene);
+  if (libNew) list = list.filter((s) => !played(s));
+  if (q) list = list.filter((s) => [s.title, s.sub, s.tag, s.intro, GENRES[s.genre].n, ...Object.values(s.signs).map((x) => x.t)].join(" ").toLowerCase().includes(q));
+  return list;
+};
 function renderFilters() {
   const opts = [["all", "すべて"], ...Object.entries(GENRES).map(([k, g]) => [k, g.n])];
-  $("filters").innerHTML = opts.map(([k, n]) => `<button class="chipbtn" type="button" id="f-${k}" data-f="${k}" aria-pressed="${filter === k}">${esc(n)}</button>`).join("");
-  $("filters").querySelectorAll("button").forEach((b) => (b.onclick = () => { filter = b.dataset.f; renderFilters(); renderLib(); }));
+  $("filters").innerHTML = `<div class="frow">${opts.map(([k, n]) => `<button class="chipbtn" type="button" id="f-${k}" data-f="${k}" aria-pressed="${filter === k}">${esc(n)}</button>`).join("")}</div>
+    <div class="frow frow2"><button class="chipbtn sm dice" type="button" id="fRand"><span aria-hidden="true">🎲</span> ランダムに1本</button>
+      <button class="chipbtn sm" type="button" id="fNew" aria-pressed="${libNew}">未体験だけ</button>
+      <span class="frow-sep" aria-hidden="true"></span>
+      <span class="frow-h">場面</span>${Object.entries(SCENE_GN).map(([k, n]) => `<button class="chipbtn sm" type="button" id="fs-${k}" data-s="${k}" aria-pressed="${libScene === k}">${k !== "all" ? `<span class="nt-ic" aria-hidden="true">${SCENE_ICON[{ msg: "dm", call: "call", live: "live", web: "web" }[k]]}</span>` : ""}${esc(n)}</button>`).join("")}</div>`;
+  $("filters").querySelectorAll("[data-f]").forEach((b) => (b.onclick = () => { filter = b.dataset.f; renderFilters(); renderLib(); }));
+  $("filters").querySelectorAll("[data-s]").forEach((b) => (b.onclick = () => { libScene = b.dataset.s; renderFilters(); renderLib(); }));
+  $("fNew").onclick = () => { libNew = !libNew; renderFilters(); renderLib(); };
+  $("fRand").onclick = () => {
+    const pool = libList().length ? libList() : SCENARIOS;
+    const fresh = pool.filter((s) => !played(s));
+    const pick = (fresh.length ? fresh : pool)[Math.floor(Math.random() * (fresh.length || pool.length))];
+    location.hash = "#" + pick.id;
+  };
 }
 /* 一覧：検索・並べかえ。「すべて・おすすめ順・検索なし」のときはジャンルごとの棚にする */
 let libQ = "", libSort = "rec";
@@ -524,14 +548,13 @@ const SORTS = {
 };
 function renderLib() {
   const q = libQ.trim().toLowerCase();
-  let list = SCENARIOS.filter((s) => filter === "all" || s.genre === filter);
-  if (q) list = list.filter((s) => [s.title, s.sub, s.tag, s.intro, GENRES[s.genre].n, ...Object.values(s.signs).map((x) => x.t)].join(" ").toLowerCase().includes(q));
+  let list = libList();
   if (SORTS[libSort].f) list = list.slice().sort(SORTS[libSort].f);
   if (!list.length) {
-    $("lib").innerHTML = `<div class="lib-empty">${mascot("md")}<p>「${esc(libQ)}」に合う話が見つかりませんでした。別のことばで探してみてね。</p></div>`;
+    $("lib").innerHTML = `<div class="lib-empty">${mascot("md")}<p>${q ? `「${esc(libQ)}」に合う話が見つかりませんでした。別のことばで探してみてね。` : libNew ? "この条件の話は、ぜんぶ体験ずみです。すごい！" : "この条件に合う話はありませんでした。"}</p></div>`;
     return;
   }
-  if (filter === "all" && !q && libSort === "rec") {
+  if (filter === "all" && !q && libSort === "rec" && libScene === "all" && !libNew) {
     $("lib").innerHTML = Object.entries(GENRES).map(([gk, g]) => {
       const items = list.filter((s) => s.genre === gk);
       const done = items.filter(played).length;

@@ -1524,3 +1524,13 @@ body { background-image: none; letter-spacing: .01em; }
 .sheet > .tape, .end > .tape, .stop > .tape { height: 4px; background: var(--brand); background-image: none; border: 0; }
 .stop.ng > .tape, .end:has(.s-bad) > .tape { background: var(--danger); }
 .stop.ok > .tape { background: var(--safe); }
+/* ===== v27：一覧の探し方（場面・未体験だけ・ランダム） ===== */
+.filters { display: grid; gap: 8px; overflow: visible; }
+.frow { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; align-items: center; scrollbar-width: thin; }
+.frow2 { gap: 6px; }
+.frow-h { flex: 0 0 auto; font-size: 11px; font-weight: 700; letter-spacing: .12em; color: var(--muted); margin-right: 2px; }
+.frow-sep { flex: 0 0 1px; height: 22px; background: var(--line-strong); margin: 0 4px; }
+.chipbtn.sm { min-height: 36px; padding: 4px 12px; font-size: 13px; display: inline-flex; align-items: center; gap: 5px; }
+.chipbtn.sm .nt-ic { display: inline-grid; place-items: center; color: inherit; background: none; width: auto; height: auto; }
+.chipbtn.dice { border-style: dashed; }
+.chipbtn.dice:hover { border-style: solid; border-color: var(--brand); color: var(--brand); }
