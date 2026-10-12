@@ -187,6 +187,7 @@ function showView(name, scId) {
     if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
   });
   if (name !== "play") { RUN++; }
+  if (name !== "challenge" && EXAM && EXAM.saved) EXAM = null;
   if (name === "home") renderHome();
   if (name === "zukan") renderZukan();
   if (name === "help") renderHelp();
