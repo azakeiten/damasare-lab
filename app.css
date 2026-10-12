@@ -1550,3 +1550,30 @@ body { background-image: none; letter-spacing: .01em; }
 .exam-list small { color: var(--muted); }
 .exam-res { border-color: color-mix(in srgb, #C9A227 55%, var(--line)); background: color-mix(in srgb, #C9A227 10%, var(--surface)); }
 @media (max-width: 560px) { .exam-list li { grid-template-columns: auto 1fr; } }
+/* ===== v29：今日のメニュー ===== */
+.dash { margin: 22px 0 8px; display: grid; gap: 12px; }
+.dash-h { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
+.dash-h h2 { font-size: var(--step-2); font-weight: 900; }
+.dash-me { display: flex; gap: 10px; align-items: center; font-size: var(--step--1); color: var(--muted); }
+.dash-me b { color: var(--safe); }
+.dash-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+.dtile { position: relative; display: grid; gap: 2px; align-content: start; padding: 14px 16px 14px; border-radius: 16px; text-decoration: none; color: var(--ink);
+  background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-1); transition: border-color .15s, transform .15s; min-width: 0; }
+.dtile:hover { border-color: var(--brand); transform: translateY(-2px); }
+.dt-ic { width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center; background: var(--brand-soft); color: var(--brand); margin-bottom: 6px; }
+.dt-ic svg { width: 17px; height: 17px; }
+.dtile small { font-size: 11.5px; font-weight: 700; letter-spacing: .04em; color: var(--muted); }
+.dtile b { font-size: var(--step-0); line-height: 1.45; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dtile > span:not(.dt-ic) { font-size: 12px; color: var(--muted); }
+.dtile.done { background: color-mix(in srgb, var(--safe) 7%, var(--surface)); }
+.dt-ok { position: absolute; top: 12px; right: 12px; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-size: 12px; font-weight: 900; background: var(--safe); color: #fff; }
+.dtile.exam { border-color: color-mix(in srgb, #C9A227 50%, var(--line)); }
+.dtile.exam .dt-ic { background: color-mix(in srgb, #C9A227 18%, var(--surface)); color: #A8851C; }
+/* 二度目からは、ヒーローを少しコンパクトに */
+.hero-back { padding-block: 28px !important; }
+@media (max-width: 560px) {
+  .dash-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .dtile { padding: 12px; }
+  .dt-ic { width: 28px; height: 28px; margin-bottom: 4px; }
+}
+@media (max-width: 560px) { .dash-grid .dtile:last-child:nth-child(odd) { grid-column: 1 / -1; } }

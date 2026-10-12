@@ -99,12 +99,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "follower", "giftwari", "airdrop"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "follower", "giftwari", "airdrop"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
-  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "kakin", "gameacct", "liver"] },
+  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "kakin", "gameacct", "liver"] },
   { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "shukatsu", "course", "kyozai", "ryugaku"] },
   { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -372,7 +372,8 @@ function renderHome() {
     : "";
 
   $("v-home").innerHTML = `
-  <div class="hero bleed b-hero">
+  ${dashHTML(t)}
+  <div class="hero bleed b-hero${t.gotEnds ? " hero-back" : ""}">
     <div>
       <div class="eyebrow">中高生・大学生のための消費者教育教材</div>
       <h1>だまされる前に、<br><em>気づく練習を。</em></h1>
@@ -2351,6 +2352,47 @@ function renderChallenge() {
 }
 
 /* ===== ホームの「今日のチャレンジ」への近道 ===== */
+/* ===== 今日のメニュー：一度遊んだ人に、今日やることをホームのいちばん上でまとめて見せる ===== */
+function dashHTML(t) {
+  if (!t.gotEnds) return "";
+  const lv = lvInfo();
+  const tiles = [];
+  /* 今日の1話 */
+  const mid = "mix-" + todaySeed(), msc = byId(mid);
+  if (msc) {
+    const done = !!(progress[mid] && (progress[mid].ends || []).length);
+    tiles.push({ href: "#" + mid, ic: '<path d="M4 5h16v11H9l-5 4z"/>', h: "今日の1話", b: msc.tag, s: done ? "体験ずみ。また明日" : "日付で決まる、今日だけの話", done });
+  }
+  /* 今日のチャレンジ */
+  const d = (store.get("dl3-daily", {}) || {})[dayKey(new Date())];
+  tiles.push({ href: "#challenge", ic: '<path d="M13 3L5 14h6l-1 7 8-11h-6z"/>', h: "今日のチャレンジ", b: d !== undefined ? `${d} / 10 問` : "10問・約3分", s: d !== undefined ? "挑戦ずみ" : "まだ挑戦していません", done: d !== undefined });
+  /* つづき：コースの次か、まだ遊んでいない話 */
+  const c = COURSES.find((x) => x.id === prefs.course);
+  const cnx = c && courseOf(c).find((s) => !cleared(s.id));
+  const nx = cnx || nextUnplayed();
+  if (nx) tiles.push({ href: "#" + nx.id, ic: '<path d="M7 4.5v15l13-7.5z"/>', h: cnx ? `つづき：${c.n}` : "つづき：まだの話", b: nx.tag, s: `約${nx.mins}分` });
+  /* 苦手克服：いちばん見逃しの多い系統 */
+  const stat = {};
+  SCENARIOS.forEach((sc) => Object.entries(sc.signs).forEach(([k, sg]) => {
+    const st = ((progress[sc.id] || {}).signs || {})[k];
+    if (!st) return;
+    const s = (stat[sg.cat] ||= { met: 0, caught: 0 }); s.met++; if (st === "caught") s.caught++;
+  }));
+  const weak = Object.entries(stat).filter(([, s]) => s.met >= 2).sort((a, b) => a[1].caught / a[1].met - b[1].caught / b[1].met)[0];
+  if (weak && weak[1].caught / weak[1].met < 0.9) {
+    const rec = SCENARIOS.find((sc) => Object.entries(sc.signs).some(([k, sg]) => sg.cat === weak[0] && ((progress[sc.id] || {}).signs || {})[k] !== "caught"));
+    if (rec) tiles.push({ href: "#" + rec.id, ic: '<path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17v.5"/>', h: "苦手克服", b: `「${CATS[weak[0]].n}」を練習`, s: `見抜き率 ${Math.round(weak[1].caught / weak[1].met * 100)}%` });
+  }
+  /* 検定 */
+  const ex = store.get("dl3-exam", null);
+  tiles.push({ href: "#challenge", ic: '<circle cx="12" cy="9" r="5"/><path d="M8.5 13l-2 8 5.5-3 5.5 3-2-8"/>', h: "見抜き検定", b: ex ? `最高：${ex.grade}` : "まだ受けていません", s: ex ? `${ex.score}点。級を上げよう` : "3話で級が決まる", exam: true });
+  return `<section class="dash" aria-label="今日のメニュー">
+    <div class="dash-h"><div><span class="eyebrow">TODAY</span><h2>今日のメニュー</h2></div>
+      <div class="dash-me"><span>Lv.${lv.lv}　${esc(lv.title)}</span>${streak() >= 2 ? `<b>${streak()}日つづけて体験中</b>` : ""}</div></div>
+    <div class="dash-grid">${tiles.map((x) => `<a class="dtile${x.done ? " done" : ""}${x.exam ? " exam" : ""}" href="${x.href}"${x.exam ? ' data-exam="1"' : ""}>
+      <span class="dt-ic" aria-hidden="true">${svgI(x.ic)}</span><small>${esc(x.h)}</small><b>${esc(x.b)}</b><span>${esc(x.s)}</span>${x.done ? `<i class="dt-ok" aria-label="済み">✓</i>` : ""}</a>`).join("")}</div>
+  </section>`;
+}
 function todayChHTML() {
   const d = (store.get("dl3-daily", {}) || {})[dayKey(new Date())];
   return `<a class="today-ch" href="#challenge" id="todayCh"><span class="tc-ic" aria-hidden="true">${svgI('<path d="M13 3L5 14h6l-1 7 8-11h-6z"/>')}</span>
