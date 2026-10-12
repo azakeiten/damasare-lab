@@ -99,11 +99,11 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "follower", "giftwari", "airdrop"] },
-  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "follower", "giftwari", "airdrop"] },
+  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
   { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "kakin", "gameacct", "liver"] },
   { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "shukatsu", "course", "kyozai", "ryugaku"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga"] },
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku"] },
   { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
@@ -647,6 +647,7 @@ function achHTML() {
 
 /* ===== 図鑑 ===== */
 let resetArmed = false;
+let zkCat = "all", zkSt = "all";
 function renderZukan() {
   const all = [];
   SCENARIOS.forEach((sc) => Object.entries(sc.signs).forEach(([k, sg]) => all.push({ sc, k, sg, st: (progress[sc.id] && progress[sc.id].signs || {})[k] })));
@@ -673,7 +674,13 @@ function renderZukan() {
   </div>
   ${achHTML()}
   ${journalHTML()}
-  ${catRows.map((r) => `<section class="zgroup" aria-label="${esc(r.c.n)}">
+  <div class="zk-tools" id="zkTools" role="group" aria-label="図鑑をしぼりこむ">
+    <div class="frow"><span class="frow-h">系統</span>${[["all", "すべて", all.length], ...catRows.map((r) => [r.ck, r.c.n, r.items.length])].map(([k, n, c]) => `<button class="chipbtn sm" type="button" data-zc="${k}" aria-pressed="${zkCat === k}">${k !== "all" ? `<span aria-hidden="true">${CATS[k].ic}</span>` : ""}${esc(n)}<small>${c}</small></button>`).join("")}</div>
+    <div class="frow"><span class="frow-h">状態</span>${[["all", "すべて"], ["caught", "気づけた"], ["missed", "見逃した"], ["none", "未発見"]].map(([k, n]) => `<button class="chipbtn sm zs-${k}" type="button" data-zs="${k}" aria-pressed="${zkSt === k}">${n}<small>${k === "all" ? all.length : all.filter((x) => (x.st || "none") === k).length}</small></button>`).join("")}</div>
+  </div>
+  ${(() => { const rows = catRows.filter((r) => zkCat === "all" || r.ck === zkCat).map((r) => Object.assign({}, r, { items: r.items.filter((x) => zkSt === "all" || (x.st || "none") === zkSt) })).filter((r) => r.items.length);
+    return rows.length ? "" : `<div class="jr-empty">${mascot("md")}<span>この条件のサインは、まだありません。${zkSt === "missed" ? "見逃したサインがないのは、すごいこと！" : ""}</span></div>`; })()}
+  ${catRows.filter((r) => zkCat === "all" || r.ck === zkCat).map((r) => Object.assign({}, r, { items: r.items.filter((x) => zkSt === "all" || (x.st || "none") === zkSt) })).filter((r) => r.items.length).map((r) => `<section class="zgroup" aria-label="${esc(r.c.n)}">
     <div class="zgroup-h"><span class="ic" aria-hidden="true">${r.c.ic}</span><div><b>${esc(r.c.n)}</b><span>${esc(r.c.d)}</span></div></div>
     <div class="zcards">${r.items.map((x) => {
       const g = GENRES[x.sc.genre];
@@ -688,6 +695,9 @@ function renderZukan() {
     progress = {}; saveProgress(); store.set("dl3-log", []); resetArmed = false; renderZukan(); toast("記録をリセットしました");
   };
   if ($("resetCancel")) $("resetCancel").onclick = () => { resetArmed = false; renderZukan(); };
+  const zkGo = () => { renderZukan(); const t = $("zkTools"); if (t) t.scrollIntoView({ block: "start" }); };
+  document.querySelectorAll("[data-zc]").forEach((b) => (b.onclick = () => { zkCat = b.dataset.zc; zkGo(); }));
+  document.querySelectorAll("[data-zs]").forEach((b) => (b.onclick = () => { zkSt = b.dataset.zs; zkGo(); }));
 }
 
 /* ===== 相談先 ===== */
