@@ -99,11 +99,11 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "follower", "giftwari", "airdrop"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "follower", "giftwari", "airdrop"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
   { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "kakin", "gameacct", "liver"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "shukatsu", "course", "kyozai", "ryugaku"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku"] },
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "shukatsu", "course", "kyozai", "ryugaku"] },
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai"] },
   { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
@@ -390,6 +390,7 @@ function renderHome() {
     ${demoHTML()}
   </div>
   ${tapeRun()}
+  ${seasonHTML()}
   <div class="stats">
     <div class="stat"><b>${SCENARIOS.length}</b><span>シナリオ</span></div>
     <div class="stat"><b>${t.signs}</b><span>気づくサイン</span></div>
@@ -2383,6 +2384,33 @@ function renderChallenge() {
 
 /* ===== ホームの「今日のチャレンジ」への近道 ===== */
 /* ===== 今日のメニュー：一度遊んだ人に、今日やることをホームのいちばん上でまとめて見せる ===== */
+/* ===== 季節の注意報：月ごとに、いま気をつけたい手口を出す ===== */
+const SEASON = {
+  1: ["成人式と新年", "成人式のあとの同窓会、お年玉の使い道、振袖の前払いに注意。", ["dousoukai", "otoshidama", "furisode", "kubari"]],
+  2: ["受験と卒業", "合格を急ぐ気持ち、卒業旅行、入学前のSNSにつけこむ話が増えます。", ["kyozai", "koukuuken", "rental", "kyokasho"]],
+  3: ["新生活の準備", "部屋探し、引っ越し、入学前のSNS。新しい生活の前は、ねらわれやすい時期です。", ["chintai", "kaishu", "kyokasho", "gakuwari"]],
+  4: ["新学期・新入生", "サークル勧誘、入学の日の勧誘、先輩を名のるアカウントに注意。", ["circle", "gakuwari", "kyokasho", "baito"]],
+  5: ["連休と旅行", "旅行の予約、ホテルを名のるメッセージ、格安航空券に注意。", ["hotel", "koukuuken", "rental", "wifi"]],
+  6: ["ボーナスと副業", "「スキマ時間でかせげる」の誘いや、投資の話が増える時期です。", ["side", "task", "invest", "shoken"]],
+  7: ["夏休みのはじまり", "高額バイトや海外バイト、SNSで知り合った人に注意。", ["yami", "kaigai", "offapp", "shashin"]],
+  8: ["夏休み", "時間がある夏休みは、ゲームやSNS、くじの課金が増えます。", ["oripa", "jewel", "aiapp", "kakin"]],
+  9: ["台風と防災", "災害のあとは、修理や防災グッズの訪問販売、募金詐欺が増えます。", ["hoken", "bousai", "tenken", "bokin"]],
+  10: ["推し活とイベント", "ライブやイベントのチケット、グッズの抽選、ライブ配信の通販に注意。", ["ticket", "chusen", "livecom", "ouen"]],
+  11: ["年末の買い物", "セールの時期は、偽の通販サイトや不在通知のSMSが増えます。", ["nisetsuhan", "phishing", "etc", "teiki"]],
+  12: ["年末年始", "帰省の時期は、家族をねらう電話や、お金配りの話に注意。", ["oreore", "kazokuline", "kubari", "cardtel"]]
+};
+function seasonHTML() {
+  const m = new Date().getMonth() + 1, s = SEASON[m];
+  if (!s) return "";
+  const list = s[2].map(byId).filter(Boolean);
+  if (!list.length) return "";
+  return `<section class="season" aria-label="季節の注意報">
+    <div class="ss-h"><span class="ss-badge">${m}月の注意報</span><div><h2>${esc(s[0])}</h2><p>${esc(s[1])}</p></div></div>
+    <div class="ss-list">${list.map((sc) => {
+      const done = (((progress[sc.id] || {}).ends) || []).length > 0;
+      return `<a class="ss-item${done ? " done" : ""}" href="#${sc.id}"><small>${esc(sc.tag)}${done ? "　✓体験ずみ" : ""}</small><b>${esc(sc.title)}</b></a>`;
+    }).join("")}</div></section>`;
+}
 function dashHTML(t) {
   if (!t.gotEnds) return "";
   const lv = lvInfo();

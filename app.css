@@ -1599,3 +1599,17 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 .zk-tools .chipbtn small { margin-left: 4px; font-size: 11px; opacity: .75; font-variant-numeric: tabular-nums; }
 .zk-tools .zs-caught[aria-pressed="true"] { background: var(--safe); border-color: var(--safe); color: #fff; }
 .zk-tools .zs-missed[aria-pressed="true"] { background: var(--danger); border-color: var(--danger); color: #fff; }
+/* ===== v32：季節の注意報 ===== */
+.season { margin: 26px 0 6px; padding: 18px; border-radius: 18px; display: grid; gap: 14px;
+  background: linear-gradient(135deg, color-mix(in srgb, #C9A227 12%, var(--surface)), var(--surface) 55%); border: 1px solid color-mix(in srgb, #C9A227 45%, var(--line)); }
+.ss-h { display: flex; gap: 14px; align-items: flex-start; }
+.ss-badge { flex: 0 0 auto; padding: 6px 12px; border-radius: 10px; background: #1E3A5F; color: #F5F7FA; font-weight: 900; font-size: 13px; letter-spacing: .04em; }
+.ss-h h2 { font-size: var(--step-1); font-weight: 900; }
+.ss-h p { margin: 2px 0 0; color: var(--muted); font-size: var(--step--1); line-height: 1.7; }
+.ss-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+.ss-item { display: grid; gap: 2px; padding: 10px 14px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); text-decoration: none; color: var(--ink); transition: border-color .15s; min-width: 0; }
+.ss-item:hover { border-color: var(--brand); }
+.ss-item small { font-size: 11.5px; color: var(--muted); font-weight: 700; }
+.ss-item b { font-size: 13.5px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ss-item.done { opacity: .7; }
+@media (max-width: 560px) { .ss-h { flex-direction: column; gap: 8px; } .ss-list { grid-template-columns: 1fr; } }
