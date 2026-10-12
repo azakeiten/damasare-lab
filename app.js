@@ -101,10 +101,10 @@ const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
   { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "follower", "giftwari", "airdrop"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
-  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "kakin", "gameacct", "liver"] },
+  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "kakin", "gameacct", "liver"] },
   { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "shukatsu", "course", "kyozai", "ryugaku"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga"] },
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -709,6 +709,7 @@ function renderHelp() {
       <li><b>これ以上払わない・送らない</b><span>「取り戻せます」と向こうから来る連絡は二次被害のサイン。相談先は自分で調べた公的な窓口へ。</span></li>
     </ol>
   </section>
+  ${familyHTML()}
   ${phraseBookHTML()}
   ${wordsHTML()}
   <section class="sec" aria-label="断り方">
@@ -723,6 +724,9 @@ function renderHelp() {
     </div>
   </section>`;
   bindPhraseBook();
+  document.querySelectorAll("[data-easybtn]").forEach((b) => (b.onclick = toggleEasy));
+  applyEasy();
+  bindCourses($("v-help"));
 }
 
 /* ===== 授業で使う（先生・保護者向け） ===== */
@@ -2166,6 +2170,22 @@ function renderReply(el, head) {
   }
 }
 /* わたしの断りことば帳（相談先のページ） */
+/* ===== 家族といっしょに使う（相談先ページ） ===== */
+function familyHTML() {
+  const c = COURSES.find((x) => x.id === "kazoku");
+  const list = c ? courseOf(c) : [];
+  const nx = list.find((s) => !cleared(s.id)) || list[0];
+  return `<section class="sec family" aria-label="家族といっしょに使う">
+    <div class="sec-h"><h2>家族といっしょに使う</h2><p>おじいちゃん・おばあちゃんや親といっしょに体験すると、家族みんなの守りになります。</p></div>
+    <div class="fam-grid">
+      <div class="fam-card"><span class="fam-n">1</span><b>「やさしい表示」にする</b><span>文字と選択肢が大きくなり、えらぶだけで進めるようになります。</span>
+        <button class="btn small" type="button" data-easybtn>やさしい表示：オフ</button></div>
+      <div class="fam-card"><span class="fam-n">2</span><b>「家族を守る編」を一緒に</b><span>家族を名のる電話、訪問の業者、役所やカード会社を名のる連絡など、${list.length}本の話をまとめました。</span>
+        ${nx ? `<a class="btn small primary" href="#${nx.id}" data-course="kazoku">一緒にはじめる：${esc(nx.tag)}</a>` : ""}</div>
+      <div class="fam-card"><span class="fam-n">3</span><b>家族の「合言葉」を決める</b><span>電話やメッセージでお金の話が出たら、合言葉を聞く。いつもの番号にかけ直す。家族で決めておくと安心です。</span></div>
+    </div>
+  </section>`;
+}
 function phraseBookHTML() {
   const list = store.get("dl3-phrases", []) || [];
   return `<section class="sec" aria-label="わたしの断りことば帳" id="phraseBook">
@@ -2475,6 +2495,14 @@ applyTheme(true);
 function applySound() { $("soundBtn").setAttribute("aria-pressed", String(!!prefs.sound)); $("soundBtn").textContent = prefs.sound ? "効果音：オン" : "効果音：オフ"; }
 $("soundBtn").onclick = () => { prefs.sound = !prefs.sound; savePrefs(); applySound(); sfx("ok"); };
 applySound();
+/* やさしい表示：文字と選択肢を大きく、小さな行動と自由入力をかくして、大きな選択肢だけで進める */
+function applyEasy() {
+  document.documentElement.dataset.easy = prefs.easy ? "1" : "0";
+  document.querySelectorAll("[data-easybtn], #easyBtn").forEach((b) => { b.setAttribute("aria-pressed", String(!!prefs.easy)); b.textContent = prefs.easy ? "やさしい表示：オン" : "やさしい表示：オフ"; });
+}
+function toggleEasy() { prefs.easy = !prefs.easy; savePrefs(); applyEasy(); toast(prefs.easy ? "やさしい表示にしました" : "ふつうの表示にもどしました"); }
+$("easyBtn").onclick = toggleEasy;
+applyEasy();
 /* 選択肢は A〜F のキーでもえらべる（入力欄に書いているときはのぞく） */
 document.addEventListener("keydown", (e) => {
   if (document.body.dataset.view !== "play" || e.ctrlKey || e.metaKey || e.altKey) return;

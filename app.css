@@ -1577,3 +1577,20 @@ body { background-image: none; letter-spacing: .01em; }
   .dt-ic { width: 28px; height: 28px; margin-bottom: 4px; }
 }
 @media (max-width: 560px) { .dash-grid .dtile:last-child:nth-child(odd) { grid-column: 1 / -1; } }
+/* ===== v30：家族といっしょに・やさしい表示 ===== */
+.fam-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+.fam-card { display: grid; gap: 6px; align-content: start; padding: 18px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-1); }
+.fam-card b { font-size: var(--step-1); font-weight: 900; }
+.fam-card > span:not(.fam-n) { color: var(--muted); font-size: var(--step--1); line-height: 1.8; }
+.fam-card .btn { justify-self: start; margin-top: 4px; }
+.fam-n { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-weight: 900; background: var(--brand-soft); color: var(--brand); }
+
+html[data-easy="1"] { font-size: 112.5%; }
+html[data-easy="1"] .acts, html[data-easy="1"] .freebar, html[data-easy="1"] .kbdhint, html[data-easy="1"] .ch-key { display: none !important; }
+html[data-easy="1"] .choice { min-height: 64px; font-size: 1.125rem; padding: 12px 14px; }
+html[data-easy="1"] .choice .ch-tx small { display: block !important; font-size: 13px; }
+html[data-easy="1"] .bub p { font-size: 1.125rem; line-height: 1.8; }
+html[data-easy="1"] .think, html[data-easy="1"] .narr, html[data-easy="1"] .act { font-size: 1.0625rem; }
+html[data-easy="1"] .stop .in p, html[data-easy="1"] .stop h3 { font-size: 1.125rem; }
+html[data-easy="1"] .composer { max-height: 60%; }
+html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: var(--brand); color: var(--on-brand); border-color: var(--brand); }
