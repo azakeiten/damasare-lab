@@ -99,10 +99,10 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "follower", "giftwari", "airdrop"] },
-  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "follower", "giftwari", "airdrop"] },
+  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
   { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "kakin", "gameacct", "liver"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "shukatsu", "course", "kyozai", "ryugaku"] },
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shukatsu", "course", "kyozai", "ryugaku"] },
   { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai"] },
   { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
@@ -1768,6 +1768,31 @@ function renderDots() {
   const words = ["平穏", "平穏", "ちょっと注意", "あやしい", "かなり危険", "危険！"];
   $("meter").innerHTML = `<span class="m-lab">あぶなさ</span><span class="m-bars">${[1, 2, 3, 4, 5].map((i) => `<i class="${i <= lv ? "on l" + lv : ""}"></i>`).join("")}</span><span class="m-word">${words[lv]}</span>`;
   $("meter").dataset.lv = lv;
+  if ($("guard")) $("guard").innerHTML = guardHTML();
+  if ($("guard2")) $("guard2").innerHTML = guardHTML(true);
+}
+/* 守りゲージ：見逃したサインの種類ごとに、守れているもの（お金・個人情報・人間関係・冷静さ）が減っていく */
+const GUARD = [
+  ["money", "お金", ["kane", "umai"], '<rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/>'],
+  ["info", "個人情報", ["kojin", "tsuuchi"], '<rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>'],
+  ["people", "人間関係", ["kankei", "himitsu", "soudan"], '<circle cx="8" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 20c0-3.3 2.5-5.5 5.5-5.5s5.5 2.2 5.5 5.5M14.5 14.6c2.8 0 6 1.8 6 5.4"/>'],
+  ["calm", "冷静さ", ["isogi", "jouken"], '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>']
+];
+function guardVals() {
+  const v = { money: 3, info: 3, people: 3, calm: 3 };
+  Object.entries(S.signs).forEach(([k, st]) => {
+    if (st !== "missed") return;
+    const cat = (S.sc.signs[k] || {}).cat, g = GUARD.find((x) => x[2].includes(cat));
+    if (g) v[g[0]] = Math.max(0, v[g[0]] - 1);
+  });
+  return v;
+}
+function guardHTML(still) {
+  const v = guardVals();
+  const prev = S.gprev || {};
+  if (!still) S.gprev = v;
+  return GUARD.map(([k, n, , ic]) => `<span class="gd gd-${v[k]}${!still && prev[k] > v[k] ? " drop" : ""}" title="${n}：${["ほぼ失った", "かなり危ない", "少し減った", "守れている"][v[k]]}">
+    <span class="gd-ic" aria-hidden="true">${svgI(ic)}</span><span class="gd-n">${n}</span><span class="gd-pips" aria-label="${n} ${v[k]}/3">${[1, 2, 3].map((i) => `<i class="${i <= v[k] ? "on" : ""}"></i>`).join("")}</span></span>`).join("");
 }
 function renderSide(flash) {
   const sc = S.sc, p = prog(sc.id), ids = Object.keys(sc.signs);
@@ -1809,6 +1834,7 @@ function openResult(id, n, isNewEnd) {
     <div><span class="label ${n.end}">結末｜${n.lab || ENDLAB[n.end]}${isNewEnd ? "（はじめて回収！）" : ""}</span><p style="margin-top:6px;font-weight:700">${esc(n.h)}</p></div>
     <p class="xpgain">見抜きポイント <b>+${S.xp || 0} XP</b>　${lvInfo().title}（Lv.${lvInfo().lv}）</p>
     <div class="resgrid"><div><b>${caught}</b><span>気づけたサイン</span></div><div><b>${missed}</b><span>見逃したサイン</span></div><div><b>${p.ends.length}/${endIds(sc).length}</b><span>回収した結末</span></div></div>
+    <div class="guard guard-res" aria-label="守れたもの">${guardHTML(true)}</div>
     ${S.hints ? `<p class="hintnote">${mascot("sm")}ミヌケのヒントを ${S.hints} 回使いました。次はヒントなしで挑戦してみよう。</p>` : ""}
     ${S.evidence ? `<p class="hintnote">${mascot("sm")}記録を ${S.evidence} 件残しました。${n.end === "safe" ? "何もなくても、記録はあとで役に立つことがあります。" : "相談するとき、この記録が大事な証拠になります。"}</p>` : ""}
     ${ex ? `<div class="co-res exam-res"><span class="eyebrow">${ex.note}</span><b>${EXAM.i + 1 < EXAM.ids.length ? "この調子で、次の話へ" : "3話そろいました。結果を見よう"}</b><span class="co-bar" aria-hidden="true"><i style="width:${Math.round((EXAM.i + 1) / EXAM.ids.length * 100)}%"></i></span></div>` : ""}
