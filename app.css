@@ -1534,3 +1534,19 @@ body { background-image: none; letter-spacing: .01em; }
 .chipbtn.sm .nt-ic { display: inline-grid; place-items: center; color: inherit; background: none; width: auto; height: auto; }
 .chipbtn.dice { border-style: dashed; }
 .chipbtn.dice:hover { border-style: solid; border-color: var(--brand); color: var(--brand); }
+/* ===== v28：見抜き検定 ===== */
+.ch-mode-exam { background: linear-gradient(160deg, color-mix(in srgb, #C9A227 12%, var(--surface)), var(--surface) 60%); border-color: color-mix(in srgb, #C9A227 55%, var(--line)); }
+.ch-mode-exam .eyebrow { color: #A8851C; }
+.exam-end { max-width: 760px; text-align: center; justify-items: center; }
+.cert { width: 100%; max-width: 620px; border-radius: 10px; overflow: hidden; box-shadow: 0 18px 40px -18px rgba(0, 0, 0, .45); }
+.cert canvas { display: block; width: 100%; height: auto; }
+@media (prefers-reduced-motion: no-preference) { .cert { animation: certIn .6s cubic-bezier(.2, .9, .3, 1.1) both; } }
+@keyframes certIn { from { transform: translateY(14px) scale(.96); opacity: 0; } }
+.exam-sum { display: grid; gap: 4px; }
+.exam-sum p { margin: 0; color: var(--muted); }
+.exam-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; width: 100%; max-width: 520px; text-align: left; }
+.exam-list li { display: grid; grid-template-columns: auto 1fr auto auto; gap: 8px; align-items: center; padding: 8px 12px; border-radius: 10px; border: 1px solid var(--line); font-size: var(--step--1); }
+.exam-list li > span:first-child { color: var(--muted); font-size: 12px; }
+.exam-list small { color: var(--muted); }
+.exam-res { border-color: color-mix(in srgb, #C9A227 55%, var(--line)); background: color-mix(in srgb, #C9A227 10%, var(--surface)); }
+@media (max-width: 560px) { .exam-list li { grid-template-columns: auto 1fr; } }

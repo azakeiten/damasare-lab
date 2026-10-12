@@ -99,11 +99,11 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "follower", "giftwari", "airdrop"] },
-  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "follower", "giftwari", "airdrop"] },
+  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
   { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "kakin", "gameacct", "liver"] },
   { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "shukatsu", "course", "kyozai", "ryugaku"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai"] },
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya"] },
   { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
@@ -173,6 +173,7 @@ function talkText(sc, n) {
 function route() {
   const h = (location.hash || "").replace(/^#/, "") || "home";
   closeResult(true);
+  if (EXAM && EXAM.res[EXAM.i] && h === EXAM.ids[EXAM.i + 1]) EXAM.i++;
   if (h === "mix") { location.replace("#mix-" + Math.floor(Math.random() * 1e9)); return; }
   if (byId(h)) return showView("play", h);
   if (h === "zukan" || h === "help" || h === "teach" || h === "challenge") return showView(h);
@@ -1783,6 +1784,7 @@ function openResult(id, n, isNewEnd) {
   const full = `${text}\n${url}`;
   const idx = SCENARIOS.indexOf(sc);
   const cn = courseNext(sc);
+  const ex = examStep(sc, n, caught, met);
   const next = (cn && cn.s) || SCENARIOS.slice(idx + 1).concat(SCENARIOS.slice(0, idx)).find((s) => !(progress[s.id] && (progress[s.id].ends || []).length)) || SCENARIOS[(idx + 1) % SCENARIOS.length];
   const talk = talkText(sc, n);
   $("resultSheet").innerHTML = `<div class="tape"></div><div class="in">
@@ -1792,6 +1794,7 @@ function openResult(id, n, isNewEnd) {
     <div class="resgrid"><div><b>${caught}</b><span>気づけたサイン</span></div><div><b>${missed}</b><span>見逃したサイン</span></div><div><b>${p.ends.length}/${endIds(sc).length}</b><span>回収した結末</span></div></div>
     ${S.hints ? `<p class="hintnote">${mascot("sm")}ミヌケのヒントを ${S.hints} 回使いました。次はヒントなしで挑戦してみよう。</p>` : ""}
     ${S.evidence ? `<p class="hintnote">${mascot("sm")}記録を ${S.evidence} 件残しました。${n.end === "safe" ? "何もなくても、記録はあとで役に立つことがあります。" : "相談するとき、この記録が大事な証拠になります。"}</p>` : ""}
+    ${ex ? `<div class="co-res exam-res"><span class="eyebrow">${ex.note}</span><b>${EXAM.i + 1 < EXAM.ids.length ? "この調子で、次の話へ" : "3話そろいました。結果を見よう"}</b><span class="co-bar" aria-hidden="true"><i style="width:${Math.round((EXAM.i + 1) / EXAM.ids.length * 100)}%"></i></span></div>` : ""}
     ${cn ? `<div class="co-res">${cn.s ? `<span class="eyebrow">コース「${esc(cn.c.n)}」</span><b>${cn.done} / ${cn.all} 本クリア</b><span>次は「${esc(cn.s.tag)}」の話です。</span>` : `<span class="eyebrow">コース修了</span><b>「${esc(cn.c.n)}」を全部体験しました</b><span>ホームの「学びのコース」で、ほかのコースにも挑戦してみよう。</span>`}<span class="co-bar" aria-hidden="true"><i style="width:${Math.round(cn.done / cn.all * 100)}%"></i></span></div>` : ""}
     <div class="rtabs" role="tablist" aria-label="結果の見かた">
       <button type="button" role="tab" id="rtab-0" data-tab="0" aria-selected="true" aria-controls="rpane-0">ふりかえり</button>
@@ -1835,7 +1838,7 @@ function openResult(id, n, isNewEnd) {
     </div>
     <div class="resbtns">
       <button class="btn" type="button" id="resRetry">別の選択でもう一度</button>
-      ${sc.gen ? `<a class="btn primary" href="#mix" id="resNext">もう1話：毎回ちがう話</a>` : `<a class="btn primary" href="#${next.id}" id="resNext">${cn && cn.s ? "コースの次へ" : "次へ"}：${esc(next.tag)}</a>`}
+      ${ex ? `<a class="btn primary" href="${ex.href}" id="resNext">${ex.label}</a>` : sc.gen ? `<a class="btn primary" href="#mix" id="resNext">もう1話：毎回ちがう話</a>` : `<a class="btn primary" href="#${next.id}" id="resNext">${cn && cn.s ? "コースの次へ" : "次へ"}：${esc(next.tag)}</a>`}
     </div>
     <button class="qback" type="button" id="resClose" style="justify-self:center">閉じて会話を見返す</button>
   </div>`;
@@ -2176,6 +2179,69 @@ function bindPhraseBook() {
     $("phraseBook").outerHTML = phraseBookHTML(); bindPhraseBook();
   }));
 }
+/* ===== 見抜き検定：毎回ちがう話を3本続けて、見抜き率と結末で級を決める ===== */
+let EXAM = null;
+const EXAM_GRADES = [[90, "名人", "どんな手口も見抜ける、見抜きの名人です。"], [75, "上級", "ほとんどの手口に気づけています。"], [55, "中級", "大事なサインには気づけています。あと一歩。"], [0, "初級", "ここからがスタート。サイン図鑑で手口を見直そう。"]];
+function startExam() {
+  const G = window.DL && window.DL.gen;
+  if (!G) return;
+  const ids = [], hooks = new Set();
+  let tries = 0;
+  while (ids.length < 3 && tries++ < 60) {
+    const seed = Math.floor(Math.random() * 1e9), sc = genScenario(seed);
+    if (sc && !hooks.has(sc.tag)) { hooks.add(sc.tag); ids.push(sc.id); }
+  }
+  EXAM = { ids, i: 0, res: [] };
+  location.hash = "#" + ids[0];
+}
+/* 結果画面から呼ぶ：検定中の話なら記録して、次へのボタンを返す */
+function examStep(sc, n, caught, met) {
+  if (!EXAM || EXAM.ids[EXAM.i] !== sc.id) return null;
+  if (!EXAM.res[EXAM.i]) EXAM.res[EXAM.i] = { tag: sc.tag, end: n.end, caught, met };
+  const last = EXAM.i >= EXAM.ids.length - 1;
+  return { label: last ? "検定の結果を見る" : `検定：次の話へ（${EXAM.i + 2} / ${EXAM.ids.length}）`, href: last ? "#challenge" : "#" + EXAM.ids[EXAM.i + 1], note: `見抜き検定　${EXAM.i + 1} / ${EXAM.ids.length} 話目` };
+}
+function examScore() {
+  const r = EXAM.res, caught = r.reduce((a, x) => a + x.caught, 0), met = r.reduce((a, x) => a + x.met, 0);
+  const endPts = r.reduce((a, x) => a + (x.end === "safe" ? 10 : x.end === "partial" ? 5 : 0), 0);
+  const score = Math.round((met ? caught / met : 0) * 70 + endPts);
+  return { score, caught, met, grade: EXAM_GRADES.find(([min]) => score >= min) };
+}
+function examHTML(head) {
+  const s = examScore(), [, g, msg] = s.grade;
+  const best = store.get("dl3-exam", null);
+  const isBest = !best || s.score > best.score;
+  if (!EXAM.saved) { EXAM.saved = true; if (isBest) store.set("dl3-exam", { score: s.score, grade: g, at: Date.now() }); EXAM.xp = addXP(30); setTimeout(checkAch, 400); }
+  return head + `<div class="ch-board exam-end">
+    <span class="eyebrow">見抜き検定　結果</span>
+    <div class="cert" id="certBox"><canvas id="certCv" width="1200" height="840" aria-label="見抜き検定の認定証：${g}"></canvas></div>
+    <div class="exam-sum"><b class="ch-big">${g}</b><span>${s.score} 点（見抜いたサイン ${s.caught}/${s.met}）</span><p>${msg}${isBest && best ? "　自己ベスト更新！" : ""}</p></div>
+    <ol class="exam-list">${EXAM.res.map((x, i) => `<li><span>${i + 1}話目</span><b>${esc(x.tag)}</b><span class="label ${x.end}">${ENDLAB[x.end]}</span><small>サイン ${x.caught}/${x.met}</small></li>`).join("")}</ol>
+    <p class="xpgain">見抜きポイント <b>+${EXAM.xp || 30} XP</b></p>
+    <div class="row-btns"><button class="btn small" type="button" id="certSave">認定証を画像で保存</button>
+      <button class="btn small primary" type="button" id="examAgain">もう一度受ける</button>
+      <button class="btn small" type="button" id="examMenu">チャレンジの最初へ</button></div></div>`;
+}
+function drawCert(g, score) {
+  const cv = $("certCv"); if (!cv) return;
+  const x = cv.getContext("2d"), W = cv.width, H = cv.height;
+  const navy = "#1E3A5F", gold = "#C9A227", paper = "#FBF8F1";
+  x.fillStyle = paper; x.fillRect(0, 0, W, H);
+  x.strokeStyle = navy; x.lineWidth = 14; x.strokeRect(30, 30, W - 60, H - 60);
+  x.strokeStyle = gold; x.lineWidth = 3; x.strokeRect(58, 58, W - 116, H - 116);
+  x.textAlign = "center"; x.fillStyle = navy;
+  x.font = '700 34px "Zen Kaku Gothic New", sans-serif'; x.fillText("だまされ体験ラボ", W / 2, 150);
+  x.font = '900 86px "Zen Kaku Gothic New", sans-serif'; x.fillText("見抜き検定　認定証", W / 2, 270);
+  x.fillStyle = gold; x.fillRect(W / 2 - 160, 300, 320, 4);
+  x.fillStyle = navy; x.font = '900 150px "Zen Kaku Gothic New", sans-serif'; x.fillText(g, W / 2, 480);
+  x.font = '700 40px "Zen Kaku Gothic New", sans-serif'; x.fillText(`${score} 点`, W / 2, 550);
+  x.font = '500 30px "Zen Kaku Gothic New", sans-serif'; x.fillStyle = "#3A4656";
+  x.fillText("毎回ちがう3つの話で、だましのサインを見抜く力を示しました。", W / 2, 625);
+  const d = new Date();
+  x.fillText(`${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`, W / 2, 690);
+  x.beginPath(); x.arc(W - 160, H - 145, 56, 0, Math.PI * 2); x.strokeStyle = "#B83A2E"; x.lineWidth = 6; x.stroke();
+  x.fillStyle = "#B83A2E"; x.font = '900 27px "Zen Kaku Gothic New", sans-serif'; x.fillText("見抜き", W - 160, H - 150); x.fillText("合格", W - 160, H - 118);
+}
 function renderChallenge() {
   const el = $("v-challenge");
   const lv = lvInfo();
@@ -2185,6 +2251,15 @@ function renderChallenge() {
     <p>届いたメッセージを見て、<b>あやしい</b>か<b>だいじょうぶ</b>かを判定しよう。ふつうの連絡もまざっています。問題は毎回変わるので、何度でも挑戦できます。</p>
     <div class="ch-level"><div><span class="eyebrow">見抜きレベル</span><b>Lv.${lv.lv}　${esc(lv.title)}</b><span class="lvbar big"><i style="width:${lv.pct}%"></i></span><small>次のレベルまで ${lv.toNext} XP（合計 ${lv.xp} XP）</small></div></div></div>`;
   if (RT) return renderReply(el, head);
+  if (EXAM && EXAM.res.length === EXAM.ids.length && EXAM.res.every(Boolean)) {
+    el.innerHTML = examHTML(head);
+    const s = examScore();
+    (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => drawCert(s.grade[1], s.score));
+    $("certSave").onclick = () => { const a = document.createElement("a"); a.href = $("certCv").toDataURL("image/png"); a.download = "minuke-kentei.png"; a.click(); };
+    $("examAgain").onclick = () => startExam();
+    $("examMenu").onclick = () => { EXAM = null; renderChallenge(); };
+    return;
+  }
   if (!CH || (!CH.cur && !CH.over)) {
     el.innerHTML = head + `<div class="ch-modes">
       <div class="ch-mode"><span class="eyebrow">日替わり</span><h2>今日のチャレンジ</h2><p>今日の10問。同じ日なら、だれでも同じ問題です。最初の挑戦の結果が記録されます。</p>
@@ -2199,12 +2274,16 @@ function renderChallenge() {
       <div class="ch-mode ch-mode-new"><span class="eyebrow">書いて練習</span><h2>ことばで返す</h2><p>あやしいメッセージに、自分の言葉で返信を書く5問。断れているか、短くはっきりしているかを★3つで判定します。</p>
         <p class="ch-rec">最高記録：<b>★ ${store.get("dl3-reply", 0) || 0} / 15</b></p>
         <button class="btn primary" type="button" id="chReply">ことばで返す5問をはじめる</button></div>
+      <div class="ch-mode ch-mode-exam"><span class="eyebrow">腕だめし</span><h2>見抜き検定</h2><p>毎回ちがう話を3本つづけて体験。見抜いたサインの数と結末で、初級・中級・上級・名人の級が決まります。合格すると認定証がもらえます。</p>
+        <p class="ch-rec">${(() => { const b = store.get("dl3-exam", null); return b ? `これまでの最高：<b>${esc(b.grade)}（${b.score}点）</b>` : "まだ受けていません"; })()}</p>
+        <button class="btn primary" type="button" id="chExam">検定を受ける（約10分）</button></div>
     </div>
     <div class="ch-xp"><h2>XP（経験値）のため方</h2><ul><li>シナリオでサインに気づく <b>+10</b>（見逃しても学べたら +3）</li><li>新しい結末を見る <b>+20</b></li><li>チャレンジ・クイズで正解 <b>+5</b></li><li>今日のチャレンジをクリア <b>+30</b></li></ul></div>`;
     $("chDaily").onclick = () => startChallenge("daily");
     $("chEndless").onclick = () => startChallenge("endless");
     $("chPair").onclick = () => startChallenge("pair");
     $("chReply").onclick = () => startReply();
+    $("chExam").onclick = () => startExam();
     return;
   }
   if (CH.over && CH.mode === "pair") {
