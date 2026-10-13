@@ -101,10 +101,10 @@ const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
   { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "follower", "giftwari", "airdrop"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
-  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "seiyuu", "uketori", "kakin", "gameacct", "liver"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shukatsu", "course", "kyozai", "ryugaku"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
+  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "seiyuu", "uketori", "tatekae", "kakin", "gameacct", "liver"] },
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "shukatsu", "course", "kyozai", "ryugaku"] },
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship"] },
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -1982,23 +1982,17 @@ function closeResult(silent) {
 $("result").addEventListener("click", (e) => { if (e.target === $("result")) closeResult(); });
 
 async function drawCard(sc, n, rk, caught, total) {
+  /* シェア用の画像：紺と金の落ち着いたデザイン。表示がライトでもダークでも同じ色で描く */
   try {
     if (document.fonts && document.fonts.load) {
-      await Promise.all([document.fonts.load('40px "Dela Gothic One"'), document.fonts.load('700 30px "Zen Maru Gothic"')]).catch(() => {});
+      await Promise.all([document.fonts.load('900 44px "Zen Kaku Gothic New"'), document.fonts.load('700 26px "Zen Kaku Gothic New"')]).catch(() => {});
     }
-    const cs = getComputedStyle(document.documentElement);
-    const col = (v) => cs.getPropertyValue(v).trim() || "#000";
-    const W = 1200, H = 630;
+    const W = 1200, H = 630, F = '"Zen Kaku Gothic New", sans-serif';
+    const NAVY = "#1E3A5F", NAVY2 = "#0F2440", GOLD = "#C9A227", PAPER = "#FBF8F1", INK = "#1B2534", MUTED = "#5B6676";
+    const END = { safe: ["#14805D", "被害なし"], partial: ["#A8851C", "ギリギリ"], bad: ["#B83A2E", "被害にあった"] }[n.end] || ["#1E3A5F", ""];
     const cv = document.createElement("canvas"); cv.width = W; cv.height = H;
     const x = cv.getContext("2d");
-    const ink = col("--ink"), surf = col("--surface"), acc = col("--accent"), muted = col("--muted");
-    x.fillStyle = col("--bg"); x.fillRect(0, 0, W, H);
-    x.save(); x.beginPath(); x.rect(0, 0, W, 34); x.clip();
-    for (let i = -40; i < W + 40; i += 40) { x.fillStyle = acc; x.beginPath(); x.moveTo(i, 0); x.lineTo(i + 20, 0); x.lineTo(i - 14, 34); x.lineTo(i - 34, 34); x.fill(); x.fillStyle = ink; x.beginPath(); x.moveTo(i + 20, 0); x.lineTo(i + 40, 0); x.lineTo(i + 6, 34); x.lineTo(i - 14, 34); x.fill(); }
-    x.restore();
     const rr = (X, Y, w, h, r) => { x.beginPath(); x.moveTo(X + r, Y); x.arcTo(X + w, Y, X + w, Y + h, r); x.arcTo(X + w, Y + h, X, Y + h, r); x.arcTo(X, Y + h, X, Y, r); x.arcTo(X, Y, X + w, Y, r); x.closePath(); };
-    x.fillStyle = surf; rr(48, 72, W - 96, H - 120, 32); x.fill();
-    x.lineWidth = 4; x.strokeStyle = ink; x.stroke();
     const wrap = (text, X, Y, maxW, lh, maxLines) => {
       let line = "", lines = [];
       for (const ch of text) { if (x.measureText(line + ch).width > maxW && line) { lines.push(line); line = ch; } else line += ch; }
@@ -2008,35 +2002,48 @@ async function drawCard(sc, n, rk, caught, total) {
       return lines.length;
     };
     x.textBaseline = "top";
-    x.fillStyle = muted; x.font = '700 26px "Zen Maru Gothic", sans-serif';
-    x.fillText("だまされ体験ラボ｜" + sc.tag, 96, 112);
-    x.fillStyle = ink; x.font = '44px "Dela Gothic One", sans-serif';
-    const tl = wrap(sc.title, 96, 156, 700, 58, 2);
-    const y0 = 156 + tl * 58 + 26;
-    x.font = '700 28px "Zen Maru Gothic", sans-serif'; x.fillStyle = muted;
-    wrap("結末：" + n.h, 96, y0, 700, 40, 2);
-    x.fillStyle = acc; rr(96, 420, 300, 120, 20); x.fill(); x.strokeStyle = ink; x.lineWidth = 3; x.stroke();
-    x.fillStyle = ink; x.font = '700 22px "Zen Maru Gothic", sans-serif'; x.fillText("判定", 120, 436);
-    let fz = 38; x.font = `${fz}px "Dela Gothic One", sans-serif`;
-    while (x.measureText(rk.r).width > 252 && fz > 18) { fz -= 2; x.font = `${fz}px "Dela Gothic One", sans-serif`; }
-    x.fillText(rk.r, 120, 474 + (38 - fz) / 2);
-    x.fillStyle = surf; rr(420, 420, 300, 120, 20); x.fill(); x.strokeStyle = ink; x.stroke();
-    x.fillStyle = ink; x.font = '700 22px "Zen Maru Gothic", sans-serif'; x.fillText("気づけたサイン", 444, 436);
-    x.font = '44px "Dela Gothic One", sans-serif'; x.fillText(`${caught} / ${total}`, 444, 472);
-    // ミヌケ
-    const cx = 960, cy = 300, R = 150;
-    x.fillStyle = acc; x.beginPath(); x.arc(cx, cy, R, 0, Math.PI * 2); x.fill(); x.lineWidth = 8; x.strokeStyle = ink; x.stroke();
-    x.save(); x.beginPath(); x.arc(cx, cy, R - 4, 0, Math.PI * 2); x.clip();
-    x.translate(cx, cy - 60); x.rotate(-0.08);
-    for (let i = -210, n = 0; i < 210; i += 16, n++) { x.fillStyle = n % 2 ? ink : acc; x.beginPath(); x.moveTo(i, -24); x.lineTo(i + 16, -24); x.lineTo(i + 32, 24); x.lineTo(i + 16, 24); x.fill(); }
-    x.lineWidth = 6; x.strokeStyle = ink; x.strokeRect(-210, -24, 420, 48);
-    x.restore();
-    x.fillStyle = ink;
-    x.beginPath(); x.ellipse(cx - 50, cy + 30, 18, 24, 0, 0, Math.PI * 2); x.fill();
-    x.beginPath(); x.ellipse(cx + 50, cy + 30, 18, 24, 0, 0, Math.PI * 2); x.fill();
-    x.lineWidth = 10; x.lineCap = "round"; x.beginPath(); x.moveTo(cx - 30, cy + 90); x.quadraticCurveTo(cx, cy + 110, cx + 30, cy + 90); x.stroke();
-    x.fillStyle = muted; x.font = '700 24px "Zen Maru Gothic", sans-serif'; x.textAlign = "center";
-    x.fillText("#だまされ体験ラボ", cx, 500);
+    /* 背景：紙の色＋左に紺の帯 */
+    x.fillStyle = PAPER; x.fillRect(0, 0, W, H);
+    const g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, NAVY); g.addColorStop(1, NAVY2);
+    x.fillStyle = g; x.fillRect(0, 0, 400, H);
+    x.fillStyle = GOLD; x.fillRect(400, 0, 6, H);
+    /* 左：サイト名・結末・判定・気づけたサイン */
+    x.fillStyle = GOLD; x.font = `700 24px ${F}`; x.fillText("だまされ体験ラボ", 48, 52);
+    x.fillStyle = "rgba(245,247,250,.7)"; x.font = `500 18px ${F}`; x.fillText("だまされる前に、気づく練習を。", 48, 86);
+    rr(48, 150, 304, 64, 32); x.fillStyle = END[0]; x.fill();
+    x.fillStyle = "#fff"; x.font = `900 30px ${F}`; x.textAlign = "center"; x.fillText(END[1], 200, 166); x.textAlign = "left";
+    x.fillStyle = "rgba(245,247,250,.7)"; x.font = `700 20px ${F}`; x.fillText("判定", 48, 250);
+    let fz = 44; x.font = `900 ${fz}px ${F}`;
+    while (x.measureText(rk.r).width > 304 && fz > 24) { fz -= 2; x.font = `900 ${fz}px ${F}`; }
+    x.fillStyle = "#F5F7FA"; x.fillText(rk.r, 48, 280);
+    x.fillStyle = "rgba(245,247,250,.7)"; x.font = `700 20px ${F}`; x.fillText("気づけたサイン", 48, 372);
+    x.fillStyle = GOLD; x.font = `900 64px ${F}`; x.fillText(`${caught}`, 48, 400);
+    const cw = x.measureText(`${caught}`).width;
+    x.fillStyle = "rgba(245,247,250,.8)"; x.font = `700 34px ${F}`; x.fillText(` / ${total}`, 48 + cw, 424);
+    x.fillStyle = "rgba(245,247,250,.55)"; x.font = `500 18px ${F}`; x.fillText("azakeiten.github.io/damasare-lab", 48, 560);
+    /* 右：話のタイトルと結末 */
+    const L = 456, RW = W - L - 56;
+    x.font = `700 20px ${F}`;
+    const tagW = x.measureText(sc.tag).width + 32;
+    rr(L, 56, tagW, 38, 19); x.fillStyle = "#E8EEF5"; x.fill();
+    x.fillStyle = NAVY; x.fillText(sc.tag, L + 16, 64);
+    x.fillStyle = INK; x.font = `900 40px ${F}`;
+    const tl = wrap(sc.title, L, 120, RW, 56, 3);
+    let y = 120 + tl * 56 + 18;
+    x.fillStyle = MUTED; x.font = `700 24px ${F}`;
+    y += wrap("結末：" + n.h, L, y, RW, 36, 2) * 36 + 24;
+    /* 守りゲージ */
+    const v = guardVals();
+    x.fillStyle = MUTED; x.font = `700 18px ${F}`; x.fillText("守れたもの", L, Math.max(y, 400));
+    const gy = Math.max(y, 400) + 34, gw = RW / 4;
+    GUARD.forEach(([k, name], i) => {
+      const gx = L + i * gw;
+      x.fillStyle = INK; x.font = `700 20px ${F}`; x.fillText(name, gx, gy);
+      const c = v[k] >= 3 ? "#14805D" : v[k] === 2 ? GOLD : "#B83A2E";
+      for (let p = 0; p < 3; p++) { rr(gx + p * 30, gy + 34, 24, 14, 4); x.fillStyle = p < v[k] ? c : "#D9DEE5"; x.fill(); }
+    });
+    x.fillStyle = MUTED; x.font = `700 20px ${F}`; x.textAlign = "right";
+    x.fillText("#だまされ体験ラボ", W - 56, H - 56);
     return cv.toDataURL("image/png");
   } catch (e) { return null; }
 }
