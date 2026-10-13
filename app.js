@@ -100,11 +100,11 @@ function totals() {
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
   { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "follower", "giftwari", "airdrop"] },
-  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
-  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "kakin", "gameacct", "liver"] },
+  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
+  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "seiyuu", "uketori", "kakin", "gameacct", "liver"] },
   { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shukatsu", "course", "kyozai", "ryugaku"] },
   { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -1133,7 +1133,7 @@ function choicesUI(n, note) {
   const order = (S.order[S.node] ||= n.choices.map((_, i) => i).sort(() => Math.random() - 0.5));
   const hintSign = n.choices.map((c) => c.sign && S.sc.signs[c.sign]).find(Boolean);
   const info = nodeInfo(n);
-  const keys = "ABCDEFGH"; let k = 0;
+  const keys = "ABCDEFGHIJ"; let k = 0;
   /* 大きな選択肢は3つ：もとの2つに「ためらう」を足す。ためらうと、相手は手口を変えてくる */
   S.hes ||= {}; S.hpos ||= {};
   const canHes = !!(info.risky && info.safe && n.choices.length === 2 && !S.hes[S.node] && !S.pending);
@@ -1150,6 +1150,7 @@ function choicesUI(n, note) {
   S.searched ||= {}; S.waited ||= {}; S.memo ||= {};
   const sgn = info.risky ? S.sc.signs[info.risky.sign] : hintSign;
   const acts = [];
+  if (info.who && !info.ally && talkScene() && !S.checkedSc) acts.push(["check", "相手を確かめる", inPerson() ? ((S.scene || {}).type === "call" ? "電話番号を検索する" : "名刺を見せてもらう") : "プロフィールを見る", ICON_CHECK]);
   if (info.canAsk) acts.push(["ask", "聞き返す", askT, ICON_ASK]);
   if (info.canTalk) acts.push(["talk", "相談する", inPerson() ? "待ってもらって、家族や友だちに相談" : "返事の前に、家族や友だちに相談", ICON_TALK]);
   if (sgn && !S.searched[S.node]) acts.push(["search", "調べる", "ネットで、似た話がないか検索", ICON_SEARCH]);
@@ -1171,7 +1172,7 @@ function choicesUI(n, note) {
   const ab = $(`ch-${S.node}-ask`); if (ab) ab.onclick = () => askBack(n, askT);
   const tb = $(`ch-${S.node}-talk`); if (tb) tb.onclick = () => consult(n);
   const hb = $(`ch-${S.node}-hes`); if (hb) hb.onclick = () => hesitate(n, hesT);
-  [["search", searchUp], ["wait", waitUp], ["memo", memoUp]].forEach(([x, f]) => { const b = $(`ch-${S.node}-${x}`); if (b) b.onclick = () => f(n); });
+  [["check", checkUp], ["search", searchUp], ["wait", waitUp], ["memo", memoUp]].forEach(([x, f]) => { const b = $(`ch-${S.node}-${x}`); if (b) b.onclick = () => f(n); });
   $("freeForm").onsubmit = (e) => { e.preventDefault(); const v = $("freeIn").value.trim(); if (v) freeReply(n, v); };
   if ($("hintBtn")) $("hintBtn").onclick = () => {
     const cat = CATS[hintSign.cat];
@@ -1311,6 +1312,36 @@ function harmFx(cat) {
   pushNote(h[0], h[1], h[2], "bad");
   hitScreen();
   sfx("stop");
+}
+/* ===== 相手を確かめる：プロフィール・電話番号・名刺を見て、あやしさに気づく ===== */
+const ICON_CHECK = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.5 2.7-6 6-6 1.6 0 3 .5 4 1.4"/><path d="M15 18l2 2 4-4"/></svg>`;
+const CHECK_TXT = {
+  sns: [["アカウントの作成：3日前", "アカウントの作成：2週間前", "アカウントの作成：先月"],
+    ["投稿は3件だけ", "同じ宣伝の投稿ばかり", "ほかの人の写真を使っているみたい"],
+    ["フォロワーは多いのに、いいねがほとんどない", "フォローしている人の数が、フォロワーよりずっと多い", "コメント欄に「詐欺では？」という書きこみ"]],
+  call: [["この番号の口コミ：「詐欺の電話」の報告が12件", "この番号の口コミ：「しつこい勧誘」の報告が8件", "この番号の口コミ：海外からの発信の可能性"],
+    ["公式サイトに書かれた番号とはちがう", "会社の名前で検索しても、番号が出てこない", "名のった会社の公式サイトには「この番号から電話はしません」"]],
+  live: [["会社名：〇〇サービス（住所が書いていない）", "会社名だけで、担当者の名前がない", "担当者の名前が、手書きで書き足してある"],
+    ["連絡先が携帯電話の番号だけ", "検索しても、会社のホームページが出てこない", "名のった会社に電話すると「そのような者はいません」"]]
+};
+async function checkUp(n) {
+  const my = S.run, info = nodeInfo(n), type = (S.scene || {}).type;
+  lockComposer();
+  S.checkedSc = true;
+  const seed = [...S.sc.id].reduce((a, ch) => a + ch.charCodeAt(0), 0);
+  const pick = (arr, i) => arr[(seed + i * 7) % arr.length];
+  const c = S.sc.cast[info.who] || {};
+  const kind = type === "call" ? "call" : type === "live" ? "live" : "sns";
+  const act = kind === "call" ? "電話番号を、ネットで検索してみた" : kind === "live" ? "名刺を見せてもらった" : `${c.n || "相手"}のプロフィールを確かめた`;
+  append(`<div class="act">${esc(act)}</div>`); S.lastFrom = null;
+  if (!S.didCheck) { S.didCheck = true; S.xp = (S.xp || 0) + addXP(2); }
+  await pause(600); if (my !== RUN) return;
+  const lines = CHECK_TXT[kind].map((arr, i) => pick(arr, i));
+  append(`<div class="shot wide check-res"><div class="t">${kind === "call" ? "番号の検索結果" : kind === "live" ? "名刺" : "プロフィール"}${c.n ? "：" + esc(c.n) : ""}</div><ul>${lines.map((l) => `<li>${esc(l)}</li>`).join("")}</ul></div>`);
+  S.lastFrom = null;
+  await pause(1100); if (my !== RUN) return;
+  await showItem(["think", "（…あやしいところが、いくつもある）"]); if (my !== RUN) return;
+  choicesUI(n, "相手を確かめるのは、とても強い方法。アカウントの新しさ、投稿の中身、電話番号の口コミ、会社の住所。どれか1つでもおかしければ、立ち止まろう。");
 }
 function lockComposer() { $("composer").querySelectorAll("button, input").forEach((b) => (b.disabled = true)); }
 /* 聞き返す：相手は答えずに、別の言い方でせかしてくる。そこにもサインが出る */
@@ -2572,7 +2603,7 @@ document.addEventListener("keydown", (e) => {
   if (document.body.dataset.view !== "play" || e.ctrlKey || e.metaKey || e.altKey) return;
   if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
   if (!$("overlay").hidden || !$("result").hidden) return;
-  const i = "abcdef".indexOf(e.key.toLowerCase());
+  const i = "abcdefghij".indexOf(e.key.toLowerCase());
   if (i < 0 || e.key.length !== 1) return;
   const b = [...$("composer").querySelectorAll("button[id^='ch-']")].filter((x) => !x.disabled)[i];
   if (b) { e.preventDefault(); b.click(); }

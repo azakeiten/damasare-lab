@@ -1643,3 +1643,4 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 }
 @media (max-width: 359px) { .guard-in .gd-n { display: none; } }
 @media (max-width: 400px) { .guard-in .gd-n { font-size: 9.5px; letter-spacing: -.02em; } .guard-in .gd { gap: 2px; } }
+.check-res li { color: var(--danger); font-weight: 700; }
