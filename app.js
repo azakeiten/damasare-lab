@@ -99,12 +99,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "follower", "giftwari", "airdrop"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "follower", "giftwari", "airdrop"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
-  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "seiyuu", "uketori", "tatekae", "kakin", "gameacct", "liver"] },
+  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
   { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "shukatsu", "course", "kyozai", "ryugaku"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -640,6 +640,24 @@ function checkAch() {
   store.set("dl3-ach", now.map((a) => a.id));
   fresh.forEach((a, i) => setTimeout(() => toast(`称号を手に入れた！「${a.n}」`), i * 2400));
 }
+/* ===== 体験マップ：全シナリオを、ジャンルごとのマス目で見わたす ===== */
+function mapGridHTML() {
+  const stOf = (sc) => {
+    const got = ((progress[sc.id] || {}).ends || []).length;
+    return got === 0 ? "none" : got >= endIds(sc).length ? "full" : "clear";
+  };
+  const all = SCENARIOS.map((sc) => ({ sc, st: stOf(sc) }));
+  const cnt = (s) => all.filter((x) => x.st === s).length;
+  return `<section class="sec mapgrid" aria-label="体験マップ">
+    <div class="sec-h"><h2>体験マップ　${cnt("clear") + cnt("full")} / ${all.length}</h2><p>すべての話を、ジャンルごとにマス目で並べました。マスを押すと、その話がはじまります。</p></div>
+    <div class="mg-leg"><span><i class="mg-t none"></i>まだ（${cnt("none")}）</span><span><i class="mg-t clear"></i>クリア（${cnt("clear")}）</span><span><i class="mg-t full"></i>結末コンプリート（${cnt("full")}）</span></div>
+    <div class="mg-rows">${Object.entries(GENRES).map(([gk, g]) => {
+      const items = all.filter((x) => x.sc.genre === gk);
+      const done = items.filter((x) => x.st !== "none").length;
+      return `<div class="mg-row" style="--gh:${g.h}"><div class="mg-h"><b>${esc(g.n)}</b><span>${done}/${items.length}</span></div>
+        <div class="mg-tiles">${items.map((x) => `<a class="mg-t ${x.st}" href="#${x.sc.id}" title="${esc(x.sc.tag)}：${esc(x.sc.title)}" aria-label="${esc(x.sc.tag)}（${x.st === "none" ? "まだ" : x.st === "full" ? "コンプリート" : "クリア"}）"></a>`).join("")}</div></div>`;
+    }).join("")}</div></section>`;
+}
 function achHTML() {
   const list = achievements();
   return `<section class="sec" aria-label="称号"><div class="sec-h"><h2>称号　${list.filter((a) => a.got).length} / ${list.length}</h2><p>体験を重ねると手に入ります。まだの称号は、条件を見てチャレンジしてみよう。</p></div>
@@ -673,6 +691,7 @@ function renderZukan() {
         <span class="val">${r.met ? `${r.caught}/${r.met}` : "—"}</span></div>`).join("")}</div>
     </div>
   </div>
+  ${mapGridHTML()}
   ${achHTML()}
   ${journalHTML()}
   <div class="zk-tools" id="zkTools" role="group" aria-label="図鑑をしぼりこむ">

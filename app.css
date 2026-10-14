@@ -1678,3 +1678,19 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
   .ps-f span { color: #666; }
   section { break-inside: avoid; }
 }
+/* ===== v36：体験マップ ===== */
+.mg-leg { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+.mg-leg span { display: inline-flex; align-items: center; gap: 6px; }
+.mg-leg .mg-t { width: 14px; height: 14px; pointer-events: none; }
+.mg-rows { display: grid; gap: 12px; }
+.mg-row { display: grid; grid-template-columns: 9em minmax(0, 1fr); gap: 12px; align-items: start; }
+.mg-h { display: grid; gap: 2px; padding-top: 2px; }
+.mg-h b { font-size: 13px; color: hsl(var(--gh) 55% var(--g-ls, 40%)); }
+.mg-h span { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.mg-tiles { display: flex; flex-wrap: wrap; gap: 5px; }
+.mg-t { display: block; width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid var(--line-strong); background: var(--surface); transition: transform .12s; }
+.mg-t:hover { transform: scale(1.25); border-color: var(--brand); }
+.mg-t.clear { background: hsl(var(--gh, 210) 55% 52%); border-color: transparent; }
+.mg-t.full { background: linear-gradient(135deg, #E3C25A, #C9A227); border-color: transparent; box-shadow: 0 0 0 2px color-mix(in srgb, #C9A227 30%, transparent); }
+.mg-leg .mg-t.clear { background: #4A78A8; }
+@media (max-width: 560px) { .mg-row { grid-template-columns: minmax(0, 1fr); gap: 6px; } .mg-h { display: flex; gap: 8px; align-items: baseline; } .mg-t { width: 20px; height: 20px; } }
