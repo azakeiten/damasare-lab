@@ -144,7 +144,7 @@ button:focus-visible, a:focus-visible, [tabindex]:focus-visible { outline: 3px s
 .tape-rule { height: 10px; border-radius: 6px; background: repeating-linear-gradient(-45deg, var(--accent) 0 12px, var(--ink) 12px 24px); }
 
 /* continue strip */
-.cont { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; background: var(--surface); border-radius: var(--r); padding: 16px 18px; margin-top: 28px; border: 2px solid var(--ink); }
+.cont:not(.row) { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; background: var(--surface); border-radius: var(--r); padding: 16px 18px; margin-top: 28px; border: 2px solid var(--ink); }
 .cont .t { flex: 1 1 260px; min-width: 0; display: grid; }
 .cont .t b { font-size: var(--step-1); }
 .cont .t span { font-size: var(--step--1); color: var(--muted); }
@@ -728,7 +728,7 @@ body { background-color: var(--bg); background-image: radial-gradient(var(--dot)
 .help-hero.bleed > * { max-width: 46em; }
 @media (max-width: 760px) { .b-hero::before { background: repeating-linear-gradient(-45deg, var(--band-hero-2) 0 16px, transparent 16px 32px) right bottom / 100% 120px no-repeat, var(--band-hero); } .b-hero::after { display: none; } }
 /* バンドの中のカードは、いつもの文字色に戻す */
-.quiz, .cat, .scard, .stat, .sq, .chart, .call, .today, .cont { color: var(--ink); }
+.quiz, .cat, .scard, .stat, .sq, .chart, .call, .today, .cont:not(.row) { color: var(--ink); }
 
 /* ヒーローの下を横切る警告テープ */
 .tape-run { position: relative; margin-inline: calc(50% - 50vw); width: 100vw; overflow: hidden; background: var(--accent); color: var(--on-accent);
@@ -976,7 +976,7 @@ body { background-image: none; letter-spacing: .01em; }
 .rec:hover { border-color: var(--brand); transform: none; }
 
 /* カード：白地・細い線・やわらかい影。形はふつうの角丸にそろえる */
-.scard, .stat, .cat, .today, .call, .quiz, .sq, .weak, .cont, .chart, .zc, .medal, .dd, .card-plain, .qrsec, .tablewrap, .lib-empty, .ch-mode, .ch-board, .ch-xp {
+.scard, .stat, .cat, .today, .call, .quiz, .sq, .weak, .cont:not(.row), .chart, .zc, .medal, .dd, .card-plain, .qrsec, .tablewrap, .lib-empty, .ch-mode, .ch-board, .ch-xp {
   border-radius: 16px; box-shadow: var(--shadow-1); }
 .scard { border: 1px solid var(--line); border-left: 4px solid hsl(var(--gh) 55% var(--g-ls)); }
 .scard:hover { transform: translateY(-2px); border-color: var(--line-strong); box-shadow: 0 8px 24px -10px rgba(22, 36, 58, .25); }
@@ -988,7 +988,7 @@ body { background-image: none; letter-spacing: .01em; }
 .quiz-side { background: var(--brand); color: var(--on-brand); }
 .quiz-side .eyebrow { color: inherit; opacity: .8; }
 .sq { border: 1px solid var(--line); }
-.cont { border: 1px solid var(--line); }
+.cont:not(.row) { border: 1px solid var(--line); }
 .weak { border: 1px solid var(--line); border-left: 4px solid var(--danger); }
 .b-sun::before { border-block: 0; }
 .sec-h h2::before { width: 6px; height: 22px; border-radius: 3px; background: var(--gold); }
@@ -1736,3 +1736,13 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 .cb-detail .btn { justify-self: start; background: #C9A227; color: #14243A; border-color: #C9A227; }
 @media (prefers-reduced-motion: no-preference) { .cb-detail:not(.empty) { animation: paneIn .3s ease-out; } }
 @media (max-width: 760px) { .cb-wrap { grid-template-columns: minmax(0, 1fr); } .cb-detail { position: static; order: -1; } .cb-grid { grid-template-columns: repeat(auto-fill, minmax(25px, 1fr)); gap: 4px; padding: 10px; } .cb-t { font-size: 11px; } }
+/* ===== v39：相手の催促 ===== */
+.row.them.nag .bub p { box-shadow: 0 0 0 2px color-mix(in srgb, #C9A227 55%, transparent); }
+.row.them.nag .bub p::before { content: "催促"; display: inline-block; margin-right: 6px; padding: 0 6px; border-radius: 4px; font-size: 10.5px; font-weight: 900; line-height: 1.7; vertical-align: 1px; background: #C9A227; color: #14243A; }
+.nudge-narr { color: var(--gold); }
+.nudge-tag { display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 99px; font-style: normal; font-size: 11.5px; font-weight: 700; background: color-mix(in srgb, #C9A227 18%, transparent); color: var(--gold); border: 1px solid color-mix(in srgb, #C9A227 45%, transparent); }
+@media (prefers-reduced-motion: no-preference) { .nudge-tag { animation: nudgePulse 1.6s ease-in-out 3; } }
+@keyframes nudgePulse { 50% { background: color-mix(in srgb, #C9A227 38%, transparent); } }
+.screen.nudging { animation: buzz .4s linear both; }
+@keyframes buzz { 20%, 60% { transform: translateX(-2px) rotate(-.3deg); } 40%, 80% { transform: translateX(2px) rotate(.3deg); } }
+.nudge-note { border-color: color-mix(in srgb, #C9A227 45%, transparent); }

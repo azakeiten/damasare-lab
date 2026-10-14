@@ -99,12 +99,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "follower", "giftwari", "airdrop"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "follower", "giftwari", "airdrop"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
   { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "shukatsu", "course", "kyozai", "ryugaku"] },
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
   { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -266,7 +266,7 @@ function sfx(kind) {
   if (!prefs.sound) return;
   try {
     actx ||= new (window.AudioContext || window.webkitAudioContext)();
-    const seq = { stop: [[520, 0, 0.09, "square"], [330, 0.11, 0.16, "square"]], ok: [[660, 0, 0.08, "sine"], [880, 0.09, 0.14, "sine"]], end: [[523, 0, 0.12, "triangle"], [659, 0.12, 0.12, "triangle"], [784, 0.24, 0.22, "triangle"]] }[kind] || [];
+    const seq = { stop: [[520, 0, 0.09, "square"], [330, 0.11, 0.16, "square"]], ok: [[660, 0, 0.08, "sine"], [880, 0.09, 0.14, "sine"]], end: [[523, 0, 0.12, "triangle"], [659, 0.12, 0.12, "triangle"], [784, 0.24, 0.22, "triangle"]], nudge: [[880, 0, 0.06, "sine"], [880, 0.12, 0.06, "sine"]] }[kind] || [];
     const t0 = actx.currentTime + 0.01;
     seq.forEach(([f, at, dur, type]) => {
       const o = actx.createOscillator(), g = actx.createGain();
@@ -1248,8 +1248,58 @@ function choicesUI(n, note) {
     S.hints = (S.hints || 0) + 1;
     $("hintBtn").outerHTML = `<span class="hint" role="status">${mascot("sm")}<span>この場面には「<b>${esc(cat.n)}</b>」のサインがかくれているかも。${esc(cat.d)}</span></span>`;
   };
+  armNudge(n, info);
   const firstBtn = $("composer").querySelector("button.choice");
   if (firstBtn && document.activeElement && document.activeElement.closest && document.activeElement.closest("#composer")) firstBtn.focus({ preventScroll: true });
+}
+/* ===== 相手の催促：選択肢の前で迷っていると、相手が追いのメッセージを送ってくる ===== */
+const NUDGE = {
+  umai:    ["まだ迷ってます？ ほかにも希望の人がいるので", "こんなチャンス、二度とないですよ。返事ください！"],
+  isogi:   ["まだですか？ 時間がないんです", "あと10分で締め切ります。急いでください！"],
+  himitsu: ["既読ついてますよね？ だれかに話したりしてないですよね", "ここだけの話なので、早めに返事くださいね"],
+  kane:    ["手続き、まだですか？ 今日中にお願いします", "このままだと、あなたの分がなくなってしまいます"],
+  kojin:   ["確認がとれないと、先に進めないんです", "入力、まだですか？ 期限が近いです"],
+  kankei:  ["……返事ないけど、だいじょうぶ？", "既読ついてるのに……。何か気にさわった？"],
+  jouken:  ["細かいことは気にしなくて平気ですよ", "みなさん、すぐ決めてますよ。あとはあなただけです"],
+  tsuuchi: ["【再送】お手続きがまだ完了していません", "【最終通知】本日中にお手続きください"]
+};
+const NUDGE_LIVE = ["（相手が、時計をちらっと見た）", "（相手が、少し身を乗り出してきた）"];
+let nudgeTimer = null;
+function armNudge(n, info) {
+  clearTimeout(nudgeTimer);
+  const who = info.who || (S.scene || {}).who, wc = who && S.sc.cast[who];
+  if (prefs.easy || !info.risky || !wc || info.ally || ALLY_RE.test(wc.n + (wc.r || "")) || !talkScene() && (S.scene || {}).type !== "web") return;
+  S.nudged ||= {};
+  const node = S.node, my = S.run, cnt = S.nudged[node] || 0;
+  if (cnt >= 2) return;
+  const lines = NUDGE[info.rcat] || NUDGE.isogi;
+  nudgeTimer = setTimeout(() => {
+    if (my !== RUN || S.node !== node || !$("composer").querySelector("button.choice:not(:disabled)") || document.hidden || $("v-play").hidden) return;
+    S.nudged[node] = cnt + 1;
+    S.nudges = (S.nudges || 0) + 1;
+    const live = inPerson() && (S.scene || {}).type === "live";
+    const c = S.sc.cast[who] || { n: "" };
+    if ((S.scene || {}).type === "web") pushNudge(c.n, lines[cnt]);
+    else if (live) append(`<div class="narr nudge-narr">${esc(NUDGE_LIVE[cnt])}</div>`);
+    else {
+      const cont = S.lastFrom === who;
+      append(`<div class="row them nag${cont ? " cont" : ""}"><span class="av-slot">${cont ? "" : av(S.sc, who, true)}</span><span class="bub"><p>${esc(lines[cnt])}</p></span><span class="meta">${esc(S.clock)}</span></div>`);
+      S.lastFrom = who;
+    }
+    const sc = $("screen");
+    if (!reduced) { sc.classList.remove("nudging"); void sc.offsetWidth; sc.classList.add("nudging"); }
+    sfx("nudge");
+    const q = $("composer").querySelector(".q > span");
+    if (q && !q.querySelector(".nudge-tag")) q.insertAdjacentHTML("beforeend", `<em class="nudge-tag">${(S.scene || {}).type === "web" ? "通知がくり返し届いている" : "相手が返事をせかしている"}</em>`);
+    armNudge(n, info);
+  }, cnt ? 14000 : 11000);
+}
+/* 画面の上から落ちてくる通知（催促用の小さなバナー） */
+function pushNudge(name, text) {
+  const sc = $("screen"); if (!sc) return;
+  sc.querySelectorAll(".nudge-push").forEach((x) => x.remove());
+  sc.insertAdjacentHTML("beforeend", `<div class="pushn nudge-push" role="status"><span class="pn-app">新着メッセージ<i>いま</i></span><b>${esc(name || "（送り主）")}</b><span class="pn-tx">${esc(text)}</span></div>`);
+  setTimeout(() => sc.querySelectorAll(".nudge-push").forEach((x) => x.remove()), 3200);
 }
 /* ===== 選択肢のほかの行動：調べる・時間をおく・記録を残す（物語は分かれず、その場面にもどってくる） ===== */
 const ICON_SEARCH = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg>`;
@@ -1936,6 +1986,7 @@ function openResult(id, n, isNewEnd) {
     <div class="resgrid"><div><b>${caught}</b><span>気づけたサイン</span></div><div><b>${missed}</b><span>見逃したサイン</span></div><div><b>${p.ends.length}/${endIds(sc).length}</b><span>回収した結末</span></div></div>
     <div class="guard guard-res" aria-label="守れたもの">${guardHTML(true)}</div>
     ${S.hints ? `<p class="hintnote">${mascot("sm")}ミヌケのヒントを ${S.hints} 回使いました。次はヒントなしで挑戦してみよう。</p>` : ""}
+    ${S.nudges ? `<p class="hintnote nudge-note">${mascot("sm")}相手は ${S.nudges} 回、返事をせかしてきました。${n.end === "bad" ? "せかされると、考える時間がなくなります。次は「時間をおく」も使ってみよう。" : "せかされても、自分のペースで考えられました。"}</p>` : ""}
     ${S.evidence ? `<p class="hintnote">${mascot("sm")}記録を ${S.evidence} 件残しました。${n.end === "safe" ? "何もなくても、記録はあとで役に立つことがあります。" : "相談するとき、この記録が大事な証拠になります。"}</p>` : ""}
     ${ex ? `<div class="co-res exam-res"><span class="eyebrow">${ex.note}</span><b>${EXAM.i + 1 < EXAM.ids.length ? "この調子で、次の話へ" : "3話そろいました。結果を見よう"}</b><span class="co-bar" aria-hidden="true"><i style="width:${Math.round((EXAM.i + 1) / EXAM.ids.length * 100)}%"></i></span></div>` : ""}
     ${cn ? `<div class="co-res">${cn.s ? `<span class="eyebrow">コース「${esc(cn.c.n)}」</span><b>${cn.done} / ${cn.all} 本クリア</b><span>次は「${esc(cn.s.tag)}」の話です。</span>` : `<span class="eyebrow">コース修了</span><b>「${esc(cn.c.n)}」を全部体験しました</b><span>ホームの「学びのコース」で、ほかのコースにも挑戦してみよう。</span>`}<span class="co-bar" aria-hidden="true"><i style="width:${Math.round(cn.done / cn.all * 100)}%"></i></span></div>` : ""}
