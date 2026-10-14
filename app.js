@@ -99,12 +99,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "follower", "giftwari", "airdrop"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "follower", "giftwari", "airdrop"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
   { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
   { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -384,7 +384,7 @@ function renderHome() {
       </div>
       <ul class="trust" aria-label="このサイトについて"><li>登録不要・無料</li><li>個人情報を集めません</li><li>広告なし</li><li>記録はこの端末の中だけ</li></ul>
       ${todayChHTML()}
-      <a class="newpill" href="#${(next || SCENARIOS[0]).id}"><b>NEW</b>選択肢をえらぶだけでなく、聞き返したり、自分の言葉で返信したりできるようになりました</a>
+      <a class="newpill" href="#help" id="newCheck"><b>NEW</b>届いたメッセージを貼りつけて、サインをチェックできるようになりました</a>
       <div class="hero-org">${orgBadge()}</div>
     </div>
     ${demoHTML()}
@@ -442,6 +442,7 @@ function renderHome() {
 
   renderFilters(); renderLib(); bindLibTools(); renderQuiz(); renderSQ(); runDemo(); bindCourses($("v-home"));
   $("ctaQuiz").onclick = (e) => { e.preventDefault(); $("quizSec").scrollIntoView({ behavior: reduced ? "auto" : "smooth" }); };
+  $("newCheck").onclick = () => { window.__gotoChecker = true; };
 }
 /* サインあてクイズ：各シナリオの「サインつきの選択」の直前に出るメッセージを問題にする */
 let SQ = null;
@@ -837,6 +838,7 @@ function renderHelp() {
   $("v-help").innerHTML = `
   <div class="help-hero bleed b-hero"><div class="eyebrow">IF SOMETHING HAPPENS</div><h1>困ったら、ひとりで抱えない</h1>
     <p style="color:var(--muted)">だまされたのは恥ずかしいことではありません。早く相談するほど、取れる手段が増えます。迷ったら、まず188へ。</p></div>
+  ${checkerHTML()}
   <div class="calls">
     <div class="call"><span class="eyebrow">消費者ホットライン</span><div class="num">188</div><p>局番なし。近くの消費生活センターにつながります。契約・解約・お金のトラブル全般。「いやや！」で覚えよう。</p></div>
     <div class="call"><span class="eyebrow">警察相談専用電話</span><div class="num">#9110</div><p>詐欺かもしれない、脅されている、個人情報を悪用されたかも、というとき。緊急のときは110番。</p></div>
@@ -869,6 +871,7 @@ function renderHelp() {
   </section>`;
   bindPhraseBook();
   bindPledge();
+  bindChecker();
   document.querySelectorAll("[data-easybtn]").forEach((b) => (b.onclick = toggleEasy));
   applyEasy();
   bindCourses($("v-help"));
@@ -2606,6 +2609,70 @@ function familyHTML() {
       <div class="fam-card"><span class="fam-n">3</span><b>家族の「合言葉」を決める</b><span>電話やメッセージでお金の話が出たら、合言葉を聞く。いつもの番号にかけ直す。家族で決めておくと安心です。</span></div>
     </div>
   </section>`;
+}
+/* ===== 届いたメッセージをチェック：貼りつけた文から、サインの言葉を見つけて色をつける（端末の中だけで判定） ===== */
+const CHECK_PAT = {
+  tsuuchi: /https?:\/\/\S+|[a-z0-9-]+\.(top|xyz|icu|cn|shop|online|site)\b|【重要】|【緊急】|【最終(通知|警告)】|不正(な)?(ログイン|利用|アクセス)|アカウント(が|を)?(停止|凍結|ロック|制限)|未納|不在(のため|連絡)?|お荷物|配達(できません|予定)|当選(しました|されました)|下記(の)?(URL|リンク)|こちらから(ご)?(確認|手続き|ログイン)|(スマホ|携帯)が(壊れ|こわれ)|(新しい)?(アカウント|番号)(に|を)(変え|かえ|新しく)/gi,
+  isogi: /今日なら|今日だけ|今日の(契約|うち)|今日決め|本日中|至急|今すぐ|すぐに|期限(が|は|内)|\d+時間以内|残り\d+|あと\d+(名|人|枠|日)|締め?切り|お急ぎ|早い者勝ち|(停止|削除|差し押さえ)(され|し)ます/g,
+  umai: /1日d+分|作業だけ|スマホだけで|無料|タダで|当選|プレゼント|高収入|月\d+万|日給\d+|日払い|かんたん|簡単|稼げ|もうか|儲か|元本保証|必ず(もうか|儲か|当た|増え)|絶対(に)?(もうか|儲か|損)|副業|在宅で|半額|キャッシュバック|特別価格|割引|特別に|おゆずり/g,
+  kane: /振り?込|送金|電子マネー|ギフト(カード|コード|券)|手数料|登録料|保証金|前払い|先払い|PayPay|ペイペイ|コンビニで|ATM|暗号資産|仮想通貨|ビットコイン|立て替え|代引き|(カード|コード)の番号を(送|教え)/g,
+  kojin: /パスワード|暗証番号|認証コード|確認コード|ログインID|カード番号|セキュリティコード|有効期限|口座番号|マイナンバー|身分証|免許証|本人確認|生年月日/g,
+  himitsu: /内緒|ないしょ|秘密|だれにも|誰にも|(言わ|話さ)ないで|LINEで|ラインで|DMで|別のアプリ|テレグラム|Telegram/gi,
+  jouken: /定期(購入|コース)|自動更新|解約(できません|は|料)|月額|週額|初回(のみ|限定)?|お試し|分割|ローン|リボ/g,
+  kankei: /大変なことに|危ない(です|ですよ)|事故が起き|さみしい|寂しい|会いたい|信じて|わかってあげ|あなただけ|あなたにだけ|選ばれた|ご縁|特別な(あなた|方)/g
+};
+const CHECK_EX = [
+  "【重要】お客様のアカウントで不正なログインが確認されました。24時間以内に下記URLからパスワードを再設定しない場合、アカウントは停止されます。 https://xxxx-account.top/",
+  "はじめまして！スマホで1日5分の作業だけで月20万円になってます。くわしくはLINEで教えますね。最初に登録料3,000円だけかかります",
+  "お母さんだよ。スマホが壊れて新しくしたの。コンビニで電子マネーを5万円分買って、カードの番号を送ってくれる？ お父さんには内緒にしてね"
+];
+function checkMsg(text) {
+  const hits = [];
+  Object.entries(CHECK_PAT).forEach(([cat, re]) => { re.lastIndex = 0; let m; while ((m = re.exec(text))) { if (!m[0]) { re.lastIndex++; continue; } hits.push({ s: m.index, e: m.index + m[0].length, cat, t: m[0] }); } });
+  hits.sort((a, b) => a.s - b.s || b.e - a.e);
+  const keep = []; let end = -1;
+  hits.forEach((h) => { if (h.s >= end) { keep.push(h); end = h.e; } });
+  let html = "", p = 0;
+  keep.forEach((h) => { html += esc(text.slice(p, h.s)) + `<mark class="ck-m ck-${h.cat}" title="${esc(CATS[h.cat].n)}">${esc(h.t)}</mark>`; p = h.e; });
+  html += esc(text.slice(p));
+  const cats = [...new Set(keep.map((h) => h.cat))];
+  return { html, cats, keep };
+}
+function checkerHTML() {
+  return `<section class="sec checker" id="checker" aria-label="届いたメッセージをチェック">
+    <div class="sec-h"><h2>届いたメッセージをチェック</h2><p>あやしいと思ったメッセージを貼りつけると、サインになりやすい言葉に色をつけます。判定はこの端末の中だけで行い、どこにも送りません。</p></div>
+    <div class="ck-box">
+      <label class="sr" for="ckIn">チェックするメッセージ</label>
+      <textarea id="ckIn" rows="5" maxlength="1200" placeholder="ここにメッセージを貼りつける（名前や番号など、本物の個人情報は消してからにしよう）"></textarea>
+      <div class="ck-row"><span class="ck-ex-h">例で試す：</span>${CHECK_EX.map((_, i) => `<button class="chipbtn sm" type="button" data-ckex="${i}">例${i + 1}</button>`).join("")}
+        <button class="btn small primary" type="button" id="ckGo">チェックする</button></div>
+      <div id="ckOut" aria-live="polite"></div>
+    </div></section>`;
+}
+function renderCheck() {
+  const v = $("ckIn").value.trim(), out = $("ckOut");
+  if (!v) { out.innerHTML = ""; return; }
+  const r = checkMsg(v), n = r.cats.length;
+  const lv = n === 0 ? ["ck-l0", "目立つサインは見つかりませんでした", "それでも安心とはかぎりません。知らない相手からのお金や個人情報の話には、いつも注意しよう。"]
+    : n === 1 ? ["ck-l1", "注意：サインが1種類あります", "これだけで詐欺とは言えませんが、相手が本物か、公式の方法で確かめてから動こう。"]
+    : n <= 3 ? ["ck-l2", `あやしい：サインが${n}種類あります`, "いくつかのサインが重なっています。リンクを押したり、返信したりする前に、家族や188に相談しよう。"]
+    : ["ck-l3", `とてもあやしい：サインが${n}種類あります`, "詐欺によく見られる組み合わせです。返信・入金・入力はせず、すぐに家族や188・#9110に相談しよう。"];
+  const score = (s) => Object.values(s.signs).filter((g) => r.cats.includes(g.cat)).length;
+  const recs = SCENARIOS.map((s) => ({ s, k: score(s) })).filter((x) => x.k).sort((a, b) => b.k - a.k || (played(a.s) - played(b.s))).slice(0, 3);
+  out.innerHTML = `<div class="ck-res ${lv[0]}">
+      <div class="ck-meter" aria-hidden="true">${[0, 1, 2, 3].map((k) => `<i class="${k < (n >= 4 ? 4 : n === 0 ? 0 : n <= 1 ? 1 : n <= 3 ? 3 : 4) ? "on" : ""}"></i>`).join("")}</div>
+      <b>${esc(lv[1])}</b><p>${esc(lv[2])}</p></div>
+    <div class="ck-text">${r.html}</div>
+    ${n ? `<ul class="ck-cats">${r.cats.map((c) => `<li><span class="ck-dot ck-${c}" aria-hidden="true"></span><div><b>${CATS[c].ic} ${esc(CATS[c].n)}</b><span>「${esc(r.keep.filter((h) => h.cat === c).map((h) => h.t).slice(0, 3).join("」「"))}」</span><p>${esc(CATS[c].d)}</p></div></li>`).join("")}</ul>` : ""}
+    ${recs.length ? `<div class="ck-recs"><span class="eyebrow">似たサインが出てくる話</span>${recs.map((x) => `<a class="ck-rec" href="#${x.s.id}"><span class="gtag" style="--gh:${GENRES[x.s.genre].h}">${esc(x.s.tag)}</span><b>${esc(x.s.title)}</b></a>`).join("")}</div>` : ""}
+    <p class="ck-note">${mascot("sm")}<span>この判定は、言葉の目安です。サインがなくても詐欺のことも、あっても本物の連絡のこともあります。迷ったら、消費者ホットライン188へ。</span></p>`;
+}
+function bindChecker() {
+  if (!$("ckIn")) return;
+  $("ckGo").onclick = renderCheck;
+  document.querySelectorAll("[data-ckex]").forEach((b) => (b.onclick = () => { $("ckIn").value = CHECK_EX[+b.dataset.ckex]; renderCheck(); }));
+  $("ckIn").onkeydown = (e) => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) renderCheck(); };
+  if (window.__gotoChecker) { window.__gotoChecker = false; setTimeout(() => $("checker").scrollIntoView({ block: "start" }), 50); }
 }
 /* ===== わが家の守りの約束カード：家族で約束をえらび、画像にして残す ===== */
 const PLEDGES = [

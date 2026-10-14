@@ -1891,3 +1891,34 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 .sh-act i { display: block; height: 8px; border-radius: 99px; background: linear-gradient(90deg, #C9A227, #D6B97F); }
 .sh-act small { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
 @media (max-width: 760px) { .sh-wrap { grid-template-columns: minmax(0, 1fr); } }
+/* ===== v45：届いたメッセージをチェック ===== */
+.ck-box { display: grid; gap: 10px; padding: 16px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line); }
+.ck-box textarea { font: inherit; font-size: 15px; line-height: 1.7; color: var(--ink); background: var(--bg); border: 1.5px solid var(--line-strong, var(--line)); border-radius: 12px; padding: 12px 14px; resize: vertical; min-height: 110px; }
+.ck-box textarea:focus { outline: 2px solid var(--brand); outline-offset: 1px; }
+.ck-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.ck-ex-h { font-size: 12.5px; color: var(--muted); font-weight: 700; }
+.ck-row .btn { margin-left: auto; }
+.ck-res { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 14px; align-items: center; padding: 14px 16px; border-radius: 14px; background: #14243A; color: #EEF2F7; margin-top: 4px; }
+.ck-res b { font-size: var(--step-1); font-weight: 900; }
+.ck-res p { grid-column: 2; margin: 0; font-size: 13px; line-height: 1.7; color: #C9D3DF; }
+.ck-meter { grid-row: 1 / 3; display: flex; gap: 4px; align-items: flex-end; height: 40px; }
+.ck-meter i { width: 9px; border-radius: 3px; background: rgba(255,255,255,.15); }
+.ck-meter i:nth-child(1) { height: 14px; } .ck-meter i:nth-child(2) { height: 22px; } .ck-meter i:nth-child(3) { height: 31px; } .ck-meter i:nth-child(4) { height: 40px; }
+.ck-l1 .ck-meter i.on { background: #D6B97F; } .ck-l2 .ck-meter i.on { background: #E08A3C; } .ck-l3 .ck-meter i.on { background: #E05555; }
+.ck-l0 { box-shadow: inset 4px 0 0 #3FA36B; } .ck-l1 { box-shadow: inset 4px 0 0 #D6B97F; } .ck-l2 { box-shadow: inset 4px 0 0 #E08A3C; } .ck-l3 { box-shadow: inset 4px 0 0 #E05555; }
+.ck-text { padding: 12px 14px; border-radius: 12px; background: var(--bg); border: 1px solid var(--line); font-size: 15px; line-height: 2; white-space: pre-wrap; overflow-wrap: anywhere; }
+.ck-m { color: inherit; padding: 1px 2px; border-radius: 4px; background: color-mix(in srgb, var(--ckc) 22%, transparent); border-bottom: 2px solid var(--ckc); }
+.ck-tsuuchi { --ckc: #4A86C5; } .ck-isogi { --ckc: #E08A3C; } .ck-umai { --ckc: #C9A227; } .ck-kane { --ckc: #E05555; }
+.ck-kojin { --ckc: #9B6BD1; } .ck-himitsu { --ckc: #3FA3A3; } .ck-jouken { --ckc: #8E9AA8; } .ck-kankei { --ckc: #D46BA3; }
+.ck-cats { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.ck-cats li { display: grid; grid-template-columns: 10px minmax(0, 1fr); gap: 10px; padding: 10px 12px; border-radius: 12px; background: var(--bg); border: 1px solid var(--line); }
+.ck-dot { width: 10px; height: 100%; min-height: 30px; border-radius: 99px; background: var(--ckc); }
+.ck-cats b { display: block; font-size: 14px; }
+.ck-cats span { display: block; font-size: 12.5px; color: var(--ink); margin-top: 2px; }
+.ck-cats p { margin: 4px 0 0; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+.ck-recs { display: grid; gap: 6px; }
+.ck-rec { display: flex; gap: 10px; align-items: center; padding: 10px 12px; border-radius: 12px; background: var(--bg); border: 1px solid var(--line); text-decoration: none; color: var(--ink); font-size: 14px; }
+.ck-rec:hover { border-color: #C9A227; }
+.ck-note { display: flex; gap: 8px; align-items: flex-start; margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+#ckOut { display: grid; gap: 10px; }
+#ckOut:empty { display: none; }
