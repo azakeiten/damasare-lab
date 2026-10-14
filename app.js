@@ -102,9 +102,9 @@ const COURSES = [
   { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "follower", "giftwari", "airdrop"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
   { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -873,6 +873,8 @@ function renderHelp() {
   bindPledge();
   bindChecker();
   document.querySelectorAll("[data-easybtn]").forEach((b) => (b.onclick = toggleEasy));
+  document.querySelectorAll("[data-voicebtn]").forEach((b) => (b.onclick = toggleVoice));
+  applyVoice();
   applyEasy();
   bindCourses($("v-help"));
 }
@@ -1001,6 +1003,7 @@ function openScenario(id) {
   store.set("dl3-last", id);
   S = { sc, run: RUN, signs: {}, order: {}, scene: null, clock: sc.clock || "12:00", lastFrom: null, skip: false, path: [], hist: [] };
   S.honne = HONNE_NEXT; HONNE_NEXT = false;
+  hush();
   $("screen").classList.toggle("honne-on", !!S.honne);
   $("overlay").hidden = true;
   $("log").innerHTML = "";
@@ -1221,6 +1224,7 @@ async function showItem(it) {
       if (S.run !== RUN) return;
     }
     append(`<div class="row them${cont ? " cont" : ""}">${slot}<span class="bub">${nm}<p>${esc(a)}</p></span><span class="meta">${esc(S.clock)}</span></div>`);
+    speak(a, c.h, "them");
     S.lastFrom = who;
     await pause(260);
   } else if (k === "me") {
@@ -1228,13 +1232,14 @@ async function showItem(it) {
   } else if (k === "think") {
     await pause(700); append(`<div class="think">${esc(a)}</div>`); S.lastFrom = null; await pause(500);
   } else if (k === "narr") {
-    await pause(300); append(`<div class="narr">${esc(a)}</div>`); S.lastFrom = null; await pause(900);
+    await pause(300); append(`<div class="narr">${esc(a)}</div>`); S.lastFrom = null; speak(a, 0, "narr"); await pause(900);
   } else if (k === "sys") {
     await pause(300); append(`<div class="sys">${esc(a)}</div>`); S.lastFrom = null; await pause(500);
   } else if (k === "card") {
     await pause(400);
     const wide = ["web", "home", "live", "call"].includes(scn.type);
     append(`<div class="shot${wide ? " wide" : ""}"><div class="t">${esc(a)}</div><ul>${b.map((l) => `<li>${esc(l)}</li>`).join("")}</ul></div>`);
+    speak(`${a}。${b.join("。")}`, 0, "narr");
     S.lastFrom = null; await pause(1100);
   }
 }
@@ -1442,6 +1447,7 @@ function armNudge(n, info) {
       const cont = S.lastFrom === who;
       append(`<div class="row them nag${cont ? " cont" : ""}"><span class="av-slot">${cont ? "" : av(S.sc, who, true)}</span><span class="bub"><p>${esc(lines[cnt])}</p></span><span class="meta">${esc(S.clock)}</span></div>`);
       S.lastFrom = who;
+      speak(lines[cnt], (S.sc.cast[who] || {}).h, "them");
     }
     const sc = $("screen");
     if (!reduced) { sc.classList.remove("nudging"); void sc.offsetWidth; sc.classList.add("nudging"); }
@@ -2602,8 +2608,8 @@ function familyHTML() {
   return `<section class="sec family" aria-label="家族といっしょに使う">
     <div class="sec-h"><h2>家族といっしょに使う</h2><p>おじいちゃん・おばあちゃんや親といっしょに体験すると、家族みんなの守りになります。</p></div>
     <div class="fam-grid">
-      <div class="fam-card"><span class="fam-n">1</span><b>「やさしい表示」にする</b><span>文字と選択肢が大きくなり、えらぶだけで進めるようになります。</span>
-        <button class="btn small" type="button" data-easybtn>やさしい表示：オフ</button></div>
+      <div class="fam-card"><span class="fam-n">1</span><b>「やさしい表示」と「読み上げ」</b><span>文字と選択肢が大きくなり、えらぶだけで進めるようになります。読み上げをオンにすると、相手のメッセージを声で読みます。</span>
+        <div class="row-btns"><button class="btn small" type="button" data-easybtn>やさしい表示：オフ</button><button class="btn small" type="button" data-voicebtn>読み上げ：オフ</button></div></div>
       <div class="fam-card"><span class="fam-n">2</span><b>「家族を守る編」を一緒に</b><span>家族を名のる電話、訪問の業者、役所やカード会社を名のる連絡など、${list.length}本の話をまとめました。</span>
         ${nx ? `<a class="btn small primary" href="#${nx.id}" data-course="kazoku">一緒にはじめる：${esc(nx.tag)}</a>` : ""}</div>
       <div class="fam-card"><span class="fam-n">3</span><b>家族の「合言葉」を決める</b><span>電話やメッセージでお金の話が出たら、合言葉を聞く。いつもの番号にかけ直す。家族で決めておくと安心です。</span></div>
@@ -3191,6 +3197,33 @@ function applyEasy() {
 function toggleEasy() { prefs.easy = !prefs.easy; savePrefs(); applyEasy(); toast(prefs.easy ? "やさしい表示にしました" : "ふつうの表示にもどしました"); }
 $("easyBtn").onclick = toggleEasy;
 applyEasy();
+/* 読み上げ：相手のメッセージを声で読む。相手ごとに声の高さを変える（ブラウザの音声合成を使い、どこにも送らない） */
+const CAN_VOICE = "speechSynthesis" in window && typeof SpeechSynthesisUtterance === "function";
+let jaVoice = null;
+function pickVoice() { if (!CAN_VOICE) return; jaVoice = speechSynthesis.getVoices().find((v) => /^ja/i.test(v.lang)) || null; }
+if (CAN_VOICE) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
+function speak(text, h, kind) {
+  if (!prefs.voice || !CAN_VOICE || !text) return;
+  const u = new SpeechSynthesisUtterance(text.replace(/https?:\/\/\S+/g, "（リンク）").replace(/[😀-🙏✨🙇🙏☺️😊😳]/gu, ""));
+  u.lang = "ja-JP"; if (jaVoice) u.voice = jaVoice;
+  u.rate = prefs.easy ? 0.9 : 1.05;
+  u.pitch = kind === "narr" ? 1 : 0.65 + (((h || 0) * 7) % 360) / 360 * 0.9;
+  u.volume = kind === "narr" ? 0.85 : 1;
+  speechSynthesis.speak(u);
+}
+function hush() { if (CAN_VOICE) speechSynthesis.cancel(); }
+function applyVoice() {
+  document.querySelectorAll("[data-voicebtn], #voiceBtn").forEach((b) => {
+    b.hidden = !CAN_VOICE;
+    b.setAttribute("aria-pressed", String(!!prefs.voice)); b.textContent = prefs.voice ? "読み上げ：オン" : "読み上げ：オフ";
+  });
+}
+function toggleVoice() {
+  prefs.voice = !prefs.voice; savePrefs(); applyVoice();
+  if (prefs.voice) speak("読み上げをオンにしました。相手のメッセージを声で読みます。", 0, "narr"); else hush();
+}
+if ($("voiceBtn")) $("voiceBtn").onclick = toggleVoice;
+applyVoice();
 /* 選択肢は A〜F のキーでもえらべる（入力欄に書いているときはのぞく） */
 document.addEventListener("keydown", (e) => {
   if (document.body.dataset.view !== "play" || e.ctrlKey || e.metaKey || e.altKey) return;
