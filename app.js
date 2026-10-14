@@ -99,12 +99,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "follower", "giftwari", "airdrop"] },
-  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "follower", "giftwari", "airdrop"] },
+  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
   { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
   { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -957,7 +957,9 @@ function openScenario(id) {
     S.scene = null; S.lastFrom = null;
     playNode(sc.start);
   };
+  showLock(sc);
   $("goBtn").onclick = () => {
+    hideLock();
     if (store.get("dl3-coach2", false)) return begin();
     showCoach(begin);
   };
@@ -967,6 +969,51 @@ function openScenario(id) {
 const ICON_SAY = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></svg>`;
 const ICON_ACT = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>`;
 const ICON_PLAY = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg>`;
+/* ===== はじまりの画面：ロック画面に届く通知・電話の着信・インターホン ===== */
+const WEEK = "日月火水木金土";
+function lockHTML(sc) {
+  const f = firstMsg(sc), c = sc.cast[f.who] || null;
+  const d = new Date(), date = `${d.getMonth() + 1}月${d.getDate()}日 ${WEEK[d.getDay()]}曜日`;
+  const story = `<details class="lk-story" open><summary>この話の場面</summary><p>${esc(sc.intro)}</p></details>`;
+  if (f.type === "home" || f.type === "live" && !/玄関|インターホン/.test(f.app)) return "";
+  if (f.type === "call" || f.type === "live") {
+    const door = f.type === "live";
+    return `<div class="lock ring${door ? " door" : ""}" id="lock" role="dialog" aria-label="${door ? "インターホン" : "着信"}">
+      <div class="lk-top"><span class="lk-kind">${door ? "インターホン" : "着信"}</span><b class="lk-name">${esc(door ? "玄関に、だれか来ました" : (c ? c.n : f.name || "知らない番号"))}</b><span class="lk-sub">${esc(door ? (c ? c.n : "") : (((sc.nodes[sc.start].scene || {}).status || "").replace(/^着信$|^通話中$/, "") || "携帯電話"))}</span></div>
+      <div class="lk-av" aria-hidden="true"><i></i><i></i>${c ? `<span class="av" style="--h:${c.h}">${esc(c.i)}</span>` : `<span class="av ghost">？</span>`}</div>
+      ${story}
+      <p class="lk-note" id="lkNote" aria-live="polite"></p>
+      <div class="lk-btns"><button type="button" class="lk-no" id="lkNo"><span class="lk-ic" aria-hidden="true">${door ? "✕" : SCENE_ICON.call}</span>${door ? "出ない" : "拒否"}</button><button type="button" class="lk-yes" id="lkYes"><span class="lk-ic" aria-hidden="true">${door ? "●" : SCENE_ICON.call}</span>${door ? "出る" : "応答"}</button></div>
+    </div>`;
+  }
+  const preview = f.text.length > 46 ? f.text.slice(0, 46) + "…" : f.text;
+  return `<div class="lock" id="lock" role="dialog" aria-label="ロック画面">
+    <div class="lk-clock"><span>${esc(date)}</span><b>${esc(S.clock)}</b></div>
+    <button type="button" class="lk-note-card" id="lkYes"><span class="lk-app"><span class="nt-ic" aria-hidden="true">${SCENE_ICON[f.type] || SCENE_ICON.dm}</span>${esc(f.app)}<i>いま</i></span>
+      ${f.name ? `<b>${esc(f.name)}</b>` : ""}<span class="lk-prev">${esc(preview)}</span></button>
+    ${story}
+    <span class="lk-hint">通知をタップして、ひらく</span>
+  </div>`;
+}
+function showLock(sc) {
+  hideLock(true);
+  if (prefs.easy) return;
+  const h = lockHTML(sc); if (!h) return;
+  $("screen").insertAdjacentHTML("beforeend", h);
+  $("screen").classList.add("locked");
+  $("lkYes").onclick = () => $("goBtn") && $("goBtn").click();
+  const no = $("lkNo");
+  if (no) no.onclick = () => {
+    $("lkNote").textContent = /出ない/.test(no.textContent) ? "出ないのも、立派な守り方。今回は練習なので、相手の話を聞いてみよう。" : "知らない番号に出ないのも、立派な守り方。今回は練習なので、出てみよう。";
+    no.disabled = true; $("lkYes").classList.add("pulse"); $("lkYes").focus({ preventScroll: true });
+  };
+}
+function hideLock(now) {
+  const l = $("lock"); $("screen").classList.remove("locked");
+  if (!l) return;
+  if (now || reduced) return l.remove();
+  l.classList.add("out"); setTimeout(() => l.remove(), 360);
+}
 /* はじめての人向けの3ステップ案内（1回だけ） */
 function showCoach(done) {
   const stop = $("stop");
