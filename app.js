@@ -99,10 +99,10 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "follower", "giftwari", "airdrop"] },
-  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
-  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "shukatsu", "course", "kyozai", "ryugaku"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "follower", "giftwari", "airdrop"] },
+  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
+  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "shukatsu", "course", "kyozai", "ryugaku"] },
   { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
   { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
@@ -739,6 +739,7 @@ function renderHelp() {
       <li><b>これ以上払わない・送らない</b><span>「取り戻せます」と向こうから来る連絡は二次被害のサイン。相談先は自分で調べた公的な窓口へ。</span></li>
     </ol>
   </section>
+  ${kimariHTML()}
   ${familyHTML()}
   ${phraseBookHTML()}
   ${wordsHTML()}
@@ -2291,6 +2292,47 @@ function renderReply(el, head) {
 }
 /* わたしの断りことば帳（相談先のページ） */
 /* ===== 家族といっしょに使う（相談先ページ） ===== */
+/* ===== だましの決まり文句ランキング：全シナリオの相手のセリフから、よく使われる言葉を数える ===== */
+const KIMARI = [
+  [/今日だけ|今日中|本日中|今夜だけ|今すぐ|いますぐ/, "今日だけ・今すぐ", "考える時間をなくして、その場で決めさせる言葉"],
+  [/あなただけ|あなたにだけ|きみにだけ|おまえにだけ|特別に|特待生/, "あなただけ・特別に", "特別あつかいして、うれしい気持ちにさせる言葉"],
+  [/必ず(もうか|当た|増え|デビュー|取り返|返す|合格|通|戻|稼げ)|絶対(に)?(もうか|当た|増え|安全|大丈夫|損)|ぜったい(もうか|当た)|(元本|全額|合格|単位|収入|当選)保証|保証します/, "必ず・絶対・保証", "リスクがないように思わせる言葉"],
+  [/だれにも言わ|誰にも言わ|内緒|ないしょ|ふたりだけの秘密|には言わないで|言わないでね|話さないほうがいい|親には(言わ|内緒|話さ)/, "だれにも言わないで", "まわりに相談させないための言葉"],
+  [/取り返せ|元が取れ|回収でき/, "すぐ取り返せる", "先に払わせるための言葉"],
+  [/無料|タダ|ゼロ円|(?<![0-9０-９,，])[0０]円/, "無料・ゼロ円", "入口のハードルを下げる言葉"],
+  [/残り[0-9０-９]+(名|席|個|枠|口|人|セット)|あと[0-9０-９]+(名|席|個|口|人|セット)|残りわずか|枠が(埋|なく|残り)|早い者勝ち|ほかにも(希望|欲しい)/, "残りわずか", "あせらせて、比べさせない言葉"],
+  [/みなさん.{0,8}(買われ|始め|やって|入って|受けて|使って|提出|申し込|手続き|付けて|そうして)|みんな.{0,6}(やって|稼いで|もうか|入って|払って|そうして|使って|増やし|倍)/, "みんなやっている", "自分だけ取り残されると思わせる言葉"],
+  [/手数料|登録料|保証料|参加費|入会金|着手金/, "手数料・登録料", "お金を払わせる口実"],
+  [/大丈夫|だいじょうぶ|ご安心/, "大丈夫・ご安心ください", "不安を打ち消して、確かめさせない言葉"]
+];
+function kimariHTML() {
+  const rows = KIMARI.map(([re, label, note]) => {
+    const hits = [];
+    SCENARIOS.forEach((sc) => {
+      let ex = null;
+      Object.values(sc.nodes).some((n) => (n.log || []).some((l) => {
+        if (l[0] !== "them") return false;
+        const c = sc.cast[l[2] || (n.scene && n.scene.who)] || {};
+        if (ALLY_RE.test((c.n || "") + (c.r || ""))) return false;
+        if (re.test(l[1])) { ex = l[1]; return true; }
+        return false;
+      }));
+      if (ex) hits.push({ sc, ex });
+    });
+    return { label, note, hits };
+  }).sort((a, b) => b.hits.length - a.hits.length);
+  const max = Math.max(1, ...rows.map((r) => r.hits.length));
+  return `<section class="sec kimari" aria-label="だましの決まり文句ランキング">
+    <div class="sec-h"><h2>だましの決まり文句ランキング</h2><p>${SCENARIOS.length}本の話で、相手が使ってきた言葉を数えました。この言葉が出たら、いったん止まろう。</p></div>
+    <ol class="km-list">${rows.map((r, i) => {
+      const ex = r.hits[(i * 7) % Math.max(1, r.hits.length)];
+      return `<li style="--d:${i}"><span class="km-rank">${i + 1}</span>
+        <div class="km-body"><div class="km-top"><b>「${esc(r.label)}」</b><span class="km-n">${r.hits.length}本</span></div>
+          <span class="km-bar" aria-hidden="true"><i style="width:${Math.round((r.hits.length / max) * 100)}%"></i></span>
+          <span class="km-note">${esc(r.note)}</span>
+          ${ex ? `<a class="km-ex" href="#${ex.sc.id}">「${esc([...ex.ex].slice(0, 44).join(""))}${[...ex.ex].length > 44 ? "…" : ""}」<small>— ${esc(ex.sc.tag)}</small></a>` : ""}</div></li>`;
+    }).join("")}</ol></section>`;
+}
 function familyHTML() {
   const c = COURSES.find((x) => x.id === "kazoku");
   const list = c ? courseOf(c) : [];

@@ -1694,3 +1694,19 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 .mg-t.full { background: linear-gradient(135deg, #E3C25A, #C9A227); border-color: transparent; box-shadow: 0 0 0 2px color-mix(in srgb, #C9A227 30%, transparent); }
 .mg-leg .mg-t.clear { background: #4A78A8; }
 @media (max-width: 560px) { .mg-row { grid-template-columns: minmax(0, 1fr); gap: 6px; } .mg-h { display: flex; gap: 8px; align-items: baseline; } .mg-t { width: 20px; height: 20px; } }
+/* ===== v37：だましの決まり文句ランキング ===== */
+.km-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.km-list li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 12px; align-items: start; padding: 12px 14px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
+@media (prefers-reduced-motion: no-preference) { .km-list li { animation: paneIn .35s ease-out backwards; animation-delay: calc(var(--d) * 50ms); } }
+.km-rank { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 900; background: var(--brand-soft); color: var(--brand); }
+.km-list li:nth-child(-n+3) .km-rank { background: #1E3A5F; color: #F5F7FA; box-shadow: 0 0 0 2px #C9A227; }
+.km-body { display: grid; gap: 4px; min-width: 0; }
+.km-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.km-top b { font-size: var(--step-1); font-weight: 900; }
+.km-n { font-size: 13px; font-weight: 700; color: var(--danger); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.km-bar { display: block; height: 6px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.km-bar i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #C9A227, var(--danger)); }
+.km-note { font-size: 12.5px; color: var(--muted); }
+.km-ex { font-size: 13px; color: var(--ink); text-decoration: none; padding: 6px 10px; border-radius: 4px 12px 12px 12px; background: var(--bg); border: 1px solid var(--line); line-height: 1.6; }
+.km-ex:hover { border-color: var(--brand); }
+.km-ex small { color: var(--muted); margin-left: 4px; }
