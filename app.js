@@ -99,12 +99,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "follower", "giftwari", "airdrop"] },
-  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "follower", "giftwari", "airdrop"] },
+  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
   { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "seiyuu", "uketori", "tatekae", "kakin", "gameacct", "liver"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "shukatsu", "course", "kyozai", "ryugaku"] },
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "shukatsu", "course", "kyozai", "ryugaku"] },
   { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -1947,6 +1947,31 @@ function openResult(id, n, isNewEnd) {
   $("resClose").focus({ preventScroll: true });
   drawCard(sc, n, rk, caught, met).then((src) => { const img = $("shareImg"); if (img && src) img.src = src; });
 }
+/* ===== 印刷用ワークシート：その話のあらすじ・流れ・サイン・問いを、A4の1枚に ===== */
+function printWorksheet(sc) {
+  if (!sc) return;
+  const d = DEBRIEF[sc.id] || {};
+  let el = $("printSheet");
+  if (!el) { el = document.createElement("div"); el.id = "printSheet"; document.body.appendChild(el); }
+  const signs = Object.values(sc.signs).filter((s) => s.cat !== "soudan");
+  el.innerHTML = `<div class="ps">
+    <header class="ps-h"><div><span class="ps-site">だまされ体験ラボ　ワークシート</span><h1>${esc(sc.title)}</h1><span class="ps-tag">${esc(sc.tag)}</span></div>
+      <div class="ps-name">年　　組　　番<br>名前</div></header>
+    <section><h2>1. どんな話？</h2><p>${esc(sc.intro)}</p></section>
+    ${d.flow ? `<section><h2>2. よくある流れ</h2><ol class="ps-flow">${d.flow.map((f) => `<li>${esc(f)}</li>`).join("")}</ol></section>` : ""}
+    <section><h2>3. かくれていたサイン　<small>体験して気づけたものに ✓</small></h2>
+      <ul class="ps-signs">${signs.map((s) => `<li><span class="ps-box"></span><b>${esc(s.t)}</b><span>（${esc(CATS[s.cat].n)}）</span></li>`).join("")}</ul></section>
+    ${d.ask ? `<section><h2>4. 考えてみよう</h2>${d.ask.map((q) => `<div class="ps-q"><p>${esc(q)}</p><div class="ps-lines"><i></i><i></i></div></div>`).join("")}</section>` : ""}
+    <section><h2>5. 自分の言葉で、断りのひとことを書こう</h2>
+      ${d.say ? `<p class="ps-ex">例：${d.say.map((s) => "「" + esc(s) + "」").join("　")}</p>` : ""}<div class="ps-lines"><i></i><i></i></div></section>
+    <footer class="ps-f"><b>困ったら相談</b>　消費者ホットライン 188　／　警察相談専用電話 #9110（緊急時は110番）<span>${esc(PAGES_URL)}#${esc(sc.id)}</span></footer>
+  </div>`;
+  window.print();
+}
+document.addEventListener("click", (e) => {
+  const b = e.target.closest && e.target.closest("[data-print]");
+  if (b) printWorksheet(byId(b.dataset.print));
+});
 function debriefHTML(sc) {
   const d = DEBRIEF[sc.id];
   return `<div class="debrief"><div class="side-h"><h2>このシナリオのまとめ</h2></div>
@@ -1956,7 +1981,8 @@ function debriefHTML(sc) {
     ${d.say ? `<div><span class="eyebrow">そのまま使える、断りのひとこと</span><div class="db-say">${d.say.map((l) => `<span>${esc(l)}</span>`).join("")}</div></div>` : ""}
     ${d.after ? `<div class="db-after"><span class="eyebrow">もし被害にあったら、すぐやること</span><ol>${d.after.map((l) => `<li>${esc(l)}</li>`).join("")}</ol></div>` : ""}
     <div class="db-law"><span class="eyebrow">知っておきたいこと</span><ul>${d.law.map((l) => `<li>${esc(l)}</li>`).join("")}</ul></div>
-    <div class="db-ask"><span class="eyebrow">考えてみよう</span><ul>${d.ask.map((l) => `<li>${esc(l)}</li>`).join("")}</ul></div></div>`;
+    <div class="db-ask"><span class="eyebrow">考えてみよう</span><ul>${d.ask.map((l) => `<li>${esc(l)}</li>`).join("")}</ul></div>
+    <div class="db-print"><button class="btn small" type="button" data-print="${esc(sc.id)}">${svgI('<path d="M7 9V3h10v6M7 17H4v-7h16v7h-3M7 14h10v7H7z"/>')} 印刷用ワークシート</button><span>授業で配れる、A4の1枚にまとめます</span></div></div>`;
 }
 /* 分かれ道からやり直す：その選択の直前の状態にもどして、その場面から再生する */
 function replayFrom(i) {

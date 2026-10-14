@@ -1644,3 +1644,37 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 @media (max-width: 359px) { .guard-in .gd-n { display: none; } }
 @media (max-width: 400px) { .guard-in .gd-n { font-size: 9.5px; letter-spacing: -.02em; } .guard-in .gd { gap: 2px; } }
 .check-res li { color: var(--danger); font-weight: 700; }
+/* ===== v35：印刷用ワークシート ===== */
+.db-print { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; padding-top: 6px; border-top: 1px dashed var(--line-strong); }
+.db-print .btn { display: inline-flex; align-items: center; gap: 6px; }
+.db-print span { font-size: 12px; color: var(--muted); }
+#printSheet { display: none; }
+@media print {
+  @page { size: A4; margin: 14mm; }
+  html, body { background: #fff !important; }
+  body > *:not(#printSheet) { display: none !important; }
+  #printSheet { display: block; color: #111; font-family: "Zen Kaku Gothic New", sans-serif; }
+  .ps { display: grid; gap: 10px; font-size: 11pt; line-height: 1.6; }
+  .ps-h { display: flex; justify-content: space-between; gap: 16px; border-bottom: 2.5px solid #1E3A5F; padding-bottom: 8px; }
+  .ps-site { font-size: 9pt; font-weight: 700; color: #1E3A5F; letter-spacing: .08em; }
+  .ps-h h1 { font-size: 16pt; margin: 2px 0 4px; line-height: 1.4; }
+  .ps-tag { font-size: 9pt; border: 1px solid #1E3A5F; border-radius: 99px; padding: 1px 10px; color: #1E3A5F; }
+  .ps-name { flex: 0 0 52mm; border: 1px solid #999; border-radius: 4px; padding: 6px 10px; font-size: 10pt; line-height: 2.2; }
+  .ps h2 { font-size: 11.5pt; margin: 4px 0 4px; color: #1E3A5F; border-left: 4px solid #C9A227; padding-left: 8px; }
+  .ps h2 small { font-weight: 400; color: #555; font-size: 9pt; }
+  .ps p { margin: 0; }
+  .ps-flow { list-style: none; margin: 0; padding: 0; display: flex; gap: 6px; }
+  .ps-flow li { flex: 1; border: 1px solid #1E3A5F; border-radius: 6px; padding: 6px 8px; font-size: 9.5pt; position: relative; }
+  .ps-flow li:not(:last-child)::after { content: "▶"; position: absolute; right: -9px; top: 50%; transform: translateY(-50%); font-size: 8pt; color: #C9A227; }
+  .ps-signs { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .ps-signs li { display: flex; gap: 8px; align-items: baseline; }
+  .ps-signs li span:last-child { color: #666; font-size: 9pt; }
+  .ps-box { flex: 0 0 auto; width: 11px; height: 11px; border: 1.5px solid #333; display: inline-block; transform: translateY(1px); }
+  .ps-q p { font-weight: 700; }
+  .ps-lines { display: grid; gap: 0; }
+  .ps-lines i { display: block; height: 9mm; border-bottom: 1px solid #aaa; }
+  .ps-ex { font-size: 9.5pt; color: #444; }
+  .ps-f { margin-top: 6px; padding-top: 8px; border-top: 1px solid #ccc; font-size: 9pt; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px; }
+  .ps-f span { color: #666; }
+  section { break-inside: avoid; }
+}
