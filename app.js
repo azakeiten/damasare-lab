@@ -99,10 +99,10 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "follower", "giftwari", "airdrop"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "follower", "giftwari", "airdrop"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
-  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
+  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
   { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
   { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
@@ -2057,17 +2057,68 @@ function showEnd(id, n) {
   { const ks = Object.keys(sc.signs); logPlay(sc, id, n, ks.filter((k) => S.signs[k] === "caught").length, ks.filter((k) => S.signs[k] === "missed").length); }
   setTimeout(checkAch, 1600);
   append(`<div class="end"><div class="tape"></div><div class="in"><span class="stamp s-${n.end}" aria-hidden="true">${STAMP[n.end]}</span><span class="label ${n.end}">結末｜${n.lab || ENDLAB[n.end]}</span><h3>${esc(n.h)}</h3><p>${esc(n.p)}</p></div></div>`);
-  $("composer").innerHTML = `<div class="pair">
+  const endBtns = () => {
+    $("composer").innerHTML = `<div class="pair">
     <button class="choice go" type="button" id="btn-result">結果を見る</button>
     <button class="choice" type="button" id="btn-retry"><small>同じシナリオ</small><span>別の選択でもう一度</span></button>
-    <button class="choice honne-btn" type="button" id="btn-honne"><small>相手の心の声つき</small><span>本音モードでもう一度</span></button></div>`;
-  $("btn-result").onclick = () => openResult(id, n, isNewEnd);
-  $("btn-retry").onclick = () => { if (!$("result").hidden) closeResult(); openScenario(sc.id); };
-  $("btn-honne").onclick = () => { if (!$("result").hidden) closeResult(); HONNE_NEXT = true; openScenario(sc.id); };
+    <button class="choice honne-btn" type="button" id="btn-honne"><small>相手の心の声つき</small><span>本音モードでもう一度</span></button>
+    ${!sc.gen && DEBRIEF[sc.id] && !S.taught ? `<button class="choice teach-btn" type="button" id="btn-teach"><small>1か月後のエピローグ</small><span>友だちから相談が来た</span></button>` : ""}</div>`;
+    $("btn-result").onclick = () => openResult(id, n, isNewEnd);
+    $("btn-retry").onclick = () => { if (!$("result").hidden) closeResult(); openScenario(sc.id); };
+    $("btn-honne").onclick = () => { if (!$("result").hidden) closeResult(); HONNE_NEXT = true; openScenario(sc.id); };
+    if ($("btn-teach")) $("btn-teach").onclick = () => { if (!$("result").hidden) closeResult(); epilogue(sc, endBtns); };
+  };
+  endBtns();
   renderSide(); renderDots();
   setTimeout(() => { if (S && S.sc === sc && S.node === id && $("result").hidden) openResult(id, n, isNewEnd); }, reduced || factor() === 0 ? 300 : 1400);
 }
 
+/* ===== 1か月後のエピローグ：同じ手口のメッセージを、友だちから相談される。こんどは教える側 ===== */
+function friendRow(text) {
+  const cont = S.lastFrom === "__friend";
+  const el = append(`<div class="row them ep-friend${cont ? " cont" : ""}"><span class="av-slot">${cont ? "" : `<span class="av sm" style="--h:160" aria-hidden="true">友</span>`}</span><span class="bub">${cont ? "" : `<span class="nm">クラスの友だち</span>`}<p>${esc(text)}</p></span><span class="meta">${esc(S.clock)}</span></div>`);
+  S.lastFrom = "__friend"; speak(text, 160, "them");
+  return el;
+}
+async function epilogue(sc, back) {
+  const my = S.run, d = DEBRIEF[sc.id] || {}, f = firstMsg(sc);
+  const good = `それ、あやしいよ。${d.point ? `「${d.point}」だよ。` : ""}まずは、いっしょにおうちの人に話そう`;
+  waitingUI();
+  append(`<div class="timechip">1か月後</div>`);
+  append(`<div class="scene-div">LINE｜クラスの友だち</div>`); S.lastFrom = null;
+  await pause(400); if (my !== RUN) return;
+  friendRow("ねえ、ちょっと聞いて。こんなのが届いたんだけど……");
+  await pause(700); if (my !== RUN) return;
+  append(`<div class="shot ep-shot"><div class="t">友だちのスマホの画面｜${esc(f.app)}${f.name ? `・${esc(f.name)}` : ""}</div><ul><li>${esc(f.text)}</li></ul></div>`); S.lastFrom = null;
+  await pause(800); if (my !== RUN) return;
+  friendRow("これ、大丈夫かな？ ちょっと気になってて");
+  const ask = () => {
+    const opts = shuffle([["good", good], ["bad", "いい話っぽいし、やってみたら？ ダメだったら、そこでやめればいいし"], ["meh", "とりあえず返事だけしてみたら？ どんな人か、話してみないとわからないよ"]]);
+    $("composer").innerHTML = `<div class="q"><span>友だちに、どう返す？</span></div><div class="choices">${opts.map(([k, t], i) =>
+      `<button class="choice say" type="button" id="ep-${k}"><span class="ch-key" aria-hidden="true">${"ABC"[i]}</span><span class="ch-tx"><small>友だちに返信する</small><span>${esc(t)}</span></span><span class="ch-ic" aria-hidden="true">${ICON_SAY}</span></button>`).join("")}</div>`;
+    opts.forEach(([k, t]) => ($("ep-" + k).onclick = () => answer(k, t)));
+  };
+  const answer = async (k, t) => {
+    lockComposer(); sendMe(t);
+    await pause(800); if (my !== RUN) return;
+    if (k === "good") {
+      friendRow("そうなんだ……！ 教えてくれてありがとう。危なかった");
+      await pause(500); if (my !== RUN) return;
+      append(`<div class="chip ok ep-chip"><i></i><span>エピローグ：<b>友だちを守れた</b>　＋15 XP</span></div>`); S.lastFrom = null;
+      S.taught = true; const p = prog(sc.id); p.taught = true; saveProgress(); addXP(15); sfx("ok"); toast("友だちを守れた！");
+      return back();
+    }
+    friendRow(k === "bad" ? "そうだよね、やってみる！" : "そっか。じゃあ、気にしないでおくね");
+    await pause(700); if (my !== RUN) return;
+    append(`<div class="narr ep-narr">${k === "bad" ? "（1週間後、友だちは「お金がもどってこない」と泣いていた……）" : "（数日後、友だちは同じ相手から、もっと強くせかされていた……）"}</div>`); S.lastFrom = null;
+    append(`<div class="readnote" role="status">${mascot("sm")}<span>友だちが相談してくれたときは、チャンス。この話で学んだ「${esc(d.point || "サイン")}」を、そのまま伝えてあげよう。</span></div>`);
+    sfx("stop");
+    $("composer").innerHTML = `<div class="pair"><button class="choice go" type="button" id="ep-again">もう一度、返事をえらぶ</button><button class="choice" type="button" id="ep-back"><small>エピローグをやめる</small><span>結末にもどる</span></button></div>`;
+    $("ep-again").onclick = () => { friendRow("……やっぱり、もう一回聞いてもいい？"); ask(); };
+    $("ep-back").onclick = back;
+  };
+  ask();
+}
 /* 「被害なし」の結末で、テープ色の紙吹雪を少しだけ */
 function confetti() {
   if (reduced) return;

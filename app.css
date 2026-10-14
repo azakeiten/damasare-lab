@@ -1926,3 +1926,11 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 .frow-role .chipbtn small { margin-left: 4px; }
 .rolechip { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 99px; background: #14243A; color: #D6B97F; border: 1px solid #C9A22755; }
 .role-chu.rolechip { color: #9FD8B4; } .role-kou.rolechip { color: #9FC4EA; } .role-dai.rolechip { color: #D6B97F; } .role-sha.rolechip { color: #E7B3C9; } .role-kazoku.rolechip { color: #F2C38F; }
+/* ===== v47：1か月後のエピローグ ===== */
+.pair .teach-btn { grid-column: 1 / -1; border-color: color-mix(in srgb, var(--safe) 55%, transparent) !important; }
+.choice.teach-btn small { color: var(--safe); }
+.row.them.ep-friend .bub p { background: color-mix(in srgb, var(--safe) 14%, var(--surface)); }
+.ep-shot { border-style: dashed !important; }
+.ep-shot .t::before { content: "📱 "; }
+.ep-narr { color: var(--danger); }
+.ep-chip { border-color: var(--safe); }
