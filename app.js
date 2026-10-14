@@ -99,11 +99,11 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "follower", "giftwari", "airdrop"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "follower", "giftwari", "airdrop"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
-  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
+  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
   { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
   { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
@@ -658,6 +658,67 @@ function mapGridHTML() {
         <div class="mg-tiles">${items.map((x) => `<a class="mg-t ${x.st}" href="#${x.sc.id}" title="${esc(x.sc.tag)}：${esc(x.sc.title)}" aria-label="${esc(x.sc.tag)}（${x.st === "none" ? "まだ" : x.st === "full" ? "コンプリート" : "クリア"}）"></a>`).join("")}</div></div>`;
     }).join("")}</div></section>`;
 }
+/* ===== あなたの守りのかたち：系統ごとの見抜き率のレーダーと、よく使う行動からわかる守りのタイプ ===== */
+function bumpAct(k) { const a = store.get("dl3-acts", {}) || {}; a[k] = (a[k] || 0) + 1; store.set("dl3-acts", a); }
+const ACT_TYPE = {
+  check:  ["確かめ探偵タイプ", "相手のプロフィールや番号を、まず確かめる。正体を見る目が、いちばんの守りです。"],
+  ask:    ["質問名人タイプ", "「どうして？」と聞き返せる。答えにつまる相手の様子から、うそが見えてきます。"],
+  talk:   ["相談上手タイプ", "ひとりで決めずに、まわりに話せる。だます側がいちばんいやがる力です。"],
+  search: ["しらべ研究者タイプ", "名前や文面で検索して、同じ手口を見つけられる。情報で身を守るタイプです。"],
+  wait:   ["ひと呼吸タイプ", "すぐに返事をしない。急かす相手のペースに、のみこまれません。"],
+  memo:   ["証拠係タイプ", "画面やメモを残せる。何かあったとき、相談の大きな助けになります。"],
+  free:   ["自分の言葉タイプ", "自分の言葉で、はっきり返せる。短い断りのひとことが、身についてきています。"],
+  hes:    ["ためらい冷静タイプ", "「ちょっと考えさせて」と言える。立ち止まる力は、すべての守りの土台です。"]
+};
+const ACT_N = { check: "相手を確かめる", ask: "聞き返す", talk: "相談する", search: "調べる", wait: "時間をおく", memo: "記録を残す", free: "自分の言葉で返す", hes: "ためらう" };
+function shapeHTML(catRows) {
+  const acts = store.get("dl3-acts", {}) || {}, total = Object.values(acts).reduce((a, b) => a + b, 0);
+  const top = Object.entries(acts).sort((a, b) => b[1] - a[1])[0];
+  const rows = catRows.filter((r) => r.ck !== "soudan");
+  const met = rows.filter((r) => r.met >= 2);
+  const best = met.slice().sort((a, b) => b.rate - a.rate)[0], worst = met.slice().sort((a, b) => a.rate - b.rate)[0];
+  const type = top && top[1] >= 2 ? ACT_TYPE[top[0]] : null;
+  return `<section class="sec shape" aria-label="あなたの守りのかたち">
+    <div class="sec-h"><h2>あなたの守りのかたち</h2><p>8つの系統で、どれだけ自分で気づけたか。外に広がるほど、その系統に強いということです。</p></div>
+    <div class="sh-wrap">
+      <canvas id="shapeCv" width="520" height="520" aria-label="系統ごとの見抜き率のレーダーチャート"></canvas>
+      <div class="sh-side">
+        <div class="sh-type"><span class="eyebrow">あなたの守りのタイプ</span>
+          <b>${type ? esc(type[0]) : "これから見つかるタイプ"}</b>
+          <p>${type ? esc(type[1]) : "体験の中で「相手を確かめる」「聞き返す」「相談する」などの行動を使うと、あなたの守りのタイプが見えてきます。"}</p></div>
+        ${best && worst && best !== worst ? `<div class="sh-bw"><div><span>いちばん強い</span><b>${CATS[best.ck].ic} ${esc(CATS[best.ck].n)}</b><small>${Math.round(best.rate * 100)}%</small></div>
+          <div><span>のびしろ</span><b>${CATS[worst.ck].ic} ${esc(CATS[worst.ck].n)}</b><small>${Math.round(worst.rate * 100)}%</small></div></div>` : ""}
+        ${total ? `<div class="sh-acts"><span class="eyebrow">よく使う行動</span>${Object.entries(acts).sort((a, b) => b[1] - a[1]).slice(0, 4).map(([k, v]) =>
+          `<div class="sh-act"><span>${esc(ACT_N[k] || k)}</span><i style="width:${Math.round(v / Math.max(...Object.values(acts)) * 100)}%"></i><small>${v}回</small></div>`).join("")}</div>` : ""}
+      </div>
+    </div></section>`;
+}
+function drawShape(catRows) {
+  const cv = $("shapeCv"); if (!cv) return;
+  const x = cv.getContext("2d"), W = 520, cx = W / 2, cy = W / 2, R = 135;
+  const SHORT = { umai: "うますぎる話", isogi: "急かす", himitsu: "秘密・移動", kane: "先にお金", kojin: "個人情報", kankei: "気持ち・関係", jouken: "小さな条件", tsuuchi: "いきなり通知" };
+  const rows = catRows.filter((r) => r.ck !== "soudan"), n = rows.length;
+  const dark = matchMedia("(prefers-color-scheme: dark)").matches && document.documentElement.dataset.theme !== "light" || document.documentElement.dataset.theme === "dark";
+  const ink = dark ? "#E6ECF2" : "#1B2534", line = dark ? "rgba(230,236,242,.16)" : "rgba(27,37,52,.14)";
+  x.clearRect(0, 0, W, W);
+  const pt = (i, r) => { const a = -Math.PI / 2 + (i / n) * Math.PI * 2; return [cx + Math.cos(a) * r, cy + Math.sin(a) * r]; };
+  x.lineWidth = 1.5; x.strokeStyle = line;
+  [0.25, 0.5, 0.75, 1].forEach((f) => { x.beginPath(); rows.forEach((_, i) => { const [px, py] = pt(i, R * f); i ? x.lineTo(px, py) : x.moveTo(px, py); }); x.closePath(); x.stroke(); });
+  rows.forEach((_, i) => { const [px, py] = pt(i, R); x.beginPath(); x.moveTo(cx, cy); x.lineTo(px, py); x.stroke(); });
+  x.beginPath();
+  rows.forEach((r, i) => { const [px, py] = pt(i, R * Math.max(0.04, r.met ? r.rate : 0)); i ? x.lineTo(px, py) : x.moveTo(px, py); });
+  x.closePath(); x.fillStyle = "rgba(201,162,39,.30)"; x.fill(); x.strokeStyle = "#C9A227"; x.lineWidth = 3; x.stroke();
+  rows.forEach((r, i) => { if (!r.met) return; const [px, py] = pt(i, R * Math.max(0.04, r.rate)); x.beginPath(); x.arc(px, py, 6, 0, Math.PI * 2); x.fillStyle = "#C9A227"; x.fill(); });
+  x.textBaseline = "middle";
+  rows.forEach((r, i) => {
+    const [px, py] = pt(i, R + 54); x.textAlign = "center";
+    x.font = '700 17px "Zen Kaku Gothic New", sans-serif';
+    x.fillStyle = r.met ? ink : (dark ? "rgba(230,236,242,.4)" : "rgba(27,37,52,.35)");
+    x.fillText(SHORT[r.ck] || CATS[r.ck].n, px, py - 10);
+    x.font = '900 15px "Zen Kaku Gothic New", sans-serif'; if (r.met) x.fillStyle = "#C9A227";
+    x.fillText(r.met ? `${Math.round(r.rate * 100)}%` : "—", px, py + 12);
+  });
+}
 /* ===== 相手の人物帳：出会った「相手」を顔の一覧で集める ===== */
 let cbSel = null;
 function castOf(sc) {
@@ -738,6 +799,7 @@ function renderZukan() {
         <span class="val">${r.met ? `${r.caught}/${r.met}` : "—"}</span></div>`).join("")}</div>
     </div>
   </div>
+  ${shapeHTML(catRows)}
   ${mapGridHTML()}
   ${castBookHTML()}
   ${achHTML()}
@@ -767,6 +829,7 @@ function renderZukan() {
   document.querySelectorAll("[data-zc]").forEach((b) => (b.onclick = () => { zkCat = b.dataset.zc; zkGo(); }));
   document.querySelectorAll("[data-zs]").forEach((b) => (b.onclick = () => { zkSt = b.dataset.zs; zkGo(); }));
   bindCastBook();
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => drawShape(catRows));
 }
 
 /* ===== 相談先 ===== */
@@ -1291,11 +1354,11 @@ function choicesUI(n, note) {
     const c = n.choices[+b.dataset.i], t = S.pending; S.pending = null;
     choose(c, t ? { myText: t, read: "あなたがえらんだ選択" } : null);
   }));
-  const ab = $(`ch-${S.node}-ask`); if (ab) ab.onclick = () => askBack(n, askT);
-  const tb = $(`ch-${S.node}-talk`); if (tb) tb.onclick = () => consult(n);
-  const hb = $(`ch-${S.node}-hes`); if (hb) hb.onclick = () => hesitate(n, hesT);
-  [["check", checkUp], ["search", searchUp], ["wait", waitUp], ["memo", memoUp]].forEach(([x, f]) => { const b = $(`ch-${S.node}-${x}`); if (b) b.onclick = () => f(n); });
-  $("freeForm").onsubmit = (e) => { e.preventDefault(); const v = $("freeIn").value.trim(); if (v) freeReply(n, v); };
+  const ab = $(`ch-${S.node}-ask`); if (ab) ab.onclick = () => { bumpAct("ask"); askBack(n, askT); };
+  const tb = $(`ch-${S.node}-talk`); if (tb) tb.onclick = () => { bumpAct("talk"); consult(n); };
+  const hb = $(`ch-${S.node}-hes`); if (hb) hb.onclick = () => { bumpAct("hes"); hesitate(n, hesT); };
+  [["check", checkUp], ["search", searchUp], ["wait", waitUp], ["memo", memoUp]].forEach(([x, f]) => { const b = $(`ch-${S.node}-${x}`); if (b) b.onclick = () => { bumpAct(x); f(n); }; });
+  $("freeForm").onsubmit = (e) => { e.preventDefault(); const v = $("freeIn").value.trim(); if (v) { bumpAct("free"); freeReply(n, v); } };
   if ($("hintBtn")) $("hintBtn").onclick = () => {
     const cat = CATS[hintSign.cat];
     S.hints = (S.hints || 0) + 1;
