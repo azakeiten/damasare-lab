@@ -99,12 +99,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "follower", "giftwari", "airdrop"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "follower", "giftwari", "airdrop"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
-  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
+  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
   { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -2511,6 +2511,81 @@ function bindPhraseBook() {
   }));
 }
 /* ===== 見抜き検定：毎回ちがう話を3本続けて、見抜き率と結末で級を決める ===== */
+/* ===== サインさがし：メッセージの「あやしいところ」をタップで見つける ===== */
+let SP = null;
+const SPOT = (window.DL && window.DL.spot) || [];
+function startSpot() {
+  SP = { items: shuffle(SPOT).slice(0, 6), i: 0, sel: new Set(), done: false, score: 0, xp: 0, found: 0, flags: 0, wrong: 0 };
+  renderChallenge();
+  $("v-challenge").scrollIntoView({ block: "start" });
+}
+const spotMax = (it) => it.parts.filter(Array.isArray).length * 2 + 2;
+function spotJudge(it, sel) {
+  let found = 0, wrong = 0, flags = 0;
+  it.parts.forEach((p, k) => { if (Array.isArray(p)) { flags++; if (sel.has(k)) found++; } else if (sel.has(k)) wrong++; });
+  const pts = Math.max(0, found * 2 - wrong + (found === flags && !wrong ? 2 : 0));
+  return { found, wrong, flags, pts };
+}
+function renderSpot(el, head) {
+  if (SP.i >= SP.items.length) {
+    const max = SP.items.reduce((a, it) => a + spotMax(it), 0);
+    const best = Math.max(store.get("dl3-spot", 0) || 0, SP.score);
+    store.set("dl3-spot", best);
+    const rate = SP.flags ? Math.round(SP.found / SP.flags * 100) : 0;
+    el.innerHTML = head + `<div class="ch-board ch-end">${mascot("md")}<span class="eyebrow">サインさがし　結果</span>
+      <b class="ch-big">${SP.score} / ${max} 点</b>
+      <div class="sp-sum"><span><b>${SP.found}/${SP.flags}</b>見つけたサイン</span><span><b>${rate}%</b>見つけた割合</span><span><b>${SP.wrong}</b>うたがいすぎ</span></div>
+      <p>${rate >= 90 && SP.wrong <= 2 ? "サインを見る目が、しっかり育っています。" : rate >= 60 ? "いい調子。見落としたサインは、系統ごとに図鑑で見直そう。" : "最初は見落として当然。答え合わせの解説を読むと、次は目に入るようになります。"}</p>
+      <p class="xpgain">見抜きポイント <b>+${SP.xp} XP</b>（これまでの最高：${best}点）</p>
+      <div class="row-btns"><button class="btn small primary" type="button" id="spAgain">もう一度（問題が変わります）</button>
+        <button class="btn small" type="button" id="spMenu">チャレンジの最初へ</button></div></div>`;
+    $("spAgain").onclick = () => startSpot();
+    $("spMenu").onclick = () => { SP = null; renderChallenge(); };
+    return;
+  }
+  const it = SP.items[SP.i], done = SP.done, r = done ? spotJudge(it, SP.sel) : null;
+  const sc = byId(it.src);
+  const chip = (p, k) => {
+    const flag = Array.isArray(p), on = SP.sel.has(k), tx = flag ? p[0] : p;
+    let cls = "sp-p";
+    if (!done) cls += on ? " on" : "";
+    else cls += flag ? (on ? " hit" : " miss") : (on ? " wrong" : " plain");
+    const mark = done && flag ? `<i class="sp-n" aria-hidden="true">${it.parts.slice(0, k + 1).filter(Array.isArray).length}</i>` : "";
+    return `<button type="button" class="${cls}" data-k="${k}" ${done ? "disabled" : ""} aria-pressed="${on}">${mark}${esc(tx)}</button>`;
+  };
+  let n = 0;
+  el.innerHTML = head + `<div class="ch-board sp-board">
+    <div class="ch-top"><span>第 ${SP.i + 1} / ${SP.items.length} 問</span><span><b>${SP.score}</b> 点</span><button class="linkbtn" type="button" id="spQuit">やめる</button></div>
+    <p class="sp-q">${done ? "答え合わせ" : "あやしいと思うところを、<b>ぜんぶ</b>タップしよう"}</p>
+    <div class="sp-msg"><div class="sp-from"><span class="sp-app">${esc(it.app)}</span><b>${esc(it.from)}</b></div>
+      <div class="sp-text">${it.parts.map(chip).join("")}</div></div>
+    ${done ? `<div class="sp-res ${r.found === r.flags && !r.wrong ? "perfect" : ""}"><b>+${r.pts} 点</b><span>サイン ${r.found}/${r.flags} 見つけた${r.wrong ? `・うたがいすぎ ${r.wrong}` : ""}${r.found === r.flags && !r.wrong ? "・パーフェクト！" : ""}</span></div>
+      <ol class="sp-why">${it.parts.filter(Array.isArray).map((p) => { n++; const k = it.parts.indexOf(p); return `<li class="${SP.sel.has(k) ? "hit" : "miss"}"><span class="sp-n">${n}</span><div><span class="cat-tag">${CATS[p[1]].ic} ${esc(CATS[p[1]].n)}</span>${SP.sel.has(k) ? "" : `<em>見落とし</em>`}<b>「${esc(p[0])}」</b><p>${esc(p[2])}</p></div></li>`; }).join("")}</ol>
+      ${r.wrong ? `<p class="sp-note">${mascot("sm")}グレーの線は、ふつうのあいさつや説明です。全部をうたがうと、本物の連絡まで見のがしてしまうことも。</p>` : ""}
+      <div class="row-btns">${sc ? `<a class="btn small" href="#${sc.id}">この手口の話を体験する</a>` : ""}<button class="btn small primary" type="button" id="spNext">${SP.i + 1 < SP.items.length ? "次のメッセージ" : "結果を見る"}</button></div>`
+    : `<div class="row-btns"><span class="sp-cnt">${SP.sel.size}か所 えらんでいます</span><button class="btn small primary" type="button" id="spCheck" ${SP.sel.size ? "" : "disabled"}>答え合わせ</button></div>`}
+  </div>`;
+  $("spQuit").onclick = () => { SP = null; renderChallenge(); };
+  if (!done) {
+    el.querySelectorAll(".sp-p").forEach((b) => (b.onclick = () => {
+      const k = +b.dataset.k;
+      SP.sel.has(k) ? SP.sel.delete(k) : SP.sel.add(k);
+      b.classList.toggle("on", SP.sel.has(k)); b.setAttribute("aria-pressed", SP.sel.has(k));
+      $("spCheck").disabled = !SP.sel.size;
+      el.querySelector(".sp-cnt").textContent = `${SP.sel.size}か所 えらんでいます`;
+    }));
+    $("spCheck").onclick = () => {
+      const res = spotJudge(it, SP.sel);
+      SP.done = true; SP.score += res.pts; SP.found += res.found; SP.flags += res.flags; SP.wrong += res.wrong;
+      if (res.found) SP.xp += addXP(res.found * 3);
+      sfx(res.found === res.flags && !res.wrong ? "ok" : "stop");
+      renderChallenge();
+      const nx = $("spNext"); if (nx) nx.focus({ preventScroll: true });
+    };
+  } else {
+    $("spNext").onclick = () => { SP.i++; SP.sel = new Set(); SP.done = false; renderChallenge(); $("v-challenge").scrollIntoView({ block: "start" }); };
+  }
+}
 let EXAM = null;
 const EXAM_GRADES = [[90, "名人", "どんな手口も見抜ける、見抜きの名人です。"], [75, "上級", "ほとんどの手口に気づけています。"], [55, "中級", "大事なサインには気づけています。あと一歩。"], [0, "初級", "ここからがスタート。サイン図鑑で手口を見直そう。"]];
 function startExam() {
@@ -2582,6 +2657,7 @@ function renderChallenge() {
     <p>届いたメッセージを見て、<b>あやしい</b>か<b>だいじょうぶ</b>かを判定しよう。ふつうの連絡もまざっています。問題は毎回変わるので、何度でも挑戦できます。</p>
     <div class="ch-level"><div><span class="eyebrow">見抜きレベル</span><b>Lv.${lv.lv}　${esc(lv.title)}</b><span class="lvbar big"><i style="width:${lv.pct}%"></i></span><small>次のレベルまで ${lv.toNext} XP（合計 ${lv.xp} XP）</small></div></div></div>`;
   if (RT) return renderReply(el, head);
+  if (SP) return renderSpot(el, head);
   if (EXAM && EXAM.res.length === EXAM.ids.length && EXAM.res.every(Boolean)) {
     el.innerHTML = examHTML(head);
     const s = examScore();
@@ -2602,9 +2678,12 @@ function renderChallenge() {
       <div class="ch-mode"><span class="eyebrow">見くらべる</span><h2>どっちが安全？</h2><p>2通のメッセージのうち、安全なのはどっち？ ふつうの連絡と、あやしいメッセージの「ちがい」を見つける10問です。</p>
         <p class="ch-rec">最高記録：<b>${store.get("dl3-pair", 0) || 0} / 10</b></p>
         <button class="btn primary" type="button" id="chPair">見くらべる10問をはじめる</button></div>
-      <div class="ch-mode ch-mode-new"><span class="eyebrow">書いて練習</span><h2>ことばで返す</h2><p>あやしいメッセージに、自分の言葉で返信を書く5問。断れているか、短くはっきりしているかを★3つで判定します。</p>
+      <div class="ch-mode"><span class="eyebrow">書いて練習</span><h2>ことばで返す</h2><p>あやしいメッセージに、自分の言葉で返信を書く5問。断れているか、短くはっきりしているかを★3つで判定します。</p>
         <p class="ch-rec">最高記録：<b>★ ${store.get("dl3-reply", 0) || 0} / 15</b></p>
         <button class="btn primary" type="button" id="chReply">ことばで返す5問をはじめる</button></div>
+      <div class="ch-mode ch-mode-new"><span class="eyebrow">タップで見つける</span><h2>サインさがし</h2><p>メッセージの中の「あやしいところ」を、自分でタップして見つける6問。見落としも、うたがいすぎも、答え合わせで全部わかります。</p>
+        <p class="ch-rec">最高記録：<b>${store.get("dl3-spot", 0) || 0} 点</b></p>
+        <button class="btn primary" type="button" id="chSpot">サインさがしをはじめる</button></div>
       <div class="ch-mode ch-mode-exam"><span class="eyebrow">腕だめし</span><h2>見抜き検定</h2><p>毎回ちがう話を3本つづけて体験。見抜いたサインの数と結末で、初級・中級・上級・名人の級が決まります。合格すると認定証がもらえます。</p>
         <p class="ch-rec">${(() => { const b = store.get("dl3-exam", null); return b ? `これまでの最高：<b>${esc(b.grade)}（${b.score}点）</b>` : "まだ受けていません"; })()}</p>
         <button class="btn primary" type="button" id="chExam">検定を受ける（約10分）</button></div>
@@ -2614,6 +2693,7 @@ function renderChallenge() {
     $("chEndless").onclick = () => startChallenge("endless");
     $("chPair").onclick = () => startChallenge("pair");
     $("chReply").onclick = () => startReply();
+    $("chSpot").onclick = () => startSpot();
     $("chExam").onclick = () => startExam();
     return;
   }
