@@ -99,12 +99,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "follower", "giftwari", "airdrop"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "follower", "giftwari", "airdrop"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
   { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
   { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -932,6 +932,8 @@ function openScenario(id) {
   const sc = byId(id);
   store.set("dl3-last", id);
   S = { sc, run: RUN, signs: {}, order: {}, scene: null, clock: sc.clock || "12:00", lastFrom: null, skip: false, path: [], hist: [] };
+  S.honne = HONNE_NEXT; HONNE_NEXT = false;
+  $("screen").classList.toggle("honne-on", !!S.honne);
   $("overlay").hidden = true;
   $("log").innerHTML = "";
   $("playTitle").textContent = sc.title;
@@ -948,6 +950,7 @@ function openScenario(id) {
     <div class="in"><p>${esc(sc.intro)}</p>
     <div class="castlist">${castKeys.map((k) => `<div>${av(sc, k, true)}<span><b>${esc(sc.cast[k].n)}</b>${sc.cast[k].r ? `　<span style="color:var(--muted)">${esc(sc.cast[k].r)}</span>` : ""}</span></div>`).join("")}</div>
     <div class="goal">${mascot("sm")}<span>この話にかくれた <b>${Object.keys(sc.signs).length}つのサイン</b> を見つけよう。結末は${endIds(sc).length}種類。</span></div></div></div>`);
+  if (S.honne) append(`<div class="honne-note"><b>本音モード</b><span>だます側の「心の声」が、灰色の吹き出しで見えます。どの言葉に、どんなねらいがあるのか見てみよう。</span></div>`);
   $("composer").innerHTML = `<button class="choice go" type="button" id="goBtn"><span class="ch-ic" aria-hidden="true">${ICON_PLAY}</span><span>ストーリーをはじめる</span></button>`;
   const begin = () => {
     prog(sc.id).plays++; saveProgress();
@@ -1193,6 +1196,7 @@ async function playNode(id) {
   if (n.end) return endFlow(id, n);
   waitingUI();
   for (const it of n.log) { await showItem(it); if (my !== RUN) return; }
+  if (S.honne) { await showHonne(n); if (my !== RUN) return; }
   choicesUI(n);
 }
 function waitingUI() {
@@ -1298,6 +1302,44 @@ function choicesUI(n, note) {
   armNudge(n, info);
   const firstBtn = $("composer").querySelector("button.choice");
   if (firstBtn && document.activeElement && document.activeElement.closest && document.activeElement.closest("#composer")) firstBtn.focus({ preventScroll: true });
+}
+/* ===== 本音モード：相手の「心の声」を見ながら、もう一度体験する ===== */
+let HONNE_NEXT = false;
+const HONNE = {
+  umai:    ["おいしい話に見えれば、細かいことは聞いてこない", "数字を大きく見せておけば、夢を見てくれる"],
+  isogi:   ["考えさせたら負け。今すぐ決めさせよう", "「今だけ」と言えば、比べるひまはない"],
+  himitsu: ["家族や友だちに話されたら、ここで終わりだ", "ほかの人の目が届かない場所へ連れていこう"],
+  kane:    ["この払い方なら、あとから取り返されない", "一度払わせれば、次も払わせやすい"],
+  kojin:   ["この情報さえ手に入れば、あとは好きにできる", "「確認のため」と言えば、たいてい教えてくれる"],
+  kankei:  ["やさしくしておけば、断りづらくなる", "信じてもらえたら、こっちのものだ"],
+  jouken:  ["大事な条件は、読まれる前に決めさせる", "小さな文字までは、だれも読まない"],
+  tsuuchi: ["本物っぽく見せれば、疑わない", "不安にさせれば、リンクを押してくれる"]
+};
+const HONNE_OK = ["……気づかれた。こいつは手ごわい", "ちっ、ここで止まるか", "……次は別の手でいこう"];
+const HONNE_NG = ["よし、かかった", "思ったとおり。このまま進めよう", "あと一押しだ"];
+function honneWho(n) {
+  S.asked ||= {};
+  const info = nodeInfo(n), who = info.who || (S.scene || {}).who, c = who && S.sc.cast[who];
+  if (!info.risky || !c || info.ally || ALLY_RE.test(c.n + (c.r || ""))) return null;
+  return { info, who, c };
+}
+function honneHTML(who, text) {
+  return `<div class="honne"><span class="hn-h">${av(S.sc, who, true)}<b>${esc(S.sc.cast[who].n)}</b>の本音</span><p>（${esc(text)}）</p></div>`;
+}
+async function showHonne(n) {
+  const h = honneWho(n); if (!h) return;
+  S.honneWho = h.who;
+  const lines = HONNE[h.info.rcat]; if (!lines) return;
+  await pause(400);
+  append(honneHTML(h.who, lines[S.path.length % lines.length])); S.lastFrom = null;
+  await pause(900);
+}
+function honneReact(ok) {
+  const who = S.honneWho; if (!who || !S.sc.cast[who]) return false;
+  const arr = ok ? HONNE_OK : HONNE_NG;
+  append(honneHTML(who, arr[S.path.length % arr.length]).replace('class="honne"', `class="honne ${ok ? "hn-ok" : "hn-ng"}"`)); S.lastFrom = null;
+  S.honneWho = null;
+  return true;
 }
 /* ===== 相手の催促：選択肢の前で迷っていると、相手が追いのメッセージを送ってくる ===== */
 const NUDGE = {
@@ -1604,6 +1646,7 @@ async function choose(c, opt) {
     await pause(400);
   }
   if (my !== RUN) return;
+  if (S.honne && c.sign) { if (honneReact(c.ok)) await pause(700); if (my !== RUN) return; }
   playNode(c.next);
 }
 function stopCard(signId, ok) {
@@ -1927,9 +1970,11 @@ function showEnd(id, n) {
   append(`<div class="end"><div class="tape"></div><div class="in"><span class="stamp s-${n.end}" aria-hidden="true">${STAMP[n.end]}</span><span class="label ${n.end}">結末｜${n.lab || ENDLAB[n.end]}</span><h3>${esc(n.h)}</h3><p>${esc(n.p)}</p></div></div>`);
   $("composer").innerHTML = `<div class="pair">
     <button class="choice go" type="button" id="btn-result">結果を見る</button>
-    <button class="choice" type="button" id="btn-retry"><small>同じシナリオ</small><span>別の選択でもう一度</span></button></div>`;
+    <button class="choice" type="button" id="btn-retry"><small>同じシナリオ</small><span>別の選択でもう一度</span></button>
+    <button class="choice honne-btn" type="button" id="btn-honne"><small>相手の心の声つき</small><span>本音モードでもう一度</span></button></div>`;
   $("btn-result").onclick = () => openResult(id, n, isNewEnd);
-  $("btn-retry").onclick = () => { openScenario(sc.id); };
+  $("btn-retry").onclick = () => { if (!$("result").hidden) closeResult(); openScenario(sc.id); };
+  $("btn-honne").onclick = () => { if (!$("result").hidden) closeResult(); HONNE_NEXT = true; openScenario(sc.id); };
   renderSide(); renderDots();
   setTimeout(() => { if (S && S.sc === sc && S.node === id && $("result").hidden) openResult(id, n, isNewEnd); }, reduced || factor() === 0 ? 300 : 1400);
 }
@@ -2079,6 +2124,7 @@ function openResult(id, n, isNewEnd) {
     </div>
     <div class="resbtns">
       <button class="btn" type="button" id="resRetry">別の選択でもう一度</button>
+      <button class="btn honne-btn" type="button" id="resHonne">本音モードでもう一度</button>
       ${ex ? `<a class="btn primary" href="${ex.href}" id="resNext">${ex.label}</a>` : sc.gen ? `<a class="btn primary" href="#mix" id="resNext">もう1話：毎回ちがう話</a>` : `<a class="btn primary" href="#${next.id}" id="resNext">${cn && cn.s ? "コースの次へ" : "次へ"}：${esc(next.tag)}</a>`}
     </div>
     <button class="qback" type="button" id="resClose" style="justify-self:center">閉じて会話を見返す</button>
@@ -2108,6 +2154,7 @@ function openResult(id, n, isNewEnd) {
     catch (e) { const r = document.createRange(); r.selectNodeContents($("talkMsg")); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); toast("選択しました。コピーしてください"); }
   };
   $("resRetry").onclick = () => { closeResult(); openScenario(sc.id); };
+  $("resHonne").onclick = () => { closeResult(); HONNE_NEXT = true; openScenario(sc.id); };
   $("resultSheet").querySelectorAll("[data-replay]").forEach((b) => (b.onclick = () => replayFrom(+b.dataset.replay)));
   $("resClose").onclick = () => closeResult();
   $("resNext").onclick = () => closeResult(true);

@@ -1835,3 +1835,23 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 .sp-sum span { display: grid; justify-items: center; gap: 2px; min-width: 96px; padding: 8px 10px; border-radius: 12px; background: var(--bg); border: 1px solid var(--line); font-size: 12px; color: var(--muted); }
 .sp-sum b { font-size: var(--step-1); color: var(--ink); }
 @media (prefers-reduced-motion: no-preference) { .sp-why li { animation: paneIn .3s ease-out backwards; } .sp-why li:nth-child(2) { animation-delay: .06s; } .sp-why li:nth-child(3) { animation-delay: .12s; } .sp-why li:nth-child(4) { animation-delay: .18s; } }
+/* ===== v42：本音モード ===== */
+.honne { align-self: flex-start; max-width: 86%; margin: 2px 0 4px 34px; padding: 8px 12px 9px; border-radius: 16px 16px 16px 4px; position: relative;
+  background: repeating-linear-gradient(-45deg, #1B2534 0 8px, #202C3D 8px 16px); color: #E6ECF2; border: 1px dashed #8E9AA8; }
+.honne::before { content: ""; position: absolute; left: -14px; top: 8px; width: 8px; height: 8px; border-radius: 50%; background: #8E9AA8; box-shadow: -6px -6px 0 -1px #8E9AA8; }
+.hn-h { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: #B9C4D1; letter-spacing: .04em; margin-bottom: 2px; }
+.hn-h .av.sm { width: 18px; height: 18px; font-size: 9px; }
+.hn-h b { color: #D6B97F; }
+.honne p { margin: 0; font-size: 13.5px; line-height: 1.6; font-style: italic; }
+.honne.hn-ok { border-color: var(--safe); }
+.honne.hn-ok p { color: #9FE0BC; }
+.honne.hn-ng { border-color: var(--danger); }
+.honne.hn-ng p { color: #F3A9A9; }
+@media (prefers-reduced-motion: no-preference) { .honne { animation: hnIn .45s ease-out both; } }
+@keyframes hnIn { from { opacity: 0; transform: translateY(4px) scale(.97); filter: blur(2px); } }
+.honne-note { margin: 4px 8px; padding: 10px 12px; border-radius: 12px; display: grid; gap: 2px; font-size: 12.5px; line-height: 1.6;
+  background: #14243A; color: #E6ECF2; border: 1px solid #C9A22766; }
+.honne-note b { color: #D6B97F; font-size: 12px; letter-spacing: .08em; }
+.honne-btn { border-style: dashed !important; }
+.choice.honne-btn small { color: var(--gold); }
+.pair .honne-btn { grid-column: 1 / -1; }
