@@ -99,11 +99,11 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "follower", "giftwari", "airdrop"] },
-  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
-  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "follower", "giftwari", "airdrop"] },
+  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
+  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
   { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "shukatsu", "course", "kyozai", "ryugaku"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
   { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
@@ -658,6 +658,53 @@ function mapGridHTML() {
         <div class="mg-tiles">${items.map((x) => `<a class="mg-t ${x.st}" href="#${x.sc.id}" title="${esc(x.sc.tag)}：${esc(x.sc.title)}" aria-label="${esc(x.sc.tag)}（${x.st === "none" ? "まだ" : x.st === "full" ? "コンプリート" : "クリア"}）"></a>`).join("")}</div></div>`;
     }).join("")}</div></section>`;
 }
+/* ===== 相手の人物帳：出会った「相手」を顔の一覧で集める ===== */
+let cbSel = null;
+function castOf(sc) {
+  const fm = firstMsg(sc), keys = Object.keys(sc.cast || {});
+  const isAlly = (k) => ALLY_RE.test(sc.cast[k].n + (sc.cast[k].r || ""));
+  const k = (fm.who && sc.cast[fm.who] && !isAlly(fm.who)) ? fm.who : keys.find((x) => !isAlly(x)) || keys[0];
+  if (!k) return null;
+  let line = "";
+  for (const n of Object.values(sc.nodes)) {
+    const m = (n.log || []).find((l) => l[0] === "them" && (l[2] || (n.scene && n.scene.who) || fm.who) === k);
+    if (m) { line = m[1]; break; }
+  }
+  if (!line) line = fm.text.replace(/^[^：]{1,16}：/, "");
+  const cats = [...new Set(Object.values(sc.signs).map((s) => s.cat).filter((c) => c !== "soudan"))];
+  return { sc, k, c: sc.cast[k], line, cats, met: cleared(sc.id) };
+}
+function castBookHTML() {
+  const all = SCENARIOS.map(castOf).filter(Boolean);
+  const met = all.filter((x) => x.met);
+  const sel = all.find((x) => x.sc.id === cbSel && x.met) || met[met.length - 1] || null;
+  const detail = sel ? `<div class="cb-detail" id="cbDetail" style="--h:${sel.c.h}">
+      <div class="cb-who"><span class="av" style="--h:${sel.c.h}" aria-hidden="true">${esc(sel.c.i)}</span><div><b>${esc(sel.c.n)}</b><span>${esc(sel.c.r || "")}${sel.c.r ? "｜" : ""}${esc(sel.sc.tag)}</span></div></div>
+      ${sel.line ? `<p class="cb-line">「${esc(sel.line)}」</p>` : ""}
+      <div class="cb-cats"><span class="cb-h">使ってきた手</span>${sel.cats.map((c) => `<span class="cb-cat"><i aria-hidden="true">${CATS[c].ic}</i>${esc(CATS[c].n)}</span>`).join("")}</div>
+      ${DEBRIEF[sel.sc.id] ? `<p class="cb-point"><span class="cb-h">見抜くポイント</span>${esc(DEBRIEF[sel.sc.id].point)}</p>` : ""}
+      <a class="btn small" href="#${sel.sc.id}">この話をもう一度 →</a>
+    </div>` : `<div class="cb-detail empty">${mascot("md")}<span>まだ、だれにも会っていません。話をひとつ遊ぶと、相手がここに並びます。</span></div>`;
+  return `<section class="sec castbook" aria-label="相手の人物帳">
+    <div class="sec-h"><h2>相手の人物帳　${met.length} / ${all.length}</h2><p>これまでに出会った「相手」です。顔を押すと、最初のひとことと、使ってきた手が見られます。</p></div>
+    <div class="cb-wrap">
+      <div class="cb-grid" role="list">${all.map((x) => x.met
+        ? `<button type="button" role="listitem" class="cb-t${sel && sel.sc.id === x.sc.id ? " on" : ""}" data-cb="${x.sc.id}" style="--h:${x.c.h}" title="${esc(x.c.n)}（${esc(x.sc.tag)}）" aria-label="${esc(x.c.n)}（${esc(x.sc.tag)}）">${esc(x.c.i)}</button>`
+        : `<span role="listitem" class="cb-t lock" title="まだ会っていない（${esc(x.sc.tag)}）" aria-label="まだ会っていない相手">？</span>`).join("")}</div>
+      ${detail}
+    </div></section>`;
+}
+function bindCastBook() {
+  document.querySelectorAll("[data-cb]").forEach((b) => (b.onclick = () => {
+    cbSel = b.dataset.cb;
+    const sec = b.closest(".castbook"), tmp = document.createElement("div");
+    tmp.innerHTML = castBookHTML();
+    sec.replaceWith(tmp.firstElementChild);
+    bindCastBook();
+    const d = $("cbDetail");
+    if (d && innerWidth < 760) d.scrollIntoView({ block: "nearest", behavior: reduced ? "auto" : "smooth" });
+  }));
+}
 function achHTML() {
   const list = achievements();
   return `<section class="sec" aria-label="称号"><div class="sec-h"><h2>称号　${list.filter((a) => a.got).length} / ${list.length}</h2><p>体験を重ねると手に入ります。まだの称号は、条件を見てチャレンジしてみよう。</p></div>
@@ -692,6 +739,7 @@ function renderZukan() {
     </div>
   </div>
   ${mapGridHTML()}
+  ${castBookHTML()}
   ${achHTML()}
   ${journalHTML()}
   <div class="zk-tools" id="zkTools" role="group" aria-label="図鑑をしぼりこむ">
@@ -718,6 +766,7 @@ function renderZukan() {
   const zkGo = () => { renderZukan(); const t = $("zkTools"); if (t) t.scrollIntoView({ block: "start" }); };
   document.querySelectorAll("[data-zc]").forEach((b) => (b.onclick = () => { zkCat = b.dataset.zc; zkGo(); }));
   document.querySelectorAll("[data-zs]").forEach((b) => (b.onclick = () => { zkSt = b.dataset.zs; zkGo(); }));
+  bindCastBook();
 }
 
 /* ===== 相談先 ===== */

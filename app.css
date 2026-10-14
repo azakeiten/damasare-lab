@@ -1710,3 +1710,29 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 .km-ex { font-size: 13px; color: var(--ink); text-decoration: none; padding: 6px 10px; border-radius: 4px 12px 12px 12px; background: var(--bg); border: 1px solid var(--line); line-height: 1.6; }
 .km-ex:hover { border-color: var(--brand); }
 .km-ex small { color: var(--muted); margin-left: 4px; }
+/* ===== v38：相手の人物帳 ===== */
+.cb-wrap { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.cb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(34px, 1fr)); gap: 6px; padding: 12px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); }
+.cb-t { aspect-ratio: 1; width: 100%; border-radius: 50%; display: grid; place-items: center; font: inherit; font-size: 13px; font-weight: 700; padding: 0; border: 0; cursor: pointer;
+  background: hsl(var(--h, 210) var(--av-s) var(--av-l)); color: var(--on-av); transition: transform .12s, box-shadow .12s; }
+.cb-t:hover { transform: scale(1.12); }
+.cb-t.on { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px #C9A227; }
+.cb-t:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.cb-t.lock { cursor: default; background: transparent; color: var(--muted); border: 1.5px dashed var(--line-strong, var(--line)); font-size: 11px; opacity: .7; }
+.cb-detail { position: sticky; top: 76px; display: grid; gap: 12px; padding: 18px; border-radius: 18px; background: #14243A; color: #EEF2F7; border: 1px solid #C9A22766;
+  box-shadow: inset 0 3px 0 #C9A227; }
+.cb-detail.empty { background: var(--surface); color: var(--muted); border: 1px dashed var(--line); box-shadow: none; grid-template-columns: auto 1fr; align-items: center; }
+.cb-who { display: flex; gap: 12px; align-items: center; }
+.cb-who .av { width: 52px; height: 52px; font-size: 20px; box-shadow: 0 0 0 3px #C9A227; }
+.cb-who b { display: block; font-size: var(--step-1); font-weight: 900; line-height: 1.35; }
+.cb-who span { font-size: 12.5px; color: #B9C4D1; }
+.cb-line { margin: 0; padding: 10px 14px; border-radius: 4px 14px 14px 14px; background: #F5F7FA; color: #1B2534; font-size: 14px; line-height: 1.7; position: relative; }
+.cb-h { display: block; font-size: 11.5px; font-weight: 700; letter-spacing: .08em; color: #D6B97F; margin-bottom: 4px; }
+.cb-cats { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.cb-cats .cb-h { flex-basis: 100%; margin: 0; }
+.cb-cat { display: inline-flex; gap: 5px; align-items: center; font-size: 12.5px; padding: 3px 10px 3px 4px; border-radius: 99px; background: #ffffff14; border: 1px solid #ffffff22; }
+.cb-cat i { font-style: normal; width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; background: #C9A227; color: #14243A; font-size: 11px; font-weight: 900; }
+.cb-point { margin: 0; font-size: 14px; line-height: 1.7; font-weight: 700; }
+.cb-detail .btn { justify-self: start; background: #C9A227; color: #14243A; border-color: #C9A227; }
+@media (prefers-reduced-motion: no-preference) { .cb-detail:not(.empty) { animation: paneIn .3s ease-out; } }
+@media (max-width: 760px) { .cb-wrap { grid-template-columns: minmax(0, 1fr); } .cb-detail { position: static; order: -1; } .cb-grid { grid-template-columns: repeat(auto-fill, minmax(25px, 1fr)); gap: 4px; padding: 10px; } .cb-t { font-size: 11px; } }
