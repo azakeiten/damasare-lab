@@ -99,12 +99,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "follower", "giftwari", "airdrop"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "follower", "giftwari", "airdrop"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
   { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -790,6 +790,7 @@ function renderHelp() {
   </section>
   ${kimariHTML()}
   ${familyHTML()}
+  ${pledgeHTML()}
   ${phraseBookHTML()}
   ${wordsHTML()}
   <section class="sec" aria-label="断り方">
@@ -804,6 +805,7 @@ function renderHelp() {
     </div>
   </section>`;
   bindPhraseBook();
+  bindPledge();
   document.querySelectorAll("[data-easybtn]").forEach((b) => (b.onclick = toggleEasy));
   applyEasy();
   bindCourses($("v-help"));
@@ -2541,6 +2543,99 @@ function familyHTML() {
       <div class="fam-card"><span class="fam-n">3</span><b>家族の「合言葉」を決める</b><span>電話やメッセージでお金の話が出たら、合言葉を聞く。いつもの番号にかけ直す。家族で決めておくと安心です。</span></div>
     </div>
   </section>`;
+}
+/* ===== わが家の守りの約束カード：家族で約束をえらび、画像にして残す ===== */
+const PLEDGES = [
+  ["お金の話が出たら、いったん電話を切って家族に相談する", "電話"],
+  ["家族を名のる電話には、いつもの番号にかけ直す", "電話"],
+  ["家の電話は、ふだんから留守番電話にしておく", "電話"],
+  ["キャッシュカードと暗証番号は、だれにも渡さない・教えない", "お金"],
+  ["「電子マネーで払って」と言われたら、詐欺と考える", "お金"],
+  ["SMSやメールのリンクは押さず、公式アプリで確かめる", "スマホ"],
+  ["「だれにも言わないで」と言われたら、すぐ家族に話す", "気持ち"],
+  ["訪問の業者は、ドアを開ける前にインターホンで確かめる", "訪問"],
+  ["その場で契約しない。書面をもらって、家族と読む", "契約"],
+  ["だまされても責めない。早く話してくれたら「ありがとう」", "気持ち"]
+];
+function pledgeState() {
+  const s = store.get("dl3-pledge", null) || {};
+  return { name: s.name || "", who: s.who || "", picks: Array.isArray(s.picks) ? s.picks : [0, 1, 3, 4, 6, 9] };
+}
+function pledgeHTML() {
+  const s = pledgeState();
+  return `<section class="sec pledge" aria-label="わが家の守りの約束カード">
+    <div class="sec-h"><h2>わが家の守りの約束カード</h2><p>家族で話し合って、守りの約束を6つまでえらぼう。カードにして保存すれば、冷蔵庫や電話のそばにはっておけます。</p></div>
+    <div class="pl-wrap">
+      <div class="pl-form">
+        <label class="pl-field"><span>家の呼び名（例：山田家、うちの家族）</span><input id="plName" type="text" maxlength="12" value="${esc(s.name)}" placeholder="うちの家族"></label>
+        <label class="pl-field"><span>迷ったときに、まず連絡する人</span><input id="plWho" type="text" maxlength="14" value="${esc(s.who)}" placeholder="例：お母さん、となりのおばさん"></label>
+        <fieldset class="pl-list"><legend>約束をえらぶ <b id="plCount">${s.picks.length}</b> / 6</legend>
+          ${PLEDGES.map(([t, tag], i) => `<label class="pl-item"><input type="checkbox" data-pl="${i}" ${s.picks.includes(i) ? "checked" : ""}><span class="pl-tag">${esc(tag)}</span><span>${esc(t)}</span></label>`).join("")}
+        </fieldset>
+        <p class="pl-note">${mascot("sm")}<span>家族の「合言葉」は、カードには書かずに、家族の中だけで覚えておこう。入力した内容は、この端末の中だけに保存されます。</span></p>
+      </div>
+      <div class="pl-preview"><canvas id="plCv" width="1080" height="1350" aria-label="約束カードのプレビュー"></canvas>
+        <div class="row-btns"><button class="btn small primary" type="button" id="plSave">画像を保存</button><button class="btn small" type="button" id="plPrint">印刷する</button></div></div>
+    </div></section>`;
+}
+function drawPledge() {
+  const cv = $("plCv"); if (!cv) return;
+  const s = pledgeState(), x = cv.getContext("2d"), W = 1080, H = 1350;
+  const NAVY = "#14243A", NAVY2 = "#0B1522", GOLD = "#C9A227", GOLD2 = "#D6B97F", F = '"Zen Kaku Gothic New", "Yu Gothic", sans-serif', M = '"Shippori Mincho", "Yu Mincho", serif';
+  const g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, NAVY); g.addColorStop(1, NAVY2);
+  x.fillStyle = g; x.fillRect(0, 0, W, H);
+  x.strokeStyle = GOLD; x.lineWidth = 4; x.strokeRect(36, 36, W - 72, H - 72);
+  x.lineWidth = 1.5; x.strokeRect(50, 50, W - 100, H - 100);
+  x.textBaseline = "top"; x.textAlign = "center";
+  x.fillStyle = GOLD2; x.font = `700 28px ${F}`; x.fillText("FAMILY PLEDGE", W / 2, 100);
+  const name = (s.name || "うちの家族").trim();
+  let fz = 76; x.font = `800 ${fz}px ${M}`;
+  const title = `${name}の 守りの約束`;
+  while (x.measureText(title).width > W - 200 && fz > 44) { fz -= 4; x.font = `800 ${fz}px ${M}`; }
+  x.fillStyle = "#F5F7FA"; x.fillText(title, W / 2, 148);
+  x.fillStyle = GOLD; x.fillRect(W / 2 - 60, 160 + fz + 14, 120, 4);
+  x.textAlign = "left";
+  const wrap = (t, X, Y, w, lh) => { let line = "", y = Y; for (const ch of t) { if (x.measureText(line + ch).width > w) { x.fillText(line, X, y); line = ch; y += lh; } else line += ch; } if (line) x.fillText(line, X, y); return y + lh; };
+  const picks = s.picks.slice(0, 6), by = H - 260;
+  const big = picks.length <= 4, fs = big ? 38 : 34, lh = big ? 52 : 46, gap = big ? 40 : 24;
+  let y = 290;
+  picks.forEach((i, k) => {
+    x.fillStyle = GOLD; x.beginPath(); x.arc(150, y + 26, 28, 0, Math.PI * 2); x.fill();
+    x.fillStyle = NAVY; x.font = `900 30px ${F}`; x.textAlign = "center"; x.fillText(String(k + 1), 150, y + 10); x.textAlign = "left";
+    x.fillStyle = "#F5F7FA"; x.font = `700 ${fs}px ${F}`;
+    y = wrap(PLEDGES[i][0], 205, y + 6, W - 205 - 130, lh) + gap - 6;
+  });
+  if (!picks.length) { x.fillStyle = "rgba(245,247,250,.6)"; x.font = `700 34px ${F}`; x.fillText("約束をえらんでください", 150, y); }
+  x.fillStyle = "rgba(255,255,255,.07)"; x.fillRect(100, by, W - 200, 150);
+  x.fillStyle = GOLD2; x.font = `700 26px ${F}`; x.fillText("迷ったら、まず", 140, by + 26);
+  const wt = `${(s.who || "家族").trim()}に連絡`; let wf = 40; x.font = `900 ${wf}px ${F}`;
+  while (x.measureText(wt).width > 440 && wf > 22) { wf -= 2; x.font = `900 ${wf}px ${F}`; }
+  x.fillStyle = "#F5F7FA"; x.fillText(wt, 140, by + 64);
+  x.textAlign = "right"; x.fillStyle = GOLD2; x.font = `700 24px ${F}`; x.fillText("消費者ホットライン", W - 140, by + 26);
+  x.fillStyle = "#F5F7FA"; x.font = `900 48px ${F}`; x.fillText("188　#9110", W - 140, by + 60);
+  x.fillStyle = "rgba(245,247,250,.55)"; x.font = `500 22px ${F}`; x.textAlign = "center";
+  const d = new Date();
+  x.fillText(`${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日に決めました　｜　だまされ体験ラボ`, W / 2, H - 92);
+}
+function bindPledge() {
+  if (!$("plCv")) return;
+  const save = () => {
+    const picks = [...document.querySelectorAll("[data-pl]")].filter((b) => b.checked).map((b) => +b.dataset.pl);
+    store.set("dl3-pledge", { name: $("plName").value.trim(), who: $("plWho").value.trim(), picks });
+    $("plCount").textContent = picks.length;
+    document.querySelectorAll("[data-pl]").forEach((b) => { b.disabled = !b.checked && picks.length >= 6; b.closest(".pl-item").classList.toggle("off", b.disabled); });
+    drawPledge();
+  };
+  document.querySelectorAll("[data-pl]").forEach((b) => (b.onchange = save));
+  $("plName").oninput = save; $("plWho").oninput = save;
+  $("plSave").onclick = () => { const a = document.createElement("a"); a.href = $("plCv").toDataURL("image/png"); a.download = "mamori-yakusoku.png"; a.click(); };
+  $("plPrint").onclick = () => {
+    const url = $("plCv").toDataURL("image/png"), ps = $("printSheet") || document.body.appendChild(Object.assign(document.createElement("div"), { id: "printSheet" }));
+    ps.innerHTML = `<img src="${url}" alt="守りの約束カード" style="width:100%;max-width:170mm;display:block;margin:0 auto">`;
+    window.print();
+  };
+  save();
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(drawPledge);
 }
 function phraseBookHTML() {
   const list = store.get("dl3-phrases", []) || [];
