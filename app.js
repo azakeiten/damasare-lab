@@ -100,10 +100,10 @@ function totals() {
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
   { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "follower", "giftwari", "airdrop"] },
-  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
-  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
+  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
+  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
   { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
@@ -214,7 +214,7 @@ function scenarioCard(sc) {
     <div class="nt-head"><span class="nt-app"><span class="nt-ic" aria-hidden="true">${SCENE_ICON[f.type] || SCENE_ICON.dm}</span>${esc(f.app)}</span><span class="nt-time">${esc(sc.clock || "")}</span>${badge}</div>
     <div class="nt-body">${av(sc, f.who)}<div><b>${esc(f.name)}</b><p class="nt-prev">${esc(f.text)}</p></div></div>
     <div class="body"><span class="gtag">${esc(sc.tag)}</span><h3>${esc(sc.title)}</h3>
-      <div class="meta"><span>約${sc.mins}分</span><span>むずかしさ <span class="lvl">${lvl(sc.level)}</span></span><span>結末 ${played}/${ne}</span><span>サイン ${caught}/${ns}</span></div>
+      <div class="meta">${roleOf(sc) !== "all" ? `<span class="rolechip role-${roleOf(sc)}">${esc(ROLES[roleOf(sc)])}</span>` : ""}<span>約${sc.mins}分</span><span>むずかしさ <span class="lvl">${lvl(sc.level)}</span></span><span>結末 ${played}/${ne}</span><span>サイン ${caught}/${ns}</span></div>
       <div class="pbar" aria-hidden="true"><i style="width:${Math.round((played / ne) * 100)}%"></i></div>
     </div></a>`;
 }
@@ -515,12 +515,25 @@ function todaySignHTML() {
 /* 場面の種類で探す：メッセージ・電話・対面・ウェブ */
 const SCENE_GROUP = { dm: "msg", talk: "msg", call: "call", live: "live", web: "web", home: "web" };
 const SCENE_GN = { all: "すべての場面", msg: "メッセージ", call: "電話", live: "対面", web: "ウェブ・アプリ" };
+/* あなたの立場で探す：あらすじの「あなたは〇〇」から、立場を読み取る */
+const ROLES = { all: "すべての立場", chu: "中学生", kou: "高校生", dai: "大学・専門学校", sha: "社会人", kazoku: "家族を守る" };
+const roleOf = (sc) => {
+  const t = sc.intro || "";
+  if (/おばあ|おじい|祖父|祖母|お年寄り/.test(t)) return "kazoku";
+  if (/中学/.test(t)) return "chu";
+  if (/高校/.test(t)) return "kou";
+  if (/大学|専門学校|大学院/.test(t)) return "dai";
+  if (/社会人|会社|\d{2}歳|主婦|子育て|新入社員|働いて/.test(t)) return "sha";
+  return "all";
+};
+let libRole = "all";
 let libScene = "all", libNew = false;
 const libList = () => {
   const q = libQ.trim().toLowerCase();
   let list = SCENARIOS.filter((s) => filter === "all" || s.genre === filter);
   if (libScene !== "all") list = list.filter((s) => SCENE_GROUP[firstMsg(s).type] === libScene);
   if (libNew) list = list.filter((s) => !played(s));
+  if (libRole !== "all") list = list.filter((s) => roleOf(s) === libRole);
   if (q) list = list.filter((s) => [s.title, s.sub, s.tag, s.intro, GENRES[s.genre].n, ...Object.values(s.signs).map((x) => x.t)].join(" ").toLowerCase().includes(q));
   return list;
 };
@@ -530,9 +543,11 @@ function renderFilters() {
     <div class="frow frow2"><button class="chipbtn sm dice" type="button" id="fRand"><span aria-hidden="true">🎲</span> ランダムに1本</button>
       <button class="chipbtn sm" type="button" id="fNew" aria-pressed="${libNew}">未体験だけ</button>
       <span class="frow-sep" aria-hidden="true"></span>
-      <span class="frow-h">場面</span>${Object.entries(SCENE_GN).map(([k, n]) => `<button class="chipbtn sm" type="button" id="fs-${k}" data-s="${k}" aria-pressed="${libScene === k}">${k !== "all" ? `<span class="nt-ic" aria-hidden="true">${SCENE_ICON[{ msg: "dm", call: "call", live: "live", web: "web" }[k]]}</span>` : ""}${esc(n)}</button>`).join("")}</div>`;
+      <span class="frow-h">場面</span>${Object.entries(SCENE_GN).map(([k, n]) => `<button class="chipbtn sm" type="button" id="fs-${k}" data-s="${k}" aria-pressed="${libScene === k}">${k !== "all" ? `<span class="nt-ic" aria-hidden="true">${SCENE_ICON[{ msg: "dm", call: "call", live: "live", web: "web" }[k]]}</span>` : ""}${esc(n)}</button>`).join("")}</div>
+    <div class="frow frow-role"><span class="frow-h">立場</span>${Object.entries(ROLES).map(([k, n]) => `<button class="chipbtn sm role-${k}" type="button" data-r="${k}" aria-pressed="${libRole === k}">${esc(n)}<small>${k === "all" ? SCENARIOS.length : SCENARIOS.filter((s) => roleOf(s) === k).length}</small></button>`).join("")}</div>`;
   $("filters").querySelectorAll("[data-f]").forEach((b) => (b.onclick = () => { filter = b.dataset.f; renderFilters(); renderLib(); }));
   $("filters").querySelectorAll("[data-s]").forEach((b) => (b.onclick = () => { libScene = b.dataset.s; renderFilters(); renderLib(); }));
+  $("filters").querySelectorAll("[data-r]").forEach((b) => (b.onclick = () => { libRole = b.dataset.r; renderFilters(); renderLib(); }));
   $("fNew").onclick = () => { libNew = !libNew; renderFilters(); renderLib(); };
   $("fRand").onclick = () => {
     const pool = libList().length ? libList() : SCENARIOS;
@@ -559,7 +574,7 @@ function renderLib() {
     $("lib").innerHTML = `<div class="lib-empty">${mascot("md")}<p>${q ? `「${esc(libQ)}」に合う話が見つかりませんでした。別のことばで探してみてね。` : libNew ? "この条件の話は、ぜんぶ体験ずみです。すごい！" : "この条件に合う話はありませんでした。"}</p></div>`;
     return;
   }
-  if (filter === "all" && !q && libSort === "rec" && libScene === "all" && !libNew) {
+  if (filter === "all" && !q && libSort === "rec" && libScene === "all" && !libNew && libRole === "all") {
     $("lib").innerHTML = Object.entries(GENRES).map(([gk, g]) => {
       const items = list.filter((s) => s.genre === gk);
       const done = items.filter(played).length;

@@ -1922,3 +1922,7 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 .ck-note { display: flex; gap: 8px; align-items: flex-start; margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
 #ckOut { display: grid; gap: 10px; }
 #ckOut:empty { display: none; }
+/* ===== v46：立場でさがす ===== */
+.frow-role .chipbtn small { margin-left: 4px; }
+.rolechip { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 99px; background: #14243A; color: #D6B97F; border: 1px solid #C9A22755; }
+.role-chu.rolechip { color: #9FD8B4; } .role-kou.rolechip { color: #9FC4EA; } .role-dai.rolechip { color: #D6B97F; } .role-sha.rolechip { color: #E7B3C9; } .role-kazoku.rolechip { color: #F2C38F; }
