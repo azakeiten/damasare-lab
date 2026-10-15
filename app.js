@@ -99,12 +99,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "follower", "giftwari", "airdrop"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "follower", "giftwari", "airdrop"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
   { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
   { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -646,7 +646,13 @@ function achievements() {
     { id: "talk", ic: "話", n: "相談の達人", d: "「相談・被害のあと」のサインに5つ気づく", got: allSigns.filter((x) => x.cat === "soudan" && x.st === "caught").length >= 5 },
     { id: "second", ic: "盾", n: "二次被害ブロッカー", d: "「取り戻せます」の連絡を見抜く", got: (P("ticket").signs || {}).second === "caught" },
     { id: "family", ic: "家", n: "家族の守り手", d: "おばあちゃんを守りきる", got: safeEnd("oreore") },
-    { id: "quiz", ic: "満", n: "クイズ満点", d: "サインあてクイズで5問正解", got: (prefs.sqBest || 0) >= 5 }
+    { id: "quiz", ic: "満", n: "クイズ満点", d: "サインあてクイズで5問正解", got: (prefs.sqBest || 0) >= 5 },
+    { id: "teach1", ic: "教", n: "先生デビュー", d: "エピローグで、友だちを1回守る", got: SCENARIOS.some((s) => P(s.id).taught) },
+    { id: "teach10", ic: "友", n: "みんなの守り手", d: "エピローグで、10の話の友だちを守る", got: SCENARIOS.filter((s) => P(s.id).taught).length >= 10 },
+    { id: "honne", ic: "裏", n: "本音を見た", d: "本音モードで、話を最後まで体験する", got: SCENARIOS.some((s) => P(s.id).honne) },
+    { id: "spot", ic: "探", n: "サインさがし名人", d: "サインさがしで40点以上", got: (store.get("dl3-spot", 0) || 0) >= 40 },
+    { id: "check", ic: "点", n: "メッセージ点検係", d: "「届いたメッセージをチェック」を使う", got: !!store.get("dl3-checked", false) },
+    { id: "pledge", ic: "約", n: "わが家の約束", d: "守りの約束カードを保存か印刷する", got: !!store.get("dl3-pledged", false) }
   ];
 }
 function checkAch() {
@@ -704,6 +710,7 @@ function shapeHTML(catRows) {
           <p>${type ? esc(type[1]) : "体験の中で「相手を確かめる」「聞き返す」「相談する」などの行動を使うと、あなたの守りのタイプが見えてきます。"}</p></div>
         ${best && worst && best !== worst ? `<div class="sh-bw"><div><span>いちばん強い</span><b>${CATS[best.ck].ic} ${esc(CATS[best.ck].n)}</b><small>${Math.round(best.rate * 100)}%</small></div>
           <div><span>のびしろ</span><b>${CATS[worst.ck].ic} ${esc(CATS[worst.ck].n)}</b><small>${Math.round(worst.rate * 100)}%</small></div></div>` : ""}
+        ${(() => { const tn = SCENARIOS.filter((s) => (progress[s.id] || {}).taught).length; return tn ? `<div class="sh-taught"><span>エピローグで友だちを守った</span><b>${tn}<small>話</small></b></div>` : ""; })()}
         ${total ? `<div class="sh-acts"><span class="eyebrow">よく使う行動</span>${Object.entries(acts).sort((a, b) => b[1] - a[1]).slice(0, 4).map(([k, v]) =>
           `<div class="sh-act"><span>${esc(ACT_N[k] || k)}</span><i style="width:${Math.round(v / Math.max(...Object.values(acts)) * 100)}%"></i><small>${v}回</small></div>`).join("")}</div>` : ""}
       </div>
@@ -1416,7 +1423,7 @@ function honneHTML(who, text) {
 }
 async function showHonne(n) {
   const h = honneWho(n); if (!h) return;
-  S.honneWho = h.who;
+  S.honneWho = h.who; prog(S.sc.id).honne = true;
   const lines = HONNE[h.info.rcat]; if (!lines) return;
   await pause(400);
   append(honneHTML(h.who, lines[S.path.length % lines.length])); S.lastFrom = null;
@@ -2105,7 +2112,7 @@ async function epilogue(sc, back) {
       friendRow("そうなんだ……！ 教えてくれてありがとう。危なかった");
       await pause(500); if (my !== RUN) return;
       append(`<div class="chip ok ep-chip"><i></i><span>エピローグ：<b>友だちを守れた</b>　＋15 XP</span></div>`); S.lastFrom = null;
-      S.taught = true; const p = prog(sc.id); p.taught = true; saveProgress(); addXP(15); sfx("ok"); toast("友だちを守れた！");
+      S.taught = true; const p = prog(sc.id); p.taught = true; saveProgress(); addXP(15); sfx("ok"); toast("友だちを守れた！"); setTimeout(checkAch, 1200);
       return back();
     }
     friendRow(k === "bad" ? "そうだよね、やってみる！" : "そっか。じゃあ、気にしないでおくね");
@@ -2723,6 +2730,7 @@ function checkerHTML() {
 }
 function renderCheck() {
   const v = $("ckIn").value.trim(), out = $("ckOut");
+  if (v && !store.get("dl3-checked", false)) { store.set("dl3-checked", true); setTimeout(checkAch, 800); }
   if (!v) { out.innerHTML = ""; return; }
   const r = checkMsg(v), n = r.cats.length;
   const lv = n === 0 ? ["ck-l0", "目立つサインは見つかりませんでした", "それでも安心とはかぎりません。知らない相手からのお金や個人情報の話には、いつも注意しよう。"]
@@ -2830,8 +2838,8 @@ function bindPledge() {
   };
   document.querySelectorAll("[data-pl]").forEach((b) => (b.onchange = save));
   $("plName").oninput = save; $("plWho").oninput = save;
-  $("plSave").onclick = () => { const a = document.createElement("a"); a.href = $("plCv").toDataURL("image/png"); a.download = "mamori-yakusoku.png"; a.click(); };
-  $("plPrint").onclick = () => {
+  $("plSave").onclick = () => { store.set("dl3-pledged", true); setTimeout(checkAch, 800); const a = document.createElement("a"); a.href = $("plCv").toDataURL("image/png"); a.download = "mamori-yakusoku.png"; a.click(); };
+  $("plPrint").onclick = () => { store.set("dl3-pledged", true); setTimeout(checkAch, 800);
     const url = $("plCv").toDataURL("image/png"), ps = $("printSheet") || document.body.appendChild(Object.assign(document.createElement("div"), { id: "printSheet" }));
     ps.innerHTML = `<img src="${url}" alt="守りの約束カード" style="width:100%;max-width:170mm;display:block;margin:0 auto">`;
     window.print();
@@ -2875,6 +2883,7 @@ function renderSpot(el, head) {
     const max = SP.items.reduce((a, it) => a + spotMax(it), 0);
     const best = Math.max(store.get("dl3-spot", 0) || 0, SP.score);
     store.set("dl3-spot", best);
+    setTimeout(checkAch, 800);
     const rate = SP.flags ? Math.round(SP.found / SP.flags * 100) : 0;
     el.innerHTML = head + `<div class="ch-board ch-end">${mascot("md")}<span class="eyebrow">サインさがし　結果</span>
       <b class="ch-big">${SP.score} / ${max} 点</b>

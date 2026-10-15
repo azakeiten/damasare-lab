@@ -1934,3 +1934,7 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 .ep-shot .t::before { content: "📱 "; }
 .ep-narr { color: var(--danger); }
 .ep-chip { border-color: var(--safe); }
+.sh-taught { display: flex; justify-content: space-between; align-items: baseline; padding: 10px 14px; border-radius: 12px; background: var(--surface); border: 1px solid color-mix(in srgb, var(--safe) 45%, transparent); }
+.sh-taught span { font-size: 12.5px; font-weight: 700; color: var(--muted); }
+.sh-taught b { font-size: var(--step-1); color: var(--safe); font-variant-numeric: tabular-nums; }
+.sh-taught small { font-size: 12px; margin-left: 2px; }
