@@ -1965,3 +1965,20 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 .wn-note { font-size: 12px; color: #666; background: #F7F7F7; }
 .wn-p .sp-n { position: absolute; top: -9px; left: -9px; }
 .wn-board .sp-res, .wn-board .sp-why li { background: var(--bg); }
+/* ===== v49：あそびかたマップ ===== */
+.md-groups { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.md-group { display: grid; gap: 8px; align-content: start; }
+.md-gh { font-size: 12px; font-weight: 900; letter-spacing: .12em; color: var(--gold); padding-left: 4px; border-left: 3px solid #C9A227; }
+.md-tiles { display: grid; gap: 8px; }
+.md-tile { position: relative; display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 10px; align-items: center; padding: 10px 12px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); text-decoration: none; color: var(--ink); transition: transform .15s, border-color .15s, box-shadow .15s; }
+.md-tile:hover { transform: translateY(-2px); border-color: #C9A227; box-shadow: 0 10px 22px -14px rgba(0,0,0,.5); }
+.md-tile:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.md-ic { width: 38px; height: 38px; border-radius: 11px; display: grid; place-items: center; font-weight: 900; font-size: 17px; background: #14243A; color: #D6B97F; box-shadow: inset 0 0 0 1px #C9A22755; }
+.md-tx { display: grid; gap: 1px; min-width: 0; }
+.md-tx b { font-size: 14px; line-height: 1.35; }
+.md-tx small { font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+.md-badge { position: absolute; top: 8px; right: 10px; font-style: normal; font-size: 11px; font-weight: 700; color: var(--gold); font-variant-numeric: tabular-nums; }
+.md-tile:has(.md-badge) .md-tx { padding-right: 46px; }
+@media (prefers-reduced-motion: no-preference) { .md-group { animation: paneIn .4s ease-out backwards; animation-delay: calc(var(--mi) * 70ms); } }
+@media (max-width: 1000px) { .md-groups { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .md-groups { grid-template-columns: minmax(0, 1fr); } }

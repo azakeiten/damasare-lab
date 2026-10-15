@@ -99,12 +99,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "follower", "giftwari", "airdrop"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "follower", "giftwari", "airdrop"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
-  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
+  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
   { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "hp", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -195,6 +195,8 @@ function showView(name, scId) {
   if (name === "challenge") renderChallenge();
   if (name === "play") openScenario(scId);
   window.scrollTo(0, 0);
+  if (window.__goto) { const g = window.__goto; window.__goto = null; setTimeout(() => { const e = $(g); if (e) e.scrollIntoView({ block: "start" }); }, 60); }
+  if (name === "challenge" && window.__mode) { const m = window.__mode; window.__mode = null; ({ daily: () => startChallenge("daily"), endless: () => startChallenge("endless"), pair: () => startChallenge("pair"), reply: startReply, spot: startSpot, wana: startWana, exam: startExam }[m] || (() => {}))(); }
 }
 
 /* ===== ホーム ===== */
@@ -358,6 +360,45 @@ function nextUnplayed() {
   return SCENARIOS.find((s) => !(progress[s.id] && (progress[s.id].ends || []).length)) || null;
 }
 
+/* ===== あそびかたマップ：ふえた遊び方と道具を、ひと目で選べるようにする ===== */
+function modesHTML() {
+  const met = SCENARIOS.filter((s) => cleared(s.id)).length;
+  const ach = achievements(), got = ach.filter((a) => a.got).length;
+  const G = [
+    ["体験する", [
+      ["話", "シナリオ", `${SCENARIOS.length}本の話を、スマホの画面で体験`, "#home", null, null, `${met}/${SCENARIOS.length}`, "libSec"],
+      ["新", "毎回ちがう話", "場面と手口を組み合わせて、開くたびに新しい話", "#mix", null, null, "", null],
+      ["裏", "本音モード", "話を終えたら、だます側の心の声を見ながらもう一度", "#home", null, null, "", "libSec"]
+    ]],
+    ["見抜く", [
+      ["今", "今日のチャレンジ", "日替わりの10問。あやしい？ だいじょうぶ？", "#challenge", "daily", null, "", null],
+      ["探", "サインさがし", "メッセージのあやしいところをタップ", "#challenge", "spot", null, "", null],
+      ["罠", "画面のワナさがし", "通販やアプリの画面にかくれた仕掛け", "#challenge", "wana", null, "", null],
+      ["言", "ことばで返す", "自分の言葉で断る練習", "#challenge", "reply", null, "", null],
+      ["検", "見抜き検定", "3話つづけて、級が決まる", "#challenge", "exam", null, "", null]
+    ]],
+    ["ふりかえる", [
+      ["顔", "相手の人物帳", "これまでに出会った「相手」", "#zukan", null, "castbook", `${met}/${SCENARIOS.length}`, null],
+      ["形", "守りのかたち", "見抜きのレーダーと、あなたの守りのタイプ", "#zukan", null, "shape", "", null],
+      ["章", "称号", "体験を重ねて集める", "#zukan", null, null, `${got}/${ach.length}`, null]
+    ]],
+    ["くらしで使う", [
+      ["点", "メッセージをチェック", "届いたメッセージを貼って、サインに色をつける", "#help", null, "checker", "", null],
+      ["約", "守りの約束カード", "家族で決めた約束を、カードにして残す", "#help", null, "pledge", "", null],
+      ["授", "授業で使う", "ワークシートや、発表用の画面", "#teach", null, null, "", null]
+    ]]
+  ];
+  return `<section class="sec modes" aria-label="あそびかたマップ"><div class="sec-h"><h2>あそびかたマップ</h2><p>体験する・見抜く・ふりかえる・くらしで使う。気になるところから、どうぞ。</p></div>
+    <div class="md-groups">${G.map(([gn, items], gi) => `<div class="md-group" style="--mi:${gi}"><span class="md-gh">${esc(gn)}</span><div class="md-tiles">${items.map(([ic, n, d, href, mode, go, badge, local]) =>
+      `<a class="md-tile" href="${href}"${mode ? ` data-mode="${mode}"` : ""}${go ? ` data-goto="${go}"` : ""}${local ? ` data-local="${local}"` : ""}><span class="md-ic" aria-hidden="true">${ic}</span><span class="md-tx"><b>${esc(n)}</b><small>${esc(d)}</small></span>${badge ? `<i class="md-badge">${badge}</i>` : ""}</a>`).join("")}</div></div>`).join("")}</div></section>`;
+}
+function bindModes() {
+  document.querySelectorAll(".md-tile").forEach((a) => (a.onclick = (e) => {
+    if (a.dataset.local) { e.preventDefault(); const t = $(a.dataset.local) || $("lib"); if (t) t.scrollIntoView({ block: "start" }); return; }
+    if (a.dataset.mode) window.__mode = a.dataset.mode;
+    if (a.dataset.goto) window.__goto = a.dataset.goto;
+  }));
+}
 function renderHome() {
   const t = totals();
   const rate = t.met ? Math.round((t.caught / t.met) * 100) : null;
@@ -402,6 +443,7 @@ function renderHome() {
     <a class="way" href="#challenge"><span class="way-n">2</span><b>見抜く</b><span>「あやしい？ だいじょうぶ？」を判定するチャレンジ。日替わり・エンドレス・見くらべ・ことばで返すの4つの遊び方で、何度でも。</span><i>チャレンジする →</i></a>
     <a class="way" href="#zukan"><span class="way-n">3</span><b>集める</b><span>出会ったサインは図鑑に。見抜きレベルと称号が上がり、苦手な系統もわかります。</span><i>図鑑を見る →</i></a>
   </section>
+  ${modesHTML()}
   ${contHTML}
   ${mixHTML()}
   ${coursesHTML()}
@@ -424,7 +466,7 @@ function renderHome() {
     <div class="sq" id="sq"></div>
   </section>
 
-  <section class="sec" aria-label="シナリオ一覧">
+  <section class="sec" id="libSec" aria-label="シナリオ一覧">
     <div class="sec-h"><h2>シナリオをえらぶ</h2><p>どれからでもOK。結末はシナリオごとに3〜8種類。選択を変えると、ちがう結末とサインに出会えます。</p></div>
     <div class="libtools">
       <label class="search"><span class="sr">シナリオを探す</span><input type="search" id="libQ" placeholder="キーワードで探す（例：投資、チケット、電話）" value="${esc(libQ)}"></label>
@@ -440,7 +482,7 @@ function renderHome() {
     <div style="margin-top:18px"><a class="btn small" href="#zukan">サイン図鑑で集めたサインを見る</a></div>
   </section>`;
 
-  renderFilters(); renderLib(); bindLibTools(); renderQuiz(); renderSQ(); runDemo(); bindCourses($("v-home"));
+  renderFilters(); renderLib(); bindLibTools(); renderQuiz(); renderSQ(); runDemo(); bindCourses($("v-home")); bindModes();
   $("ctaQuiz").onclick = (e) => { e.preventDefault(); $("quizSec").scrollIntoView({ behavior: reduced ? "auto" : "smooth" }); };
   $("newCheck").onclick = () => { window.__gotoChecker = true; };
 }
@@ -701,7 +743,7 @@ function shapeHTML(catRows) {
   const met = rows.filter((r) => r.met >= 2);
   const best = met.slice().sort((a, b) => b.rate - a.rate)[0], worst = met.slice().sort((a, b) => a.rate - b.rate)[0];
   const type = top && top[1] >= 2 ? ACT_TYPE[top[0]] : null;
-  return `<section class="sec shape" aria-label="あなたの守りのかたち">
+  return `<section class="sec shape" id="shape" aria-label="あなたの守りのかたち">
     <div class="sec-h"><h2>あなたの守りのかたち</h2><p>8つの系統で、どれだけ自分で気づけたか。外に広がるほど、その系統に強いということです。</p></div>
     <div class="sh-wrap">
       <canvas id="shapeCv" width="520" height="520" aria-label="系統ごとの見抜き率のレーダーチャート"></canvas>
@@ -770,7 +812,7 @@ function castBookHTML() {
       ${DEBRIEF[sel.sc.id] ? `<p class="cb-point"><span class="cb-h">見抜くポイント</span>${esc(DEBRIEF[sel.sc.id].point)}</p>` : ""}
       <a class="btn small" href="#${sel.sc.id}">この話をもう一度 →</a>
     </div>` : `<div class="cb-detail empty">${mascot("md")}<span>まだ、だれにも会っていません。話をひとつ遊ぶと、相手がここに並びます。</span></div>`;
-  return `<section class="sec castbook" aria-label="相手の人物帳">
+  return `<section class="sec castbook" id="castbook" aria-label="相手の人物帳">
     <div class="sec-h"><h2>相手の人物帳　${met.length} / ${all.length}</h2><p>これまでに出会った「相手」です。顔を押すと、最初のひとことと、使ってきた手が見られます。</p></div>
     <div class="cb-wrap">
       <div class="cb-grid" role="list">${all.map((x) => x.met
@@ -2774,7 +2816,7 @@ function pledgeState() {
 }
 function pledgeHTML() {
   const s = pledgeState();
-  return `<section class="sec pledge" aria-label="わが家の守りの約束カード">
+  return `<section class="sec pledge" id="pledge" aria-label="わが家の守りの約束カード">
     <div class="sec-h"><h2>わが家の守りの約束カード</h2><p>家族で話し合って、守りの約束を6つまでえらぼう。カードにして保存すれば、冷蔵庫や電話のそばにはっておけます。</p></div>
     <div class="pl-wrap">
       <div class="pl-form">
@@ -2900,10 +2942,42 @@ const WANA = [
     ["btn", "3日間 無料ではじめる", "大きなボタンは「無料体験」。3日後に自動で有料に切りかわることが、下に小さく書かれています。"],
     ["tiny", "無料期間終了後、週額 1,200円で自動更新されます", "週額で書いて安く見せる仕掛け。月にすると約5,000円です。"],
     ["link", "あとで（制限つきで使う）", null]
+  ]},
+  { app: "ネット通販", title: "ブランド財布のお店", parts: [
+    ["img", "（商品の写真）有名ブランドの長財布", null],
+    ["price", "定価 98,000円 → 9,800円（90%OFF）", "人気ブランドが90%引きは、偽物か、お金だけ取る偽サイトの可能性が高い値段です。"],
+    ["p", "送料無料・全国配送", null],
+    ["note", "お支払いは銀行振込のみ（振込先：ヤマダ タロウ）", "支払い方法が振込だけで、振込先が個人名なのは、偽の通販サイトによくある特徴です。"],
+    ["tiny", "ご注文の確認されました。迅速に発送いたします。", "少し不自然な日本語。海外の偽サイトが自動で訳した文章のことがあります。"],
+    ["link", "会社概要（住所・電話番号の記載なし）", "運営会社の住所や電話番号がないお店は、トラブルのときに連絡がとれません。"],
+    ["btn", "カートに入れる", null]
+  ]},
+  { app: "投資アプリ", title: "ホーム画面", parts: [
+    ["h", "あなたの資産：53,000円", null],
+    ["price", "先週の利益 +285%！", "いちばん良い時期の数字だけを大きく見せています。こんな利益が続く投資はありません。"],
+    ["stock", "元本保証・損をすることはありません", "元本を保証して高い利益をうたう投資は、法律で禁止されています。"],
+    ["p", "（チャートのグラフ）", null],
+    ["note", "出金には、手数料30%と本人認証料が必要です", "引き出すときに次々とお金を求めるのは、引き出せない詐欺アプリの特徴です。"],
+    ["btn", "LINEで先生に相談する", "アプリの外に連れ出して、個人的にお金の話をするのはサインです。"]
+  ]},
+  { app: "フリマアプリ", title: "商品のページ", parts: [
+    ["img", "（商品の写真）最新のゲーム機 新品", null],
+    ["price", "15,000円（相場の半額）", "相場よりずっと安いのは、写真だけの商品や、お金だけ取る目的のことがあります。"],
+    ["stock", "出品者：評価 0件・登録 昨日", "登録したばかりで評価のない出品者は、慎重に。"],
+    ["note", "アプリの外で取引すると10%引きにします。くわしくはプロフィールのURLへ", "アプリの外での取引に誘うのは、補償が受けられなくなるワナです。多くのフリマアプリで禁止されています。"],
+    ["p", "商品の状態：新品・未開封", null],
+    ["btn", "購入手続きへ", null]
+  ]},
+  { app: "ブラウザ", title: "急に出てきた画面", parts: [
+    ["timer", "警告！ あなたのスマホは 3つのウイルスに感染しています", "ブラウザのページが、スマホの中のウイルスを調べることはできません。不安にさせる偽の警告です。"],
+    ["stock", "スキャン中… 87%", "それらしく見せるための、動くだけの表示です。"],
+    ["guilt", "このページを閉じると、写真や連絡先がすべて消えます", "閉じさせないためのおどし。ページは閉じてだいじょうぶです。"],
+    ["btn", "今すぐサポートに電話する 0120-XXX-XXX", "偽のサポートに電話させて、遠隔操作のアプリや有料のサポート契約をさせる手口です。"],
+    ["tiny", "© 2026 Security Center", null]
   ]}
 ];
 let WN = null;
-function startWana() { WN = { items: shuffle(WANA), i: 0, sel: new Set(), done: false, score: 0, found: 0, traps: 0, wrong: 0, xp: 0 }; renderChallenge(); $("v-challenge").scrollIntoView({ block: "start" }); }
+function startWana() { WN = { items: shuffle(WANA).slice(0, 4), i: 0, sel: new Set(), done: false, score: 0, found: 0, traps: 0, wrong: 0, xp: 0 }; renderChallenge(); $("v-challenge").scrollIntoView({ block: "start" }); }
 function wanaJudge(it, sel) {
   let found = 0, wrong = 0, traps = 0;
   it.parts.forEach((p, k) => { if (p[2]) { traps++; if (sel.has(k)) found++; } else if (sel.has(k)) wrong++; });
@@ -3127,7 +3201,7 @@ function renderChallenge() {
       <div class="ch-mode"><span class="eyebrow">タップで見つける</span><h2>サインさがし</h2><p>メッセージの中の「あやしいところ」を、自分でタップして見つける6問。見落としも、うたがいすぎも、答え合わせで全部わかります。</p>
         <p class="ch-rec">最高記録：<b>${store.get("dl3-spot", 0) || 0} 点</b></p>
         <button class="btn primary" type="button" id="chSpot">サインさがしをはじめる</button></div>
-      <div class="ch-mode ch-mode-new"><span class="eyebrow">画面を見やぶる</span><h2>画面のワナさがし</h2><p>通販の購入画面、サブスクの解約画面、ガチャ、アプリの設定。本物そっくりの画面にかくれた「だます仕掛け」を見つける4問。</p>
+      <div class="ch-mode ch-mode-new"><span class="eyebrow">画面を見やぶる</span><h2>画面のワナさがし</h2><p>通販の購入画面、サブスクの解約画面、ガチャ、アプリの設定。本物そっくりの画面にかくれた「だます仕掛け」を見つける4問（全8画面から出題）。</p>
         <p class="ch-rec">最高記録：<b>${store.get("dl3-wana", 0) || 0} 点</b></p>
         <button class="btn primary" type="button" id="chWana">ワナさがしをはじめる</button></div>
       <div class="ch-mode ch-mode-exam"><span class="eyebrow">腕だめし</span><h2>見抜き検定</h2><p>毎回ちがう話を3本つづけて体験。見抜いたサインの数と結末で、初級・中級・上級・名人の級が決まります。合格すると認定証がもらえます。</p>
