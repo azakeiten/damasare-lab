@@ -1992,3 +1992,29 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 .note-hint { margin: 0; font-size: 11.5px; color: var(--muted); }
 .jr-note { display: block; margin-top: 4px; font-style: normal; font-size: 13px; color: var(--ink); line-height: 1.6; padding: 6px 10px; border-radius: 4px 10px 10px 10px; background: color-mix(in srgb, #C9A227 12%, transparent); border: 1px solid color-mix(in srgb, #C9A227 35%, transparent); }
 .jr-note i { font-style: normal; font-size: 10.5px; font-weight: 900; color: var(--gold); margin-right: 6px; letter-spacing: .08em; }
+/* ===== v51：くっきり表示（高コントラスト）。黒地に白文字、強調は黄色。境目を太く ===== */
+:root[data-theme="contrast"] {
+  --bg: #000000; --surface: #0B0B0B; --surface-2: #000000; --ink: #FFFFFF; --muted: #E8E8E8; --line: #9A9A9A; --line-strong: #FFFFFF; --frame: #000000;
+  --gold: #FFD400; --accent: #FFD400; --accent-soft: #2A2400; --on-accent: #000000; --danger: #FF7A7A; --danger-soft: #2A0000; --safe: #5CFFA0; --safe-soft: #002A14;
+  --brand: #FFD400; --on-brand: #000000; --brand-soft: #1F1F1F;
+  --bubble-them: #161616; --bubble-me: #FFD400; --on-me: #000000; --av-s: 70%; --av-l: 38%; --on-av: #FFFFFF; --g-s: 0%; --g-l: 8%; --g-ls: 85%;
+  --band-hero: #000000; --band-hero-2: #000000; --band-sun: #000000; --band-ink: #000000; --on-band-ink: #FFFFFF; --on-band-muted: #E8E8E8; --dot: #222222;
+  --chat-dm: #000000; --chat-talk: #000000; --chat-live: #000000; --chat-call: #000000; --chat-web: #000000; --chat-home: #000000;
+  --scrim: rgba(0,0,0,.88); --qr-bg: #FFFFFF; --qr-ink: #000000;
+  color-scheme: dark;
+}
+:root[data-theme="contrast"] body { background: #000; }
+:root[data-theme="contrast"] .scard, :root[data-theme="contrast"] .card-plain, :root[data-theme="contrast"] .choice, :root[data-theme="contrast"] .act-chip,
+:root[data-theme="contrast"] .md-tile, :root[data-theme="contrast"] .ch-mode, :root[data-theme="contrast"] .zc, :root[data-theme="contrast"] .medal,
+:root[data-theme="contrast"] .ch-board, :root[data-theme="contrast"] .sec .call { border: 2px solid #FFFFFF !important; }
+:root[data-theme="contrast"] .row.them .bub p { border: 2px solid #FFFFFF; }
+:root[data-theme="contrast"] a:not(.btn):not(.md-tile):not(.scard):not(.way):not(.course):not(.logo) { text-decoration: underline; text-underline-offset: 3px; }
+:root[data-theme="contrast"] :focus-visible { outline: 3px solid #FFD400 !important; outline-offset: 3px !important; }
+:root[data-theme="contrast"] .btn.primary, :root[data-theme="contrast"] .choice.go { background: #FFD400 !important; color: #000 !important; border-color: #FFD400 !important; }
+:root[data-theme="contrast"] .flag-tag, :root[data-theme="contrast"] .cat-tag { background: #FFD400 !important; color: #000 !important; }
+:root[data-theme="contrast"] .tape, :root[data-theme="contrast"] .tape-run { filter: grayscale(1) contrast(1.4); }
+:root[data-theme="contrast"] .lock { background: #000; }
+:root[data-theme="contrast"] .honne { background: #111; border-color: #FFF; }
+:root[data-theme="contrast"] .b-brand, :root[data-theme="contrast"] .b-hero, :root[data-theme="contrast"] .sh-type, :root[data-theme="contrast"] .cb-detail,
+:root[data-theme="contrast"] .ck-res, :root[data-theme="contrast"] .honne-note, :root[data-theme="contrast"] .lock { background: #000 !important; border: 2px solid #FFF; color: #FFF; }
+:root[data-theme="contrast"] .md-ic, :root[data-theme="contrast"] .sp-app, :root[data-theme="contrast"] .pl-tag, :root[data-theme="contrast"] .rolechip { background: #000; color: #FFD400; border: 1.5px solid #FFD400; box-shadow: none; }

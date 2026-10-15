@@ -99,12 +99,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "follower", "giftwari", "airdrop"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "follower", "giftwari", "airdrop"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
-  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "karakon", "shikijo", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
+  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "karakon", "shikijo", "seifuku", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
   { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
   { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "hp", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -3443,7 +3443,7 @@ function applyFs() {
 }
 $("fsBtn").onclick = () => { prefs.fs = prefs.fs === "l" ? "m" : "l"; savePrefs(); applyFs(); };
 /* 表示の明るさ：自動（端末に合わせる）→ ライト → ダーク */
-const THEMES = { auto: "自動", light: "ライト", dark: "ダーク" };
+const THEMES = { auto: "自動", light: "ライト", dark: "ダーク", contrast: "くっきり" };
 function applyTheme(init) {
   const t = prefs.theme in THEMES ? prefs.theme : "auto";
   if (t === "auto") { if (!init) document.documentElement.removeAttribute("data-theme"); }
@@ -3451,8 +3451,8 @@ function applyTheme(init) {
   $("themeLab").textContent = THEMES[t];
 }
 $("themeBtn").onclick = () => {
-  const order = ["auto", "light", "dark"];
-  prefs.theme = order[(order.indexOf(prefs.theme in THEMES ? prefs.theme : "auto") + 1) % 3];
+  const order = ["auto", "light", "dark", "contrast"];
+  prefs.theme = order[(order.indexOf(prefs.theme in THEMES ? prefs.theme : "auto") + 1) % order.length];
   savePrefs(); applyTheme(false);
 };
 applyTheme(true);
