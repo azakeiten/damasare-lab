@@ -1982,3 +1982,13 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 @media (prefers-reduced-motion: no-preference) { .md-group { animation: paneIn .4s ease-out backwards; animation-delay: calc(var(--mi) * 70ms); } }
 @media (max-width: 1000px) { .md-groups { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .md-groups { grid-template-columns: minmax(0, 1fr); } }
+/* ===== v50：気づきメモ ===== */
+.note-box { display: grid; gap: 8px; padding: 14px; border-radius: 14px; background: var(--bg); border: 1px solid var(--line); box-shadow: inset 3px 0 0 #C9A227; }
+.note-box textarea { font: inherit; font-size: 14.5px; line-height: 1.7; color: var(--ink); background: var(--surface); border: 1.5px solid var(--line-strong, var(--line)); border-radius: 10px; padding: 10px 12px; resize: vertical; min-height: 64px;
+  background-image: repeating-linear-gradient(transparent 0 calc(1.7em - 1px), color-mix(in srgb, var(--line) 70%, transparent) calc(1.7em - 1px) 1.7em); background-attachment: local; background-position: 0 10px; }
+.note-box textarea:focus { outline: 2px solid var(--brand); outline-offset: 1px; }
+.note-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.note-row .btn { margin-left: auto; }
+.note-hint { margin: 0; font-size: 11.5px; color: var(--muted); }
+.jr-note { display: block; margin-top: 4px; font-style: normal; font-size: 13px; color: var(--ink); line-height: 1.6; padding: 6px 10px; border-radius: 4px 10px 10px 10px; background: color-mix(in srgb, #C9A227 12%, transparent); border: 1px solid color-mix(in srgb, #C9A227 35%, transparent); }
+.jr-note i { font-style: normal; font-size: 10.5px; font-weight: 900; color: var(--gold); margin-right: 6px; letter-spacing: .08em; }

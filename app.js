@@ -99,12 +99,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "follower", "giftwari", "airdrop"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "follower", "giftwari", "airdrop"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
-  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
+  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "karakon", "shikijo", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
   { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "hp", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -147,17 +147,41 @@ function journalHTML() {
   const days = [];
   log.slice(0, 40).forEach((x) => { const k = fmt(x.t); let g = days.find((d) => d.k === k); if (!g) days.push((g = { k, items: [] })); g.items.push(x); });
   const cnt = { safe: 0, partial: 0, bad: 0 }; log.forEach((x) => cnt[x.end]++);
+  const notes = notesGet(), shownNote = new Set();
   return `<section class="sec" aria-label="ふりかえり帳">${head}
     <div class="jr-sum"><span><b>${log.length}</b>回の体験</span><span class="safe"><b>${cnt.safe}</b>被害なし</span><span class="partial"><b>${cnt.partial}</b>最小限</span><span class="bad"><b>${cnt.bad}</b>被害にあった</span></div>
     <div class="journal">${days.map((d) => `<div class="jr-day"><span class="jr-date">${d.k}</span><ul>${d.items.map((x) => {
       const sc = byId(x.id), node = sc.nodes[x.e] || {};
       const tm = new Date(x.t), hm = `${tm.getHours()}:${String(tm.getMinutes()).padStart(2, "0")}`;
       return `<li class="jr-${x.end}"><span class="jr-dot" aria-hidden="true"></span><div><small>${hm}　${esc(sc.tag)}　<span class="label ${x.end}">${ENDLAB[x.end]}</span></small>
-        <b>${esc(node.h || sc.title)}</b><span>気づけたサイン ${x.c}・見逃したサイン ${x.m}</span></div><a class="linkbtn" href="#${sc.id}">もう一度</a></li>`;
+        <b>${esc(node.h || sc.title)}</b><span>気づけたサイン ${x.c}・見逃したサイン ${x.m}</span>${notes[x.id] && !shownNote.has(x.id) && shownNote.add(x.id) ? `<em class="jr-note"><i>メモ</i>${esc(notes[x.id].t)}</em>` : ""}</div><a class="linkbtn" href="#${sc.id}">もう一度</a></li>`;
     }).join("")}</ul></div>`).join("")}</div>
     ${log.length > 40 ? `<p class="hint">新しい40件を表示しています。</p>` : ""}</section>`;
 }
 
+/* ===== 気づきメモ：話を終えたら「次はこうする」をひとこと残す（この端末の中だけ） ===== */
+const notesGet = () => store.get("dl3-notes", {}) || {};
+function noteHTML(sc) {
+  const d = DEBRIEF[sc.id] || {}, cur = (notesGet()[sc.id] || {}).t || "";
+  const ideas = [...new Set([(d.after || [])[0], (d.say || []).find((x) => !/^（/.test(x)), "その場で決めずに、家族に話す"].filter(Boolean))].slice(0, 3);
+  return `<div class="note-box"><div class="side-h"><h2>気づきメモ</h2><span>次はこうする、をひとこと</span></div>
+    <textarea id="noteIn" rows="2" maxlength="120" placeholder="例：知らない人からのお金の話は、まず親に見せる">${esc(cur)}</textarea>
+    <div class="note-row">${ideas.map((t, i) => `<button class="chipbtn sm" type="button" data-nidea="${i}">${esc(t)}</button>`).join("")}<button class="btn small primary" type="button" id="noteSave">メモを保存</button></div>
+    <p class="note-hint">メモは、図鑑のページの「ふりかえり帳」に残ります。この端末の中だけに保存され、どこにも送られません。</p></div>`;
+}
+function bindNote(sc) {
+  if (!$("noteIn")) return;
+  const d = DEBRIEF[sc.id] || {};
+  const ideas = [...new Set([(d.after || [])[0], (d.say || []).find((x) => !/^（/.test(x)), "その場で決めずに、家族に話す"].filter(Boolean))].slice(0, 3);
+  document.querySelectorAll("[data-nidea]").forEach((b) => (b.onclick = () => { const t = ideas[+b.dataset.nidea]; const v = $("noteIn").value.trim(); $("noteIn").value = v ? `${v}　${t}` : t; $("noteIn").focus(); }));
+  $("noteSave").onclick = () => {
+    const v = maskTx($("noteIn").value.trim()), all = notesGet();
+    if (!v) { delete all[sc.id]; store.set("dl3-notes", all); toast("メモを消しました"); return; }
+    const first = !all[sc.id]; all[sc.id] = { t: v, at: Date.now() }; store.set("dl3-notes", all);
+    if (first) addXP(3);
+    toast("気づきメモを保存しました"); setTimeout(checkAch, 800);
+  };
+}
 /* 家族や友だちに話すための、ひとこと */
 function talkText(sc, n) {
   const d = DEBRIEF[sc.id] || {};
@@ -694,6 +718,7 @@ function achievements() {
     { id: "honne", ic: "裏", n: "本音を見た", d: "本音モードで、話を最後まで体験する", got: SCENARIOS.some((s) => P(s.id).honne) },
     { id: "spot", ic: "探", n: "サインさがし名人", d: "サインさがしで40点以上", got: (store.get("dl3-spot", 0) || 0) >= 40 },
     { id: "check", ic: "点", n: "メッセージ点検係", d: "「届いたメッセージをチェック」を使う", got: !!store.get("dl3-checked", false) },
+    { id: "note", ic: "記", n: "ふりかえり名人", d: "気づきメモを5つの話で残す", got: Object.keys(store.get("dl3-notes", {}) || {}).length >= 5 },
     { id: "wana", ic: "罠", n: "ワナ見やぶり", d: "画面のワナさがしで30点以上", got: (store.get("dl3-wana", 0) || 0) >= 30 },
     { id: "pledge", ic: "約", n: "わが家の約束", d: "守りの約束カードを保存か印刷する", got: !!store.get("dl3-pledged", false) }
   ];
@@ -2280,6 +2305,7 @@ function openResult(id, n, isNewEnd) {
     </div>
     <div class="rpane" role="tabpanel" id="rpane-0" aria-labelledby="rtab-0">
     ${tacticsHTML(sc)}
+    ${noteHTML(sc)}
     <div><div class="side-h"><h2>ストーリーマップ</h2><span>結末 ${p.ends.length} / ${endIds(sc).length}</span></div><div class="mapbox">${storyMap(sc, S.path, id)}${MAP_LEGEND}</div></div>
     ${missed ? `<div><div class="side-h"><h2>見逃したサイン</h2></div><ul class="signs">${ids.filter((k) => S.signs[k] === "missed").map((k) => `<li><span class="st missed">見逃した</span><b>${esc(sc.signs[k].t)}</b><span class="d">${esc(sc.signs[k].d)}</span></li>`).join("")}</ul></div>` : ""}
     ${S.hist.length ? `<div><div class="side-h"><h2>あなたが通ったルート</h2><span>分かれ道からやり直せます</span></div>
@@ -2344,6 +2370,7 @@ function openResult(id, n, isNewEnd) {
     catch (e) { const r = document.createRange(); r.selectNodeContents($("talkMsg")); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); toast("選択しました。コピーしてください"); }
   };
   $("resRetry").onclick = () => { closeResult(); openScenario(sc.id); };
+  bindNote(sc);
   $("resHonne").onclick = () => { closeResult(); HONNE_NEXT = true; openScenario(sc.id); };
   $("resultSheet").querySelectorAll("[data-replay]").forEach((b) => (b.onclick = () => replayFrom(+b.dataset.replay)));
   $("resClose").onclick = () => closeResult();
