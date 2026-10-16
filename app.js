@@ -99,12 +99,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "follower", "giftwari", "airdrop"] },
-  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
-  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "karakon", "shikijo", "seifuku", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "speedup", "follower", "giftwari", "airdrop"] },
+  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "share", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
+  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "karakon", "shikijo", "seifuku", "hoshouden", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "shoumei", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
   { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "hp", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -998,6 +998,33 @@ function drawQR() {
   s.onerror = () => { box.innerHTML = `<span class="qr-wait">QRコードを表示できませんでした。下のURLを使ってください。</span>`; };
   document.head.appendChild(s);
 }
+/* ===== 話し合いカード：コースの話ごとに「見抜くポイント」と「問い」をカードにして印刷する ===== */
+function cardsHTML() {
+  return `<section class="sec talkcards" aria-label="話し合いカード">
+    <div class="sec-h"><h2>話し合いカードを印刷する</h2><p>コースをえらぶと、その話ごとに「見抜くポイント」と「話し合いの問い」が入ったカードを、A4にまとめて印刷できます。グループで1枚ずつ配って、話し合いに使えます。</p></div>
+    <div class="tc-row"><label class="tc-sel"><span>コース</span><select id="tcCourse">${COURSES.map((c) => `<option value="${c.id}">${esc(c.n)}（${courseOf(c).length}枚）</option>`).join("")}</select></label>
+      <button class="btn primary" type="button" id="tcPrint">話し合いカードを印刷</button></div>
+    <div class="tc-prev" id="tcPrev" aria-label="カードの見本"></div></section>`;
+}
+function talkCard(sc) {
+  const d = DEBRIEF[sc.id] || {};
+  return `<div class="pc"><span class="pc-tag">${esc(sc.tag)}</span><b class="pc-title">${esc(sc.title)}</b>
+    ${d.point ? `<p class="pc-point"><i>見抜くポイント</i>${esc(d.point)}</p>` : ""}
+    <ol class="pc-q">${(d.ask || []).slice(0, 2).map((q) => `<li>${esc(q)}</li>`).join("")}</ol>
+    <span class="pc-foot">だまされ体験ラボ｜#${esc(sc.id)}</span></div>`;
+}
+function bindCards() {
+  if (!$("tcCourse")) return;
+  const list = () => courseOf(COURSES.find((c) => c.id === $("tcCourse").value) || COURSES[0]);
+  const prev = () => { $("tcPrev").innerHTML = list().slice(0, 2).map(talkCard).join("") + `<span class="tc-more">ほか ${Math.max(0, list().length - 2)} 枚</span>`; };
+  $("tcCourse").onchange = prev; prev();
+  $("tcPrint").onclick = () => {
+    let el = $("printSheet"); if (!el) { el = document.createElement("div"); el.id = "printSheet"; document.body.appendChild(el); }
+    const c = COURSES.find((x) => x.id === $("tcCourse").value) || COURSES[0];
+    el.innerHTML = `<div class="pc-sheet"><header class="pc-head"><b>話し合いカード｜${esc(c.n)}</b><span>${esc(c.d)}</span></header><div class="pc-grid">${list().map(talkCard).join("")}</div></div>`;
+    window.print();
+  };
+}
 function renderTeach() {
   const genreOf = (sc) => GENRES[sc.genre].n;
   const catsOf = (sc) => [...new Set(Object.values(sc.signs).map((s) => s.cat))].map((c) => CATS[c] ? CATS[c].n : c).join("、");
@@ -1011,6 +1038,7 @@ function renderTeach() {
       <p>大きな文字でメッセージを1通ずつ映します。「あやしいと思う人？」と手をあげてもらってから、答えと理由を表示できます。10問・約10分。</p></div>
     <button class="btn primary" type="button" id="presentBtn">スクリーンモードをはじめる</button>
   </section>
+  ${cardsHTML()}
 
   <section class="sec qrsec" aria-label="教室で配る">
     <div class="qrbox" id="qrBox" aria-label="このページのQRコード"><span class="qr-wait">QRコードを準備中…</span></div>
@@ -1073,6 +1101,7 @@ function renderTeach() {
     catch (e) { const r = document.createRange(); r.selectNodeContents($("qrUrl")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); toast("選択しました。コピーしてください"); }
   };
   drawQR();
+  bindCards();
   $("presentBtn").onclick = openPresent;
   $("sheetCopy").onclick = async () => {
     try { await navigator.clipboard.writeText(SHEET_TEXT); toast("コピーしました"); }

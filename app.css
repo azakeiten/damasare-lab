@@ -2018,3 +2018,31 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 :root[data-theme="contrast"] .b-brand, :root[data-theme="contrast"] .b-hero, :root[data-theme="contrast"] .sh-type, :root[data-theme="contrast"] .cb-detail,
 :root[data-theme="contrast"] .ck-res, :root[data-theme="contrast"] .honne-note, :root[data-theme="contrast"] .lock { background: #000 !important; border: 2px solid #FFF; color: #FFF; }
 :root[data-theme="contrast"] .md-ic, :root[data-theme="contrast"] .sp-app, :root[data-theme="contrast"] .pl-tag, :root[data-theme="contrast"] .rolechip { background: #000; color: #FFD400; border: 1.5px solid #FFD400; box-shadow: none; }
+/* ===== v52：話し合いカード ===== */
+.tc-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; }
+.tc-sel { display: grid; gap: 4px; font-size: 12.5px; font-weight: 700; color: var(--muted); }
+.tc-sel select { font: inherit; font-size: 15px; color: var(--ink); background: var(--surface); border: 1.5px solid var(--line-strong, var(--line)); border-radius: 10px; padding: 9px 12px; min-width: 240px; }
+.tc-prev { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; align-items: stretch; }
+.tc-prev .pc { flex: 1 1 260px; max-width: 360px; background: #FFFDF6; color: #1B2534; border: 1.5px dashed #9AA6B4; border-radius: 12px; padding: 14px 16px; display: grid; gap: 6px; box-shadow: 0 10px 24px -16px rgba(0,0,0,.5); transform: rotate(-.6deg); }
+.tc-prev .pc:nth-child(2) { transform: rotate(.8deg); }
+.tc-more { align-self: center; font-size: 13px; color: var(--muted); font-weight: 700; }
+.pc-tag { justify-self: start; font-size: 11px; font-weight: 700; padding: 1px 9px; border-radius: 99px; background: #14243A; color: #D6B97F; }
+.pc-title { font-size: 15px; line-height: 1.45; }
+.pc-point { margin: 0; font-size: 13px; line-height: 1.6; padding: 6px 10px; border-left: 3px solid #C9A227; background: #FFF6D8; }
+.pc-point i { display: block; font-style: normal; font-size: 10.5px; font-weight: 900; color: #8A6A2F; letter-spacing: .08em; }
+.pc-q { margin: 0; padding-left: 1.3em; font-size: 13px; line-height: 1.7; }
+.pc-foot { font-size: 10px; color: #8A94A0; justify-self: end; }
+@media print {
+  .pc-sheet { display: grid; gap: 6mm; }
+  .pc-head { display: flex; gap: 10px; align-items: baseline; border-bottom: 2.5px solid #1E3A5F; padding-bottom: 4mm; }
+  .pc-head b { font-size: 14pt; color: #1E3A5F; }
+  .pc-head span { font-size: 9pt; color: #555; }
+  .pc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+  .pc-grid .pc { break-inside: avoid; page-break-inside: avoid; border: 1.5px dashed #888; border-radius: 3mm; padding: 4mm 5mm; display: grid; gap: 2mm; min-height: 58mm; align-content: start; }
+  .pc-grid .pc-tag { background: none; color: #1E3A5F; border: 1px solid #1E3A5F; font-size: 8.5pt; }
+  .pc-grid .pc-title { font-size: 11pt; }
+  .pc-grid .pc-point { font-size: 9.5pt; background: #FFF8E1; }
+  .pc-grid .pc-point i { font-size: 8pt; }
+  .pc-grid .pc-q { font-size: 9.5pt; }
+  .pc-grid .pc-foot { font-size: 7.5pt; }
+}
