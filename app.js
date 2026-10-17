@@ -115,12 +115,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "speedup", "follower", "giftwari", "airdrop"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "speedup", "kenshin", "portal", "follower", "giftwari", "airdrop"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "share", "gakunen", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
-  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "karakon", "shikijo", "seifuku", "hoshouden", "lease", "shincho", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
+  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "karakon", "shikijo", "seifuku", "hoshouden", "lease", "shincho", "fanclub", "doukou", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
   { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "shoumei", "daihitsu", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
   { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "hp", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "tablet", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -253,7 +253,7 @@ function scenarioCard(sc) {
   const f = firstMsg(sc);
   /* 一覧は「スマホの通知」に見立てる：アプリ名・時刻・送り主・最初のひとこと */
   return `<a class="scard${played ? "" : " unread"}" href="#${sc.id}" id="card-${sc.id}" style="--gh:${g.h}">
-    <div class="nt-head"><span class="nt-app"><span class="nt-ic" aria-hidden="true">${SCENE_ICON[f.type] || SCENE_ICON.dm}</span>${esc(f.app)}</span><span class="nt-time">${esc(sc.clock || "")}</span>${badge}</div>
+    <div class="nt-head"><span class="nt-app"><span class="nt-ic" aria-hidden="true">${SCENE_ICON[f.type] || SCENE_ICON.dm}</span>${esc(f.app)}</span><span class="nt-time">${esc(sc.clock || "")}</span>${badge}${bmStar(sc.id)}</div>
     <div class="nt-body">${av(sc, f.who)}<div><b>${esc(f.name)}</b><p class="nt-prev">${esc(f.text)}</p></div></div>
     <div class="body"><span class="gtag">${esc(sc.tag)}</span><h3>${esc(sc.title)}</h3>
       <div class="meta">${roleOf(sc) !== "all" ? `<span class="rolechip role-${roleOf(sc)}">${esc(ROLES[roleOf(sc)])}</span>` : ""}<span>約${sc.mins}分</span><span>むずかしさ <span class="lvl">${lvl(sc.level)}</span></span><span>結末 ${played}/${ne}</span><span>サイン ${caught}/${ns}</span></div>
@@ -440,6 +440,26 @@ function bindModes() {
     if (a.dataset.goto) window.__goto = a.dataset.goto;
   }));
 }
+/* ===== あとで体験リスト：気になる話に★をつけて、とっておく（この端末の中だけ） ===== */
+const bmGet = () => (store.get("dl3-bm", []) || []).filter((id) => byId(id));
+const bmStar = (id) => { const on = bmGet().includes(id); return `<span class="bm${on ? " on" : ""}" role="button" tabindex="0" data-bm="${id}" aria-pressed="${on}" aria-label="${on ? "あとで体験リストから外す" : "あとで体験リストに入れる"}" title="${on ? "あとで体験リストから外す" : "あとで体験"}">★</span>`; };
+function bmToggle(id) {
+  let b = bmGet(); const on = b.includes(id);
+  b = on ? b.filter((x) => x !== id) : [id, ...b].slice(0, 60);
+  store.set("dl3-bm", b);
+  document.querySelectorAll(`[data-bm="${id}"]`).forEach((el) => { el.classList.toggle("on", !on); el.setAttribute("aria-pressed", String(!on)); el.setAttribute("aria-label", !on ? "あとで体験リストから外す" : "あとで体験リストに入れる"); });
+  toast(on ? "あとで体験リストから外しました" : "あとで体験リストに入れました");
+  const sec = $("bmSec"); if (sec) { const t = document.createElement("div"); t.innerHTML = bmHTML() || `<section id="bmSec" hidden></section>`; sec.replaceWith(t.firstElementChild); }
+  const fb = $("fBm"); if (fb) fb.querySelector("small").textContent = bmGet().length;
+}
+document.addEventListener("click", (e) => { const b = e.target.closest && e.target.closest("[data-bm]"); if (!b) return; e.preventDefault(); e.stopPropagation(); bmToggle(b.dataset.bm); }, true);
+document.addEventListener("keydown", (e) => { const b = e.target.closest && e.target.closest("[data-bm]"); if (!b || (e.key !== "Enter" && e.key !== " ")) return; e.preventDefault(); e.stopPropagation(); bmToggle(b.dataset.bm); }, true);
+function bmHTML() {
+  const list = bmGet().map(byId).filter(Boolean);
+  if (!list.length) return "";
+  return `<section class="sec bm-shelf" id="bmSec" aria-label="あとで体験する"><div class="sec-h"><h2><span class="bm-ic" aria-hidden="true">★</span>あとで体験する　${list.length}本</h2><p>★をつけた話です。もう一度★を押すと外せます。</p></div>
+    <div class="shelf-scroll">${list.map(scenarioCard).join("")}</div></section>`;
+}
 function renderHome() {
   const t = totals();
   const rate = t.met ? Math.round((t.caught / t.met) * 100) : null;
@@ -507,6 +527,7 @@ function renderHome() {
     <div class="sq" id="sq"></div>
   </section>
 
+  ${bmHTML() || `<section id="bmSec" hidden></section>`}
   <section class="sec" id="libSec" aria-label="シナリオ一覧">
     <div class="sec-h"><h2>シナリオをえらぶ</h2><p>どれからでもOK。結末はシナリオごとに3〜8種類。選択を変えると、ちがう結末とサインに出会えます。</p></div>
     <div class="libtools">
@@ -609,13 +630,14 @@ const roleOf = (sc) => {
   if (/社会人|会社|\d{2}歳|主婦|子育て|新入社員|働いて/.test(t)) return "sha";
   return "all";
 };
-let libRole = "all";
+let libRole = "all", libBm = false;
 let libScene = "all", libNew = false;
 const libList = () => {
   const q = libQ.trim().toLowerCase();
   let list = SCENARIOS.filter((s) => filter === "all" || s.genre === filter);
   if (libScene !== "all") list = list.filter((s) => SCENE_GROUP[firstMsg(s).type] === libScene);
   if (libNew) list = list.filter((s) => !played(s));
+  if (libBm) { const b = bmGet(); list = list.filter((s) => b.includes(s.id)); }
   if (libRole !== "all") list = list.filter((s) => roleOf(s) === libRole);
   if (q) list = list.filter((s) => [s.title, s.sub, s.tag, s.intro, GENRES[s.genre].n, ...Object.values(s.signs).map((x) => x.t)].join(" ").toLowerCase().includes(q));
   return list;
@@ -625,6 +647,7 @@ function renderFilters() {
   $("filters").innerHTML = `<div class="frow">${opts.map(([k, n]) => `<button class="chipbtn" type="button" id="f-${k}" data-f="${k}" aria-pressed="${filter === k}">${esc(n)}</button>`).join("")}</div>
     <div class="frow frow2"><button class="chipbtn sm dice" type="button" id="fRand"><span aria-hidden="true">🎲</span> ランダムに1本</button>
       <button class="chipbtn sm" type="button" id="fNew" aria-pressed="${libNew}">未体験だけ</button>
+      <button class="chipbtn sm bm-chip" type="button" id="fBm" aria-pressed="${libBm}"><span aria-hidden="true">★</span> あとで体験<small>${bmGet().length}</small></button>
       <span class="frow-sep" aria-hidden="true"></span>
       <span class="frow-h">場面</span>${Object.entries(SCENE_GN).map(([k, n]) => `<button class="chipbtn sm" type="button" id="fs-${k}" data-s="${k}" aria-pressed="${libScene === k}">${k !== "all" ? `<span class="nt-ic" aria-hidden="true">${SCENE_ICON[{ msg: "dm", call: "call", live: "live", web: "web" }[k]]}</span>` : ""}${esc(n)}</button>`).join("")}</div>
     <div class="frow frow-role"><span class="frow-h">立場</span>${Object.entries(ROLES).map(([k, n]) => `<button class="chipbtn sm role-${k}" type="button" data-r="${k}" aria-pressed="${libRole === k}">${esc(n)}<small>${k === "all" ? SCENARIOS.length : SCENARIOS.filter((s) => roleOf(s) === k).length}</small></button>`).join("")}</div>`;
@@ -632,6 +655,7 @@ function renderFilters() {
   $("filters").querySelectorAll("[data-s]").forEach((b) => (b.onclick = () => { libScene = b.dataset.s; renderFilters(); renderLib(); }));
   $("filters").querySelectorAll("[data-r]").forEach((b) => (b.onclick = () => { libRole = b.dataset.r; renderFilters(); renderLib(); }));
   $("fNew").onclick = () => { libNew = !libNew; renderFilters(); renderLib(); };
+  $("fBm").onclick = () => { libBm = !libBm; renderFilters(); renderLib(); };
   $("fRand").onclick = () => {
     const pool = libList().length ? libList() : SCENARIOS;
     const fresh = pool.filter((s) => !played(s));
@@ -657,7 +681,7 @@ function renderLib() {
     $("lib").innerHTML = `<div class="lib-empty">${mascot("md")}<p>${q ? `「${esc(libQ)}」に合う話が見つかりませんでした。別のことばで探してみてね。` : libNew ? "この条件の話は、ぜんぶ体験ずみです。すごい！" : "この条件に合う話はありませんでした。"}</p></div>`;
     return;
   }
-  if (filter === "all" && !q && libSort === "rec" && libScene === "all" && !libNew && libRole === "all") {
+  if (filter === "all" && !q && libSort === "rec" && libScene === "all" && !libNew && libRole === "all" && !libBm) {
     $("lib").innerHTML = Object.entries(GENRES).map(([gk, g]) => {
       const items = list.filter((s) => s.genre === gk);
       const done = items.filter(played).length;
