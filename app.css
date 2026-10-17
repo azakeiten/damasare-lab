@@ -2046,3 +2046,14 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
   .pc-grid .pc-q { font-size: 9.5pt; }
   .pc-grid .pc-foot { font-size: 7.5pt; }
 }
+/* ===== v53：ミヌケの着せかえ ===== */
+.wr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+.wr-item { display: grid; justify-items: center; gap: 4px; padding: 14px 8px 12px; border-radius: 16px; background: var(--surface); border: 1.5px solid var(--line); cursor: pointer; font: inherit; color: var(--ink); transition: transform .15s, border-color .15s; }
+.wr-item:hover:not(:disabled) { transform: translateY(-2px); border-color: #C9A227; }
+.wr-item.on { border-color: #C9A227; box-shadow: 0 0 0 3px #C9A22733, inset 0 3px 0 #C9A227; }
+.wr-item.locked { cursor: default; opacity: .55; }
+.wr-item.locked .wr-m { filter: grayscale(1) brightness(.8); }
+.wr-m { width: 64px; height: 64px; }
+.wr-item b { font-size: 13.5px; }
+.wr-item small { font-size: 11px; color: var(--muted); }
+.wr-item.on small { color: var(--gold); font-weight: 700; }

@@ -69,7 +69,23 @@ const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 const byId = (id) => SCENARIOS.find((s) => s.id === id) || (/^mix-\d+$/.test(id || "") ? genScenario(+id.slice(4)) : null);
 const endIds = (sc) => Object.keys(sc.nodes).filter((k) => sc.nodes[k].end);
-const mascot = (cls) => `<svg class="mascot ${cls || ""}" aria-hidden="true"><use href="#minuke"></use></svg>`;
+/* ミヌケの着せかえ：見抜きレベルで手に入るアクセサリー（64×64の座標で、顔に重ねて描く） */
+const WEAR = {
+  none:   { n: "なし", lv: 0, g: "" },
+  glass:  { n: "まるメガネ", lv: 3, g: `<g fill="none" stroke="#1B2534" stroke-width="2.6"><circle cx="23" cy="38" r="7"/><circle cx="41" cy="38" r="7"/><path d="M30 38h4M16 36l-6-3M48 36l6-3"/></g><g fill="#fff" opacity=".35"><circle cx="20.5" cy="35.5" r="2.4"/><circle cx="38.5" cy="35.5" r="2.4"/></g>` },
+  hat:    { n: "探偵の帽子", lv: 6, g: `<path d="M6 21c8-3 44-3 52 0l-3 4H9z" fill="#6B4A2B" stroke="#1B2534" stroke-width="2"/><path d="M15 21c1-11 8-16 17-16s16 5 17 16" fill="#8A5E36" stroke="#1B2534" stroke-width="2"/><path d="M15 17h34" stroke="#C9A227" stroke-width="3"/>` },
+  phones: { n: "ヘッドホン", lv: 10, g: `<path d="M8 36c0-17 11-29 24-29s24 12 24 29" fill="none" stroke="#1E3A5F" stroke-width="4" stroke-linecap="round"/><rect x="2" y="31" width="10" height="15" rx="4" fill="#1E3A5F" stroke="#1B2534" stroke-width="2"/><rect x="52" y="31" width="10" height="15" rx="4" fill="#1E3A5F" stroke="#1B2534" stroke-width="2"/><circle cx="7" cy="38.5" r="2" fill="#C9A227"/><circle cx="57" cy="38.5" r="2" fill="#C9A227"/>` },
+  scarf:  { n: "マフラー", lv: 15, g: `<path d="M12 52c6 6 14 9 20 9s14-3 20-9l2 5c-6 6-14 9-22 9s-16-3-22-9z" fill="#C8463A" stroke="#1B2534" stroke-width="2"/><path d="M40 58l4 6h6l-4-7" fill="#C8463A" stroke="#1B2534" stroke-width="2"/><path d="M16 56l2 2M24 59l1 3M33 60v3" stroke="#F2C9A5" stroke-width="2"/>` },
+  crown:  { n: "王冠", lv: 20, g: `<path d="M18 14l3-11 6 7 5-9 5 9 6-7 3 11z" fill="#E3C25A" stroke="#1B2534" stroke-width="2" stroke-linejoin="round"/><circle cx="32" cy="10" r="2" fill="#C8463A"/><circle cx="24" cy="12" r="1.5" fill="#2F9E62"/><circle cx="40" cy="12" r="1.5" fill="#2F7BD6"/>` }
+};
+let wearMemo = { t: 0, k: "", w: "none" };
+const wearNow = () => {
+  const w = WEAR[prefs.wear] ? prefs.wear : "none", now = Date.now();
+  if (wearMemo.k === w && now - wearMemo.t < 1000) return wearMemo.w;
+  wearMemo = { t: now, k: w, w: lvInfo().lv >= WEAR[w].lv ? w : "none" };
+  return wearMemo.w;
+};
+const mascot = (cls, wearId) => `<svg class="mascot ${cls || ""}" viewBox="-2 -2 68 68" aria-hidden="true"><use href="#minuke" x="0" y="0" width="64" height="64"></use>${WEAR[wearId || wearNow()].g}</svg>`;
 const lvl = (n) => "★".repeat(n) + "☆".repeat(3 - n);
 const levelName = (n) => ["", "かんたん", "ふつう", "むずかしい"][n] || "";
 function orgBadge() {
@@ -100,11 +116,11 @@ function totals() {
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
   { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "speedup", "follower", "giftwari", "airdrop"] },
-  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "share", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
-  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "karakon", "shikijo", "seifuku", "hoshouden", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "shoumei", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
+  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "share", "gakunen", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
+  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "karakon", "shikijo", "seifuku", "hoshouden", "lease", "shincho", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "shoumei", "daihitsu", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
   { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "hp", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -404,7 +420,8 @@ function modesHTML() {
     ["ふりかえる", [
       ["顔", "相手の人物帳", "これまでに出会った「相手」", "#zukan", null, "castbook", `${met}/${SCENARIOS.length}`, null],
       ["形", "守りのかたち", "見抜きのレーダーと、あなたの守りのタイプ", "#zukan", null, "shape", "", null],
-      ["章", "称号", "体験を重ねて集める", "#zukan", null, null, `${got}/${ach.length}`, null]
+      ["章", "称号", "体験を重ねて集める", "#zukan", null, null, `${got}/${ach.length}`, null],
+      ["着", "ミヌケの着せかえ", "レベルで手に入るアクセサリー", "#zukan", null, "wear", "", null]
     ]],
     ["くらしで使う", [
       ["点", "メッセージをチェック", "届いたメッセージを貼って、サインに色をつける", "#help", null, "checker", "", null],
@@ -857,6 +874,16 @@ function bindCastBook() {
     if (d && innerWidth < 760) d.scrollIntoView({ block: "nearest", behavior: reduced ? "auto" : "smooth" });
   }));
 }
+function wearHTML() {
+  const lv = lvInfo().lv, cur = wearNow();
+  return `<section class="sec wear" id="wear" aria-label="ミヌケの着せかえ"><div class="sec-h"><h2>ミヌケの着せかえ</h2><p>見抜きレベルが上がると、ミヌケのアクセサリーが手に入ります。えらんだものは、ホームや結果画面のミヌケが身につけます。</p></div>
+    <div class="wr-grid">${Object.entries(WEAR).map(([k, w]) => { const open = lv >= w.lv;
+      return `<button type="button" class="wr-item${cur === k ? " on" : ""}${open ? "" : " locked"}" data-wear="${k}" ${open ? "" : "disabled"} aria-pressed="${cur === k}">
+        ${mascot("wr-m", open ? k : "none")}<b>${esc(w.n)}</b><small>${open ? (cur === k ? "身につけている" : "えらぶ") : `Lv.${w.lv} で手に入る`}</small></button>`; }).join("")}</div></section>`;
+}
+function bindWear() {
+  document.querySelectorAll("[data-wear]").forEach((b) => (b.onclick = () => { prefs.wear = b.dataset.wear; savePrefs(); const s = $("wear"); const t = document.createElement("div"); t.innerHTML = wearHTML(); s.replaceWith(t.firstElementChild); bindWear(); toast(`ミヌケが「${WEAR[prefs.wear].n}」を身につけた`); }));
+}
 function achHTML() {
   const list = achievements();
   return `<section class="sec" aria-label="称号"><div class="sec-h"><h2>称号　${list.filter((a) => a.got).length} / ${list.length}</h2><p>体験を重ねると手に入ります。まだの称号は、条件を見てチャレンジしてみよう。</p></div>
@@ -894,6 +921,7 @@ function renderZukan() {
   ${mapGridHTML()}
   ${castBookHTML()}
   ${achHTML()}
+  ${wearHTML()}
   ${journalHTML()}
   <div class="zk-tools" id="zkTools" role="group" aria-label="図鑑をしぼりこむ">
     <div class="frow"><span class="frow-h">系統</span>${[["all", "すべて", all.length], ...catRows.map((r) => [r.ck, r.c.n, r.items.length])].map(([k, n, c]) => `<button class="chipbtn sm" type="button" data-zc="${k}" aria-pressed="${zkCat === k}">${k !== "all" ? `<span aria-hidden="true">${CATS[k].ic}</span>` : ""}${esc(n)}<small>${c}</small></button>`).join("")}</div>
@@ -919,7 +947,7 @@ function renderZukan() {
   const zkGo = () => { renderZukan(); const t = $("zkTools"); if (t) t.scrollIntoView({ block: "start" }); };
   document.querySelectorAll("[data-zc]").forEach((b) => (b.onclick = () => { zkCat = b.dataset.zc; zkGo(); }));
   document.querySelectorAll("[data-zs]").forEach((b) => (b.onclick = () => { zkSt = b.dataset.zs; zkGo(); }));
-  bindCastBook();
+  bindCastBook(); bindWear();
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => drawShape(catRows));
 }
 
@@ -2225,7 +2253,8 @@ async function epilogue(sc, back) {
 }
 /* 「被害なし」の結末で、テープ色の紙吹雪を少しだけ */
 function confetti() {
-  if (reduced) return;
+  if (reduced || document.hidden) return;
+  document.querySelectorAll("canvas.confetti").forEach((c) => c.remove());
   const cv = document.createElement("canvas");
   cv.className = "confetti"; cv.setAttribute("aria-hidden", "true");
   const W = (cv.width = innerWidth), H = (cv.height = innerHeight);
@@ -2244,6 +2273,7 @@ function confetti() {
     if (k < 1) requestAnimationFrame(step); else cv.remove();
   };
   requestAnimationFrame(step);
+  setTimeout(() => cv.remove(), 2600);
 }
 function renderDots() {
   const sc = S.sc;
