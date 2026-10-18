@@ -115,12 +115,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "speedup", "kenshin", "portal", "follower", "giftwari", "airdrop"] },
-  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "share", "gakunen", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "speedup", "kenshin", "portal", "chosaku", "follower", "giftwari", "airdrop"] },
+  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "share", "gakunen", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi", "sotsuaru", "catch"] },
   { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "karakon", "shikijo", "seifuku", "hoshouden", "lease", "shincho", "fanclub", "doukou", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "shoumei", "daihitsu", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku"] },
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "shoumei", "daihitsu", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku", "meikan"] },
   { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "hp", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "tablet", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin"] }
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "tablet", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin", "kanpukin"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -425,6 +425,7 @@ function modesHTML() {
     ]],
     ["くらしで使う", [
       ["点", "メッセージをチェック", "届いたメッセージを貼って、サインに色をつける", "#help", null, "checker", "", null],
+      ["相", "188に相談する練習", "相談員の質問に答えて、相談メモを作る", "#home", null, null, "", "call"],
       ["約", "守りの約束カード", "家族で決めた約束を、カードにして残す", "#help", null, "pledge", "", null],
       ["授", "授業で使う", "ワークシートや、発表用の画面", "#teach", null, null, "", null]
     ]]
@@ -435,10 +436,140 @@ function modesHTML() {
 }
 function bindModes() {
   document.querySelectorAll(".md-tile").forEach((a) => (a.onclick = (e) => {
+    if (a.dataset.local === "call") { e.preventDefault(); openCall(callPick(), "partial"); return; }
     if (a.dataset.local) { e.preventDefault(); const t = $(a.dataset.local) || $("lib"); if (t) t.scrollIntoView({ block: "start" }); return; }
     if (a.dataset.mode) window.__mode = a.dataset.mode;
     if (a.dataset.goto) window.__goto = a.dataset.goto;
   }));
+}
+/* ===== 188に相談する練習：相談員の質問に答えて、伝わる話し方と「相談メモ」を身につける ===== */
+let CL = null;
+function callSteps(sc, end) {
+  const d = DEBRIEF[sc.id] || {}, f = firstMsg(sc);
+  const who = f.name ? `「${f.name.replace(/（？）$/, "")}」と名のる相手` : "知らない相手";
+  const flow = (d.flow || []).slice(0, 3).map((x) => x.replace(/^「|」$/g, ""));
+  const paid = end !== "safe";
+  return [
+    { q: "はい、消費生活センターです。どうされましたか？", o: [
+      [`「${sc.tag}」のことで相談です。${who}から連絡がありました`, 1, "最初に、何の話かをひとことで。それだけで、相談員は話の地図を思いえがけます。"],
+      ["あの……だまされたかもしれなくて……", 0, "だいじょうぶ。最初に「何の話か」をひとこと言えると、もっと早く伝わります。"],
+      ["やっぱりいいです。たいしたことじゃないので", 0, "小さなことでも、相談していいんです。被害の前に相談する人も、たくさんいます。"]
+    ], r: ["わかりました。順番にうかがいますね", "ゆっくりでだいじょうぶですよ。どんなことがあったか、順番に聞かせてください", "切らないでくださいね。小さなことでも、早めの相談が大事なんです"] },
+    { q: "いつごろ、どこで、どんな相手から連絡がありましたか？", o: [
+      [`${sc.clock}ごろ、${f.app}で、${who}からです`, 1, "日時・場所（アプリ）・相手の名前。この3つがあると、同じ手口の情報と照らし合わせられます。"],
+      ["最近だったと思うんですけど……よく覚えていません", 0, "日時は、スクリーンショットや着信の記録で確かめられます。メモしておくと安心です。"],
+      ["相手のことは、言わないほうがいいですよね？", 0, "相手の名前やアカウント、電話番号は、大事な手がかり。かくさずに伝えましょう。"]
+    ], r: ["ありがとうございます。とてもわかりやすいです", "記録が残っていたら、あとで確かめてみてくださいね", "相手の情報は、だいじな手がかりになるんです。わかる範囲で教えてください"] },
+    { q: "どんなことを言われて、どうなりましたか？", o: [
+      [flow.length ? `最初は「${flow[0]}」。そのあと「${flow[1] || flow[0]}」と言われました` : "言われたことを、順番にメモしてあります", 1, "言われた言葉を、そのまま順番に。相談員は、その言葉から手口を見分けます。"],
+      ["とにかく、ひどいことを言われて……", 0, "気持ちも大事ですが、言われた言葉をそのまま伝えると、手口がはっきりします。"],
+      ["わたしがバカだったんです……", 0, "悪いのは、だます側です。自分を責めなくてだいじょうぶ。"]
+    ], r: ["よくある手口と、とても似ていますね", "どんな言葉だったか、思い出せるものだけでも教えてください", "あなたは悪くありませんよ。話してくれて、ありがとうございます"] },
+    { q: paid ? "お金を払ったり、個人情報を伝えたりしましたか？" : "お金を払ったり、個人情報を伝えたりはしていませんか？", o: paid ? [
+      ["払いました。金額と日付、払い方（振込・電子マネー・カード）をメモしてあります", 1, "払い方がわかると、止められるお金や、取れる手が決まります。"],
+      ["いくら払ったか、覚えていません", 0, "通帳やカードの明細、アプリの履歴で確かめられます。金額と日付をメモしておこう。"],
+      ["お金のことは、家族に知られたくなくて……", 0, "早く家族に話すほど、取れる手が増えます。相談員がいっしょに考えてくれます。"]
+    ] : [
+      ["払っていません。名前や住所も伝えていません", 1, "何をしていないかを言えるのも、大事な情報です。"],
+      ["たぶん、だいじょうぶだと思います……", 0, "あいまいなときは、送ったメッセージや入力した画面を見返してから伝えよう。"],
+      ["それより、相手を捕まえてほしいんです", 0, "気持ちはわかります。まずは、あなたの被害を確かめることから始めます。"]
+    ], r: paid ? ["わかりました。払い方によっては、まだ止められることがあります", "明細で確かめてみましょう。金額と日付がわかると、進めやすくなります", "家族に話すかどうかも、いっしょに考えましょう"] : ["よかったです。被害の前に相談できたのは、とても大事なことです", "送ったものがないか、いっしょに確かめましょう", "まずは、あなたが安全かどうかを確かめますね"] },
+    { q: "やりとりの記録は残っていますか？", o: [
+      ["スクリーンショットと、相手のアカウントや電話番号を保存しています", 1, "記録は、相談や警察への届け出で、いちばんの助けになります。"],
+      ["はずかしいので、全部消してしまいました", 0, "消す前に、スクリーンショットを。ブロックや削除は、保存してからにしよう。"],
+      ["相手をブロックして、トークごと消しました", 0, "ブロックはいい判断。でも、その前に画面を保存しておくと、あとで役に立ちます。"]
+    ], r: ["完ぺきです。その記録を手元に置いておいてください", "消してしまったものは、思い出せる範囲でメモにしておきましょう", "ブロックはいい判断です。残っている通知や履歴があれば、保存しておいてください"] }
+  ];
+}
+function callHTML() {
+  const sc = CL.sc, st = CL.steps;
+  const bubbles = CL.log.map((m) => `<div class="c8-row ${m.me ? "me" : ""}${m.tip ? " tip" : ""}">${m.tip ? `<span class="c8-tip"><b>${m.good ? "伝わる！" : "ヒント"}</b>${esc(m.t)}</span>` : `<span class="c8-b">${esc(m.t)}</span>`}</div>`).join("");
+  const step = st[CL.i];
+  const body = CL.i < st.length
+    ? `<div class="c8-opts" role="group" aria-label="答えをえらぶ">${CL.order.map((k) => `<button class="choice c8-o" type="button" id="c8o-${k}" data-k="${k}"${CL.wait ? " disabled" : ""}><span>${esc(step.o[k][0])}</span></button>`).join("")}</div>`
+    : memoHTML();
+  return `<div class="c8-top"><span class="c8-num">188</span><div><b>消費者ホットライン</b><small>相談の練習｜${esc(sc.tag)}</small></div>
+      <span class="c8-time" aria-hidden="true">${CL.i < st.length ? `${CL.i + 1} / ${st.length}` : "終了"}</span>
+      <button class="c8-x" type="button" id="c8Close" aria-label="相談の練習を閉じる">×</button></div>
+    <div class="c8-steps" aria-hidden="true">${st.map((_, k) => `<i class="${k < CL.i ? "done" : k === CL.i ? "now" : ""}"></i>`).join("")}</div>
+    <div class="c8-log" id="c8Log" aria-live="polite">${bubbles}${CL.wait ? `<div class="c8-row"><span class="c8-b c8-dots" aria-label="相談員が話しています"><i></i><i></i><i></i></span></div>` : ""}</div>
+    <div class="c8-foot">${body}</div>`;
+}
+function memoText() {
+  const sc = CL.sc, d = DEBRIEF[sc.id] || {}, f = firstMsg(sc), paid = CL.end !== "safe";
+  const day = new Date(), ds = `${day.getFullYear()}年${day.getMonth() + 1}月${day.getDate()}日`;
+  return [
+    ["相談した日", ds],
+    ["何の話", `${sc.tag}（${sc.title.replace(/^「|」$/g, "")}）`],
+    ["いつ・どこで", `${sc.clock}ごろ／${f.app}`],
+    ["相手", f.name ? `${f.name.replace(/（？）$/, "")}と名のる相手` : "わからない"],
+    ["言われたこと", (d.flow || []).join(" → ")],
+    ["お金・個人情報", paid ? "払った金額・日付・払い方：＿＿＿＿＿＿" : "払っていない・伝えていない"],
+    ["残した記録", "スクリーンショット・相手のアカウント・電話番号"],
+    ["次にすること", (d.after || ["家族に話す"]).join("／")]
+  ];
+}
+function memoHTML() {
+  const stars = CL.score, n = CL.steps.length;
+  return `<div class="c8-memo"><div class="c8-mh"><span class="eyebrow">相談メモ</span><b>伝わりやすさ <span class="c8-stars" aria-label="${n}点中${stars}点">${"★".repeat(stars)}<i>${"★".repeat(n - stars)}</i></span></b></div>
+    <dl>${memoText().map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
+    <p class="c8-note">本当に困ったときは、<b>188</b>（いやや）に電話すると、近くの消費生活センターにつながります。このメモを見ながら話すと、落ち着いて伝えられます。</p>
+    <div class="sharebtns"><button class="btn small primary" type="button" id="c8Copy">メモをコピー</button><button class="btn small" type="button" id="c8Again">もう一度練習する</button><button class="btn small" type="button" id="c8Done">閉じる</button></div></div>`;
+}
+function renderCall() {
+  const el = $("c8Sheet"); if (!el) return;
+  el.innerHTML = callHTML();
+  const lg = $("c8Log"); lg.scrollTop = lg.scrollHeight;
+  $("c8Close").onclick = closeCall;
+  el.querySelectorAll(".c8-o").forEach((b) => (b.onclick = () => answerCall(+b.dataset.k)));
+  if ($("c8Copy")) {
+    $("c8Copy").onclick = async () => { const t = memoText().map(([k, v]) => `${k}：${v}`).join("\n"); try { await navigator.clipboard.writeText(t); toast("相談メモをコピーしました"); } catch (e) { toast("コピーできませんでした"); } };
+    $("c8Again").onclick = () => openCall(CL.sc, CL.end);
+    $("c8Done").onclick = closeCall;
+  }
+}
+function sayCall(t, after) { CL.wait = true; renderCall(); setTimeout(() => { if (!CL) return; CL.wait = false; CL.log.push({ t }); speak(t, 210); if (after) after(); renderCall(); }, reduced ? 120 : 700); }
+function answerCall(k) {
+  if (!CL || CL.wait) return;
+  const step = CL.steps[CL.i], [t, good, tip] = step.o[k];
+  CL.log.push({ t, me: true }, { t: tip, tip: true, good: !!good });
+  if (good) CL.score++;
+  CL.i++;
+  CL.order = shuffle([0, 1, 2]);
+  const next = CL.steps[CL.i];
+  sayCall(step.r[k], () => {
+    if (next) CL.log.push({ t: next.q });
+    else {
+      const d = DEBRIEF[CL.sc.id] || {};
+      CL.log.push({ t: `お話、よくわかりました。まずは「${(d.after || ["家族に話す"])[0]}」から始めましょう。今日の内容を、メモにまとめておきますね` });
+      store.set("dl3-call", (store.get("dl3-call", 0) || 0) + 1);
+      checkAch();
+    }
+  });
+}
+function openCall(sc, end) {
+  if (!sc) return;
+  const steps = callSteps(sc, end || "partial");
+  CL = { sc, end: end || "partial", steps, i: 0, score: 0, log: [], wait: false, order: shuffle([0, 1, 2]), back: document.activeElement };
+  let m = $("c8");
+  if (!m) { m = document.createElement("div"); m.className = "modal c8-modal"; m.id = "c8"; m.innerHTML = `<div class="sheet c8" role="dialog" aria-modal="true" aria-label="188に相談する練習" id="c8Sheet"></div>`; document.body.appendChild(m); m.addEventListener("keydown", (e) => { if (e.key === "Escape") closeCall(); }); }
+  m.hidden = false;
+  CL.log.push({ t: "（プルルル……）" });
+  renderCall();
+  sayCall(steps[0].q, () => {});
+  setTimeout(() => { const x = $("c8Close"); if (x) x.focus({ preventScroll: true }); }, 0);
+}
+function closeCall() {
+  const m = $("c8"); if (m) m.hidden = true;
+  const b = CL && CL.back; CL = null;
+  if (b && b.focus && document.body.contains(b)) b.focus({ preventScroll: true });
+}
+function callPick() {
+  const last = byId(store.get("dl3-last", null));
+  if (last && DEBRIEF[last.id]) return last;
+  const all = SCENARIOS.filter((s) => DEBRIEF[s.id] && !s.gen), done = all.filter((s) => cleared(s.id));
+  const pool = done.length ? done : all;
+  return pool[Math.floor(Math.random() * pool.length)];
 }
 /* ===== あとで体験リスト：気になる話に★をつけて、とっておく（この端末の中だけ） ===== */
 const bmGet = () => (store.get("dl3-bm", []) || []).filter((id) => byId(id));
@@ -761,7 +892,8 @@ function achievements() {
     { id: "check", ic: "点", n: "メッセージ点検係", d: "「届いたメッセージをチェック」を使う", got: !!store.get("dl3-checked", false) },
     { id: "note", ic: "記", n: "ふりかえり名人", d: "気づきメモを5つの話で残す", got: Object.keys(store.get("dl3-notes", {}) || {}).length >= 5 },
     { id: "wana", ic: "罠", n: "ワナ見やぶり", d: "画面のワナさがしで30点以上", got: (store.get("dl3-wana", 0) || 0) >= 30 },
-    { id: "pledge", ic: "約", n: "わが家の約束", d: "守りの約束カードを保存か印刷する", got: !!store.get("dl3-pledged", false) }
+    { id: "pledge", ic: "約", n: "わが家の約束", d: "守りの約束カードを保存か印刷する", got: !!store.get("dl3-pledged", false) },
+    { id: "call", ic: "相", n: "相談の練習生", d: "「188に相談する練習」を最後まで終える", got: (store.get("dl3-call", 0) || 0) >= 1 }
   ];
 }
 function checkAch() {
@@ -2424,6 +2556,7 @@ function openResult(id, n, isNewEnd) {
     <div class="resbtns">
       <button class="btn" type="button" id="resRetry">別の選択でもう一度</button>
       <button class="btn honne-btn" type="button" id="resHonne">本音モードでもう一度</button>
+      ${sc.gen || !DEBRIEF[sc.id] ? "" : `<button class="btn call-btn" type="button" id="resCall"><span class="c8-mini" aria-hidden="true">188</span>相談する練習</button>`}
       ${ex ? `<a class="btn primary" href="${ex.href}" id="resNext">${ex.label}</a>` : sc.gen ? `<a class="btn primary" href="#mix" id="resNext">もう1話：毎回ちがう話</a>` : `<a class="btn primary" href="#${next.id}" id="resNext">${cn && cn.s ? "コースの次へ" : "次へ"}：${esc(next.tag)}</a>`}
     </div>
     <button class="qback" type="button" id="resClose" style="justify-self:center">閉じて会話を見返す</button>
@@ -2455,6 +2588,7 @@ function openResult(id, n, isNewEnd) {
   $("resRetry").onclick = () => { closeResult(); openScenario(sc.id); };
   bindNote(sc);
   $("resHonne").onclick = () => { closeResult(); HONNE_NEXT = true; openScenario(sc.id); };
+  if ($("resCall")) $("resCall").onclick = () => openCall(sc, n.end);
   $("resultSheet").querySelectorAll("[data-replay]").forEach((b) => (b.onclick = () => replayFrom(+b.dataset.replay)));
   $("resClose").onclick = () => closeResult();
   $("resNext").onclick = () => closeResult(true);
