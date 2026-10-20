@@ -2135,3 +2135,34 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 .ce-x { color: var(--ink); border-color: var(--line); flex: none; }
 #ceCv { width: 100%; height: auto; border-radius: 10px; box-shadow: 0 6px 24px rgba(20, 28, 40, .25); background: #FBF8F1; }
 .co-res .ce-res { justify-self: start; margin-top: 4px; }
+
+/* ---------- v60 だましが届く時間 ---------- */
+.ck-wrap { display: grid; gap: 18px; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); align-items: center; }
+@media (max-width: 720px) { .ck-wrap { grid-template-columns: 1fr; } .ck-svg { max-width: 320px; margin: 0 auto; } }
+.ck-svg { width: 100%; height: auto; display: block; overflow: visible; }
+.ck-night { fill: none; stroke: var(--surface-2); stroke-width: 96; }
+.ck-face { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; }
+.ck-b { cursor: pointer; outline: none; }
+.ck-hit { stroke: transparent; stroke-width: 13; }
+.ck-bar { stroke: var(--muted); stroke-opacity: .45; stroke-width: 8; stroke-linecap: round; transition: stroke .2s, stroke-opacity .2s; }
+.ck-b.top .ck-bar { stroke: var(--gold); stroke-opacity: .9; }
+.ck-b:hover .ck-bar { stroke-opacity: .85; }
+.ck-b.on .ck-bar { stroke: var(--accent); stroke-opacity: 1; stroke-width: 10; }
+.ck-b:focus-visible .ck-hit { stroke: var(--accent); stroke-opacity: .35; }
+.ck-lab { font-size: 13px; font-weight: 700; fill: var(--muted); text-anchor: middle; dominant-baseline: middle; font-variant-numeric: tabular-nums; }
+.ck-ch { font-family: var(--font-display); font-size: 34px; fill: var(--ink); text-anchor: middle; font-variant-numeric: tabular-nums; }
+.ck-chs { font-size: 15px; font-family: inherit; }
+.ck-cn { font-size: 15px; font-weight: 700; fill: var(--gold); text-anchor: middle; }
+.ck-side { display: grid; gap: 10px; align-content: start; }
+.ck-band { display: inline-flex; align-items: center; gap: 8px; font-size: var(--step--1); font-weight: 700; color: var(--muted); }
+.ck-band i { font-style: normal; background: var(--band-ink); color: var(--accent); border-radius: 999px; padding: 2px 12px; font-size: var(--step--1); }
+.ck-tip { margin: 0; line-height: 1.7; font-size: var(--step-0); }
+.ck-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.ck-item { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); text-decoration: none; font-size: var(--step--1); font-weight: 700; }
+.ck-item:hover { border-color: var(--gold); }
+.ck-t { font-variant-numeric: tabular-nums; color: var(--gold); font-size: var(--step--2); }
+.ck-more { font-size: var(--step--1); color: var(--muted); align-self: center; }
+.ck-step { display: flex; gap: 8px; }
+@media (prefers-reduced-motion: reduce) { .ck-bar { transition: none; } }
+:root[data-theme="contrast"] .ck-bar { stroke: #fff; }
+:root[data-theme="contrast"] .ck-b.on .ck-bar, :root[data-theme="contrast"] .ck-b.top .ck-bar { stroke: #FFE600; }

@@ -115,12 +115,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "speedup", "kenshin", "portal", "chosaku", "ichi", "qrlogin", "follower", "giftwari", "airdrop"] },
-  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "share", "gakunen", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi", "sotsuaru", "catch", "taikyo"] },
-  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "karakon", "shikijo", "seifuku", "hoshouden", "lease", "shincho", "fanclub", "doukou", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "shoumei", "daihitsu", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku", "meikan", "hoikuen"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "speedup", "kenshin", "portal", "chosaku", "ichi", "qrlogin", "goukaku", "follower", "giftwari", "airdrop"] },
+  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "share", "gakunen", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi", "sotsuaru", "catch", "taikyo", "hakobi"] },
+  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "karakon", "shikijo", "seifuku", "hoshouden", "lease", "shincho", "fanclub", "doukou", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver", "sports"] },
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "shoumei", "daihitsu", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku", "meikan", "hoikuen", "hojokin"] },
   { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "hp", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "tablet", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin", "kanpukin", "leaseback"] }
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "tablet", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin", "kanpukin", "leaseback", "ninchi"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -425,6 +425,7 @@ function modesHTML() {
       ["証", "コースの修了証", "コースを修了したら、名前入りの修了証", "#zukan", null, "cert", `${COURSES.filter((c) => courseOf(c).every((s) => cleared(s.id))).length}/${COURSES.length}`, null]
     ]],
     ["くらしで使う", [
+      ["時", "だましが届く時間", "24時間の時計で、手口が届く時間を見る", "#help", null, "clock24", "", null],
       ["点", "メッセージをチェック", "届いたメッセージを貼って、サインに色をつける", "#help", null, "checker", "", null],
       ["相", "188に相談する練習", "相談員の質問に答えて、相談メモを作る", "#home", null, null, "", "call"],
       ["約", "守りの約束カード", "家族で決めた約束を、カードにして残す", "#help", null, "pledge", "", null],
@@ -1213,6 +1214,7 @@ function renderHelp() {
     </ol>
   </section>
   ${kimariHTML()}
+  ${clockHTML()}
   ${familyHTML()}
   ${pledgeHTML()}
   ${phraseBookHTML()}
@@ -1231,6 +1233,7 @@ function renderHelp() {
   bindPhraseBook();
   bindPledge();
   bindChecker();
+  bindClock();
   document.querySelectorAll("[data-easybtn]").forEach((b) => (b.onclick = toggleEasy));
   document.querySelectorAll("[data-voicebtn]").forEach((b) => (b.onclick = toggleVoice));
   applyVoice();
@@ -3005,6 +3008,72 @@ function renderReply(el, head) {
 }
 /* わたしの断りことば帳（相談先のページ） */
 /* ===== 家族といっしょに使う（相談先ページ） ===== */
+/* ===== だましが届く時間：全シナリオの「はじまりの時刻」を、24時間の時計にならべる ===== */
+let CK_H = null;
+const CK_BANDS = [
+  [5, 10, "朝", "出かける前のあわただしい時間。「今すぐ」と言われると、確かめる時間がないまま動いてしまいます。"],
+  [11, 14, "昼", "昼休みのすきま時間。短い時間で返事をしようとして、文面をよく読まずにリンクを押しがちです。"],
+  [15, 18, "夕方", "学校や仕事の帰り道。駅前の声かけや、帰宅を待ちかまえた訪問・電話が多い時間です。"],
+  [19, 23, "夜", "疲れて、ひとりになる時間。だれにも相談できないまま、DMや電話で話が進みやすくなります。"],
+  [0, 4, "深夜", "眠くて判断がにぶる時間。深夜のメッセージには、朝になってから返事をしよう。"]
+];
+const ckBand = (h) => CK_BANDS.find(([a, b]) => h >= a && h <= b);
+function ckData() {
+  const by = Array.from({ length: 24 }, () => []);
+  SCENARIOS.forEach((sc) => { const m = /^(\d{1,2}):\d{2}$/.exec(sc.clock || ""); if (m && +m[1] < 24) by[+m[1]].push(sc); });
+  return by;
+}
+function clockHTML() {
+  const by = ckData(), cnt = by.map((a) => a.length), max = Math.max(1, ...cnt), all = cnt.reduce((a, b) => a + b, 0);
+  const top = cnt.indexOf(Math.max(...cnt));
+  const h = CK_H == null ? top : CK_H;
+  const night = [19, 20, 21, 22, 23].reduce((a, k) => a + cnt[k], 0);
+  const C = 160, R0 = 56, L = 82;
+  const pt = (k, r) => { const a = (k / 24) * Math.PI * 2 - Math.PI / 2; return [(C + Math.cos(a) * r).toFixed(1), (C + Math.sin(a) * r).toFixed(1)]; };
+  const arc = (a0, a1, r) => { const [x0, y0] = pt(a0, r), [x1, y1] = pt(a1, r); return `M${x0} ${y0}A${r} ${r} 0 ${a1 - a0 > 12 ? 1 : 0} 1 ${x1} ${y1}`; };
+  const bars = cnt.map((n, k) => {
+    const [x0, y0] = pt(k + 0.5, R0), [x1, y1] = pt(k + 0.5, R0 + 4 + (n / max) * L);
+    const [hx, hy] = pt(k + 0.5, R0 + L / 2 + 6);
+    return `<g class="ck-b${k === h ? " on" : ""}${k === top ? " top" : ""}" role="button" tabindex="0" data-hr="${k}" aria-label="${k}時台：${n}本" aria-pressed="${k === h}">
+      <line class="ck-hit" x1="${pt(k + 0.5, R0)[0]}" y1="${pt(k + 0.5, R0)[1]}" x2="${pt(k + 0.5, R0 + L + 6)[0]}" y2="${pt(k + 0.5, R0 + L + 6)[1]}"/>
+      <line class="ck-bar" x1="${x0}" y1="${y0}" x2="${x1}" y2="${y1}"/><title>${k}時台 ${n}本</title></g>`;
+  }).join("");
+  const labels = [0, 3, 6, 9, 12, 15, 18, 21].map((k) => { const [x, y] = pt(k, R0 + L + 18); return `<text class="ck-lab" x="${x}" y="${y}">${k}</text>`; }).join("");
+  const band = ckBand(h) || CK_BANDS[3];
+  const list = by[h];
+  return `<section class="sec ck-sec" id="clock24" aria-label="だましが届く時間">
+    <div class="sec-h"><h2>だましが届く時間</h2><p>${all}本の話の「はじまりの時刻」を、24時間の時計にならべました。いちばん多いのは<b>${top}時台</b>。夜の19〜23時に、全体の${Math.round((night / all) * 100)}%が集まっています。</p></div>
+    <div class="ck-wrap">
+      <svg class="ck-svg" viewBox="0 0 320 320" role="group" aria-label="24時間の時計。時間をえらぶと、その時間に始まる話が出ます">
+        <path class="ck-night" d="${arc(18, 24, R0 + L / 2 + 4)}"/><path class="ck-night" d="${arc(0, 6, R0 + L / 2 + 4)}"/>
+        <circle class="ck-face" cx="${C}" cy="${C}" r="${R0 - 6}"/>
+        ${bars}${labels}
+        <text class="ck-ch" x="${C}" y="${C - 6}">${h}<tspan class="ck-chs">時台</tspan></text>
+        <text class="ck-cn" x="${C}" y="${C + 22}">${list.length}本</text>
+      </svg>
+      <div class="ck-side" aria-live="polite">
+        <span class="ck-band"><i>${esc(band[2])}</i>${band[0]}〜${band[1]}時</span>
+        <p class="ck-tip">${esc(band[3])}</p>
+        <div class="ck-list">${list.length ? list.slice(0, 10).map((sc) => `<a class="ck-item" href="#${sc.id}"><span class="ck-t">${esc(sc.clock)}</span><span>${esc(sc.tag)}</span></a>`).join("") + (list.length > 10 ? `<span class="ck-more">ほか ${list.length - 10}本</span>` : "") : `<span class="ck-more">この時間に始まる話は、まだありません。</span>`}</div>
+        <div class="ck-step" role="group" aria-label="時間をかえる"><button class="btn small" type="button" data-hr="${(h + 23) % 24}" aria-label="1時間前">← ${(h + 23) % 24}時</button><button class="btn small" type="button" data-hr="${(h + 1) % 24}" aria-label="1時間あと">${(h + 1) % 24}時 →</button></div>
+      </div>
+    </div></section>`;
+}
+function bindClock() {
+  const sec = $("clock24"); if (!sec) return;
+  const go = (k, focus) => {
+    CK_H = k; const t = document.createElement("div"); t.innerHTML = clockHTML(); sec.replaceWith(t.firstElementChild); bindClock();
+    if (focus) { const g = document.querySelector(`#clock24 .ck-b[data-hr="${k}"]`); if (g) g.focus(); }
+  };
+  sec.querySelectorAll("[data-hr]").forEach((el) => {
+    el.addEventListener("click", () => go(+el.dataset.hr, el.matches(".ck-b")));
+    if (el.matches(".ck-b")) el.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(+el.dataset.hr, true); }
+      else if (e.key === "ArrowRight" || e.key === "ArrowDown") { e.preventDefault(); go((+el.dataset.hr + 1) % 24, true); }
+      else if (e.key === "ArrowLeft" || e.key === "ArrowUp") { e.preventDefault(); go((+el.dataset.hr + 23) % 24, true); }
+    });
+  });
+}
 /* ===== だましの決まり文句ランキング：全シナリオの相手のセリフから、よく使われる言葉を数える ===== */
 const KIMARI = [
   [/今日だけ|今日中|本日中|今夜だけ|今すぐ|いますぐ/, "今日だけ・今すぐ", "考える時間をなくして、その場で決めさせる言葉"],
