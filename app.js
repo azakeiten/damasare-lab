@@ -115,12 +115,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "speedup", "kenshin", "portal", "chosaku", "follower", "giftwari", "airdrop"] },
-  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "share", "gakunen", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi", "sotsuaru", "catch"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "speedup", "kenshin", "portal", "chosaku", "ichi", "qrlogin", "follower", "giftwari", "airdrop"] },
+  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "share", "gakunen", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi", "sotsuaru", "catch", "taikyo"] },
   { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "karakon", "shikijo", "seifuku", "hoshouden", "lease", "shincho", "fanclub", "doukou", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "shoumei", "daihitsu", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku", "meikan"] },
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "shoumei", "daihitsu", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku", "meikan", "hoikuen"] },
   { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "hp", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "tablet", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin", "kanpukin"] }
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "tablet", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin", "kanpukin", "leaseback"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -130,7 +130,7 @@ function coursesHTML() {
       const list = courseOf(c), done = list.filter((s) => cleared(s.id)).length, nx = list.find((s) => !cleared(s.id));
       const pct = Math.round((done / list.length) * 100);
       return `<a class="course${done === list.length ? " done" : ""}${prefs.course === c.id ? " on" : ""}" href="#${(nx || list[0]).id}" data-course="${c.id}">
-        <div class="co-top"><b>${esc(c.n)}</b><span class="co-n">${done === list.length ? "修了" : `${done} / ${list.length}`}</span></div>
+        <div class="co-top"><b>${esc(c.n)}</b><span class="co-n">${done === list.length ? "修了・証あり" : `${done} / ${list.length}`}</span></div>
         <span class="co-d">${esc(c.d)}</span>
         <span class="co-bar" aria-hidden="true"><i style="width:${pct}%"></i></span>
         <span class="co-dots" aria-hidden="true">${list.map((s) => `<i class="${cleared(s.id) ? "ok" : ""}" title="${esc(s.tag)}"></i>`).join("")}</span>
@@ -421,7 +421,8 @@ function modesHTML() {
       ["顔", "相手の人物帳", "これまでに出会った「相手」", "#zukan", null, "castbook", `${met}/${SCENARIOS.length}`, null],
       ["形", "守りのかたち", "見抜きのレーダーと、あなたの守りのタイプ", "#zukan", null, "shape", "", null],
       ["章", "称号", "体験を重ねて集める", "#zukan", null, null, `${got}/${ach.length}`, null],
-      ["着", "ミヌケの着せかえ", "レベルで手に入るアクセサリー", "#zukan", null, "wear", "", null]
+      ["着", "ミヌケの着せかえ", "レベルで手に入るアクセサリー", "#zukan", null, "wear", "", null],
+      ["証", "コースの修了証", "コースを修了したら、名前入りの修了証", "#zukan", null, "cert", `${COURSES.filter((c) => courseOf(c).every((s) => cleared(s.id))).length}/${COURSES.length}`, null]
     ]],
     ["くらしで使う", [
       ["点", "メッセージをチェック", "届いたメッセージを貼って、サインに色をつける", "#help", null, "checker", "", null],
@@ -442,6 +443,88 @@ function bindModes() {
     if (a.dataset.goto) window.__goto = a.dataset.goto;
   }));
 }
+/* ===== コースの修了証：コースを全部体験したら、名前を入れて保存・印刷できる ===== */
+function courseStat(c) {
+  const list = courseOf(c);
+  let met = 0, caught = 0;
+  list.forEach((s) => Object.values((progress[s.id] || {}).signs || {}).forEach((v) => { met++; if (v === "caught") caught++; }));
+  return { list, done: list.filter((s) => cleared(s.id)).length, met, caught };
+}
+function certHTML() {
+  const rows = COURSES.map((c) => Object.assign({ c }, courseStat(c)));
+  const got = rows.filter((r) => r.done === r.list.length).length;
+  return `<section class="sec cert-sec" id="cert" aria-label="コースの修了証"><div class="sec-h"><h2>コースの修了証　${got} / ${rows.length}</h2><p>学びのコースの話を全部体験すると、修了証をつくれます。名前を入れて、保存や印刷ができます。</p></div>
+    <div class="ce-list">${rows.map((r) => { const ok = r.done === r.list.length, left = r.list.length - r.done;
+      return `<div class="ce-item${ok ? " ok" : ""}"><span class="ce-seal" aria-hidden="true">${ok ? "修" : `${Math.round(r.done / r.list.length * 100)}<small>%</small>`}</span>
+        <div class="ce-t"><b>${esc(r.c.n)}</b><span>${ok ? `修了｜気づけたサイン ${r.caught} / ${r.met}` : `あと ${left} 本で修了`}</span></div>
+        ${ok ? `<button class="btn small primary" type="button" data-cert="${r.c.id}">修了証をつくる</button>` : `<a class="btn small" href="#${(r.list.find((s) => !cleared(s.id)) || r.list[0]).id}" data-course="${r.c.id}">つづける</a>`}</div>`; }).join("")}</div></section>`;
+}
+function drawCourseCert(cv, c, name) {
+  const x = cv.getContext("2d"), W = cv.width, H = cv.height, st = courseStat(c);
+  const NAVY = "#14243A", GOLD = "#B08A2E", GOLD2 = "#C9A227", PAPER = "#FBF8F1", INK = "#1B2534", F = '"Zen Kaku Gothic New", "Yu Gothic", sans-serif', M = '"Shippori Mincho", "Yu Mincho", serif';
+  x.fillStyle = PAPER; x.fillRect(0, 0, W, H);
+  /* ふちどり：紺の太枠＋金の細線＋四すみの飾り */
+  x.fillStyle = NAVY; x.fillRect(0, 0, W, 34); x.fillRect(0, H - 34, W, 34); x.fillRect(0, 0, 34, H); x.fillRect(W - 34, 0, 34, H);
+  x.strokeStyle = GOLD2; x.lineWidth = 3; x.strokeRect(54, 54, W - 108, H - 108);
+  x.lineWidth = 1; x.strokeRect(66, 66, W - 132, H - 132);
+  [[66, 66], [W - 66, 66], [66, H - 66], [W - 66, H - 66]].forEach(([cx, cy]) => { x.save(); x.translate(cx, cy); x.rotate(Math.PI / 4); x.fillStyle = GOLD2; x.fillRect(-11, -11, 22, 22); x.fillStyle = PAPER; x.fillRect(-5, -5, 10, 10); x.restore(); });
+  x.textAlign = "center"; x.textBaseline = "alphabetic";
+  x.fillStyle = GOLD; x.font = `700 24px ${F}`; x.fillText("C E R T I F I C A T E   O F   C O M P L E T I O N", W / 2, 150);
+  x.fillStyle = INK; x.font = `800 96px ${M}`; x.fillText("修　了　証", W / 2, 260);
+  const nm = (name || "").trim();
+  let fz = 60; x.font = `700 ${fz}px ${M}`;
+  const nt = nm ? `${nm}　さん` : "　　　　　　　　　さん";
+  while (x.measureText(nt).width > W - 520 && fz > 34) { fz -= 4; x.font = `700 ${fz}px ${M}`; }
+  x.fillText(nt, W / 2, 372);
+  x.strokeStyle = INK; x.lineWidth = 1.5; x.beginPath(); x.moveTo(W / 2 - 330, 394); x.lineTo(W / 2 + 330, 394); x.stroke();
+  x.font = `500 31px ${M}`; x.fillStyle = INK;
+  const body = `あなたは「だまされ体験ラボ」の学びのコース「${c.n}」の${st.list.length}本の話をすべて体験し、だましのサインに気づき、断り、相談する力を身につけました。その努力をたたえ、ここに証します。`;
+  let line = "", y = 470; const lw = W - 440;
+  for (const ch of body) { if (x.measureText(line + ch).width > lw) { x.fillText(line, W / 2, y); line = ch; y += 52; } else line += ch; }
+  if (line) x.fillText(line, W / 2, y);
+  /* 体験した話の名前を、小さく並べる（多いときは12本まで） */
+  const tags = st.list.slice(0, 12).map((s) => s.tag), more = st.list.length - tags.length;
+  const tt = tags.join("・") + (more > 0 ? `　ほか${more}本` : "");
+  y += 74; x.fillStyle = GOLD; x.font = `700 22px ${F}`; x.fillText("— 体験した話 —", W / 2, y);
+  x.fillStyle = "#5B6777"; x.font = `500 23px ${F}`; line = ""; y += 42;
+  for (const ch of tt) { if (x.measureText(line + ch).width > W - 480) { x.fillText(line, W / 2, y); line = ch; y += 36; if (y > H - 250) break; } else line += ch; }
+  if (line && y <= H - 250) x.fillText(line, W / 2, y);
+  /* 下の段：日付と記録・印 */
+  const d = new Date();
+  x.textAlign = "left"; x.fillStyle = GOLD; x.font = `700 22px ${F}`; x.fillText("修了日", 150, H - 190); x.fillText("気づけたサイン", 150, H - 128);
+  x.fillStyle = INK; x.font = `700 32px ${F}`; x.fillText(`${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`, 300, H - 188); x.fillText(`${st.caught} / ${st.met}`, 330, H - 126);
+  const sx = W - 230, sy = H - 190;
+  x.fillStyle = "rgba(206,58,46,.9)"; x.beginPath(); x.arc(sx, sy, 78, 0, Math.PI * 2); x.fill();
+  x.strokeStyle = PAPER; x.lineWidth = 3; x.beginPath(); x.arc(sx, sy, 66, 0, Math.PI * 2); x.stroke();
+  x.fillStyle = PAPER; x.textAlign = "center"; x.font = `800 40px ${M}`; x.fillText("見抜", sx, sy - 4); x.fillText("修了", sx, sy + 42);
+  x.fillStyle = "#5B6777"; x.font = `500 20px ${F}`; x.fillText("だまされ体験ラボ　｜　困ったときは 消費者ホットライン 188・警察相談 #9110", W / 2, H - 82);
+}
+function openCert(id) {
+  const c = COURSES.find((k) => k.id === id); if (!c) return;
+  let m = $("ceModal");
+  if (!m) { m = document.createElement("div"); m.className = "modal ce-modal"; m.id = "ceModal"; m.innerHTML = `<div class="sheet ce-sheet" role="dialog" aria-modal="true" aria-labelledby="ceTitle" id="ceSheet"></div>`; document.body.appendChild(m); m.addEventListener("keydown", (e) => { if (e.key === "Escape") closeCert(); }); m.addEventListener("click", (e) => { if (e.target === m) closeCert(); }); }
+  const back = document.activeElement;
+  $("ceSheet").innerHTML = `<div class="tape"></div><div class="in"><div class="ce-head"><h2 id="ceTitle">修了証｜${esc(c.n)}</h2><button class="c8-x ce-x" type="button" id="ceClose" aria-label="閉じる">×</button></div>
+    <canvas id="ceCv" width="1600" height="1130" aria-label="修了証のプレビュー：${esc(c.n)}"></canvas>
+    <label class="pl-field"><span>名前（入れなくてもOK。この端末の中だけに保存されます）</span><input id="ceName" type="text" maxlength="14" value="${esc(store.get("dl3-certname", "") || "")}" placeholder="例：みぬけ たろう"></label>
+    <div class="sharebtns"><button class="btn small primary" type="button" id="ceSave">画像を保存</button><button class="btn small" type="button" id="cePrint">印刷する</button></div></div>`;
+  m.hidden = false;
+  const draw = () => drawCourseCert($("ceCv"), c, $("ceName").value);
+  $("ceName").oninput = () => { store.set("dl3-certname", $("ceName").value.trim()); draw(); };
+  const done = () => { store.set("dl3-cert", true); setTimeout(checkAch, 800); };
+  $("ceSave").onclick = () => { done(); const a = document.createElement("a"); a.href = $("ceCv").toDataURL("image/png"); a.download = `shuryosho-${c.id}.png`; a.click(); };
+  $("cePrint").onclick = () => { done();
+    const url = $("ceCv").toDataURL("image/png"), ps = $("printSheet") || document.body.appendChild(Object.assign(document.createElement("div"), { id: "printSheet" }));
+    ps.innerHTML = `<img src="${url}" alt="修了証" style="width:100%;max-width:270mm;display:block;margin:0 auto">`;
+    window.print();
+  };
+  $("ceClose").onclick = closeCert;
+  m._back = back;
+  draw(); (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => { if (!m.hidden) draw(); });
+  $("ceClose").focus({ preventScroll: true });
+}
+function closeCert() { const m = $("ceModal"); if (!m) return; m.hidden = true; if (m._back && document.body.contains(m._back)) m._back.focus({ preventScroll: true }); }
+document.addEventListener("click", (e) => { const b = e.target.closest && e.target.closest("[data-cert]"); if (!b) return; e.preventDefault(); openCert(b.dataset.cert); });
 /* ===== 188に相談する練習：相談員の質問に答えて、伝わる話し方と「相談メモ」を身につける ===== */
 let CL = null;
 function callSteps(sc, end) {
@@ -893,6 +976,7 @@ function achievements() {
     { id: "note", ic: "記", n: "ふりかえり名人", d: "気づきメモを5つの話で残す", got: Object.keys(store.get("dl3-notes", {}) || {}).length >= 5 },
     { id: "wana", ic: "罠", n: "ワナ見やぶり", d: "画面のワナさがしで30点以上", got: (store.get("dl3-wana", 0) || 0) >= 30 },
     { id: "pledge", ic: "約", n: "わが家の約束", d: "守りの約束カードを保存か印刷する", got: !!store.get("dl3-pledged", false) },
+    { id: "cert", ic: "証", n: "修了証", d: "コースの修了証を保存か印刷する", got: !!store.get("dl3-cert", false) },
     { id: "call", ic: "相", n: "相談の練習生", d: "「188に相談する練習」を最後まで終える", got: (store.get("dl3-call", 0) || 0) >= 1 }
   ];
 }
@@ -1078,6 +1162,7 @@ function renderZukan() {
   ${castBookHTML()}
   ${achHTML()}
   ${wearHTML()}
+  ${certHTML()}
   ${journalHTML()}
   <div class="zk-tools" id="zkTools" role="group" aria-label="図鑑をしぼりこむ">
     <div class="frow"><span class="frow-h">系統</span>${[["all", "すべて", all.length], ...catRows.map((r) => [r.ck, r.c.n, r.items.length])].map(([k, n, c]) => `<button class="chipbtn sm" type="button" data-zc="${k}" aria-pressed="${zkCat === k}">${k !== "all" ? `<span aria-hidden="true">${CATS[k].ic}</span>` : ""}${esc(n)}<small>${c}</small></button>`).join("")}</div>
@@ -1103,7 +1188,7 @@ function renderZukan() {
   const zkGo = () => { renderZukan(); const t = $("zkTools"); if (t) t.scrollIntoView({ block: "start" }); };
   document.querySelectorAll("[data-zc]").forEach((b) => (b.onclick = () => { zkCat = b.dataset.zc; zkGo(); }));
   document.querySelectorAll("[data-zs]").forEach((b) => (b.onclick = () => { zkSt = b.dataset.zs; zkGo(); }));
-  bindCastBook(); bindWear();
+  bindCastBook(); bindWear(); if ($("cert")) bindCourses($("cert"));
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => drawShape(catRows));
 }
 
@@ -2511,7 +2596,7 @@ function openResult(id, n, isNewEnd) {
     ${S.nudges ? `<p class="hintnote nudge-note">${mascot("sm")}相手は ${S.nudges} 回、返事をせかしてきました。${n.end === "bad" ? "せかされると、考える時間がなくなります。次は「時間をおく」も使ってみよう。" : "せかされても、自分のペースで考えられました。"}</p>` : ""}
     ${S.evidence ? `<p class="hintnote">${mascot("sm")}記録を ${S.evidence} 件残しました。${n.end === "safe" ? "何もなくても、記録はあとで役に立つことがあります。" : "相談するとき、この記録が大事な証拠になります。"}</p>` : ""}
     ${ex ? `<div class="co-res exam-res"><span class="eyebrow">${ex.note}</span><b>${EXAM.i + 1 < EXAM.ids.length ? "この調子で、次の話へ" : "3話そろいました。結果を見よう"}</b><span class="co-bar" aria-hidden="true"><i style="width:${Math.round((EXAM.i + 1) / EXAM.ids.length * 100)}%"></i></span></div>` : ""}
-    ${cn ? `<div class="co-res">${cn.s ? `<span class="eyebrow">コース「${esc(cn.c.n)}」</span><b>${cn.done} / ${cn.all} 本クリア</b><span>次は「${esc(cn.s.tag)}」の話です。</span>` : `<span class="eyebrow">コース修了</span><b>「${esc(cn.c.n)}」を全部体験しました</b><span>ホームの「学びのコース」で、ほかのコースにも挑戦してみよう。</span>`}<span class="co-bar" aria-hidden="true"><i style="width:${Math.round(cn.done / cn.all * 100)}%"></i></span></div>` : ""}
+    ${cn ? `<div class="co-res">${cn.s ? `<span class="eyebrow">コース「${esc(cn.c.n)}」</span><b>${cn.done} / ${cn.all} 本クリア</b><span>次は「${esc(cn.s.tag)}」の話です。</span>` : `<span class="eyebrow">コース修了</span><b>「${esc(cn.c.n)}」を全部体験しました</b><span>ホームの「学びのコース」で、ほかのコースにも挑戦してみよう。</span><button class="btn small primary ce-res" type="button" data-cert="${cn.c.id}">修了証をつくる</button>`}<span class="co-bar" aria-hidden="true"><i style="width:${Math.round(cn.done / cn.all * 100)}%"></i></span></div>` : ""}
     <div class="rtabs" role="tablist" aria-label="結果の見かた">
       <button type="button" role="tab" id="rtab-0" data-tab="0" aria-selected="true" aria-controls="rpane-0">ふりかえり</button>
       <button type="button" role="tab" id="rtab-1" data-tab="1" aria-selected="false" aria-controls="rpane-1">裏側</button>
