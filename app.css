@@ -2196,3 +2196,21 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 .hm-leg .hm-c { --cell: 12px; }
 :root[data-theme="contrast"] .hm-c.l1, :root[data-theme="contrast"] .hm-c.l2 { background: #8a7a00; }
 :root[data-theme="contrast"] .hm-c.l3, :root[data-theme="contrast"] .hm-c.l4 { background: #FFE600; }
+
+/* ---------- v62 似ている話 ---------- */
+.sim-box { display: grid; gap: 10px; padding: 14px; border-radius: 18px; background: var(--surface-2); border: 1px solid var(--line); }
+.sim-list { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); }
+.sim-card { position: relative; display: grid; gap: 6px; align-content: start; padding: 12px 12px 12px 16px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); color: var(--ink); text-decoration: none; overflow: hidden; transition: transform .15s, border-color .15s; }
+.sim-card::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 5px; background: hsl(var(--gh) 60% var(--g-ls)); }
+.sim-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+.sim-card:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.sim-top { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+.sim-tag { font-size: var(--step--2); font-weight: 700; color: hsl(var(--gh) 60% var(--g-ls)); }
+.sim-done, .sim-new { flex: none; font-size: 10px; font-weight: 700; border-radius: 999px; padding: 1px 8px; }
+.sim-done { color: var(--muted); border: 1px solid var(--line); }
+.sim-new { color: var(--on-accent); background: var(--accent); }
+.sim-card b { font-size: var(--step--1); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.sim-cats { display: flex; flex-wrap: wrap; gap: 4px; }
+.sim-cats i { font-style: normal; display: inline-flex; align-items: center; gap: 4px; padding: 1px 8px 1px 2px; border-radius: 999px; background: var(--surface-2); font-size: 10px; font-weight: 700; color: var(--muted); }
+.sim-cats em { font-style: normal; display: grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; background: var(--band-ink); color: var(--accent); font-size: 9px; }
+@media (prefers-reduced-motion: reduce) { .sim-card { transition: none; } .sim-card:hover { transform: none; } }
