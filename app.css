@@ -2214,3 +2214,25 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 .sim-cats i { font-style: normal; display: inline-flex; align-items: center; gap: 4px; padding: 1px 8px 1px 2px; border-radius: 999px; background: var(--surface-2); font-size: 10px; font-weight: 700; color: var(--muted); }
 .sim-cats em { font-style: normal; display: grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; background: var(--band-ink); color: var(--accent); font-size: 9px; }
 @media (prefers-reduced-motion: reduce) { .sim-card { transition: none; } .sim-card:hover { transform: none; } }
+
+/* ---------- v63 守りの待ち受け ---------- */
+.wp-wrap { display: grid; gap: 20px; grid-template-columns: minmax(0, 260px) minmax(0, 1fr); align-items: start; }
+@media (max-width: 640px) { .wp-wrap { grid-template-columns: 1fr; } .wp-phone { max-width: 230px; margin: 0 auto; } }
+.wp-phone { position: relative; border: 8px solid var(--frame); border-radius: 34px; overflow: hidden; box-shadow: 0 14px 36px rgba(20, 28, 40, .3); background: var(--frame); aspect-ratio: 9 / 16; }
+.wp-phone canvas { display: block; width: 100%; height: 100%; }
+.wp-clock { position: absolute; left: 0; right: 0; top: 9%; display: grid; justify-items: center; color: rgba(255, 255, 255, .92); text-shadow: 0 1px 6px rgba(0, 0, 0, .25); pointer-events: none; mix-blend-mode: difference; }
+.wp-clock b { font-size: clamp(2rem, 9vw, 3.1rem); font-weight: 500; letter-spacing: .02em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.wp-clock small { font-size: 11px; font-weight: 700; }
+.wp-form { display: grid; gap: 14px; align-content: start; }
+.wp-f { border: 0; margin: 0; padding: 0; display: grid; gap: 6px; }
+.wp-f legend { font-size: var(--step--1); font-weight: 700; color: var(--muted); margin-bottom: 6px; }
+.wp-opt { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); cursor: pointer; font-weight: 700; font-size: var(--step--1); }
+.wp-opt:has(input:checked) { border-color: var(--gold); background: var(--accent-soft); }
+.wp-opt input { accent-color: var(--gold); }
+.wp-sw { display: flex; flex-wrap: wrap; gap: 10px; }
+.wp-c { display: grid; justify-items: center; gap: 4px; cursor: pointer; font-size: 11px; font-weight: 700; color: var(--muted); }
+.wp-c input { position: absolute; opacity: 0; pointer-events: none; }
+.wp-c i { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(160deg, var(--a), var(--b)); box-shadow: 0 0 0 1px var(--line); }
+.wp-c:has(input:checked) i { box-shadow: 0 0 0 3px var(--surface), 0 0 0 5px var(--gold); }
+.wp-c:has(input:focus-visible) i { outline: 3px solid var(--accent); outline-offset: 4px; }
+.wp-c:has(input:checked) span { color: var(--ink); }

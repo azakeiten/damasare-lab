@@ -115,12 +115,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "speedup", "kenshin", "portal", "chosaku", "ichi", "qrlogin", "goukaku", "follower", "giftwari", "airdrop", "shiryoku"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "speedup", "kenshin", "portal", "chosaku", "ichi", "qrlogin", "goukaku", "follower", "giftwari", "airdrop", "shiryoku", "sensei"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "share", "gakunen", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi", "sotsuaru", "catch", "taikyo", "hakobi", "battery", "tire"] },
-  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "karakon", "shikijo", "seifuku", "hoshouden", "lease", "shincho", "fanclub", "doukou", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver", "sports", "archive"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "shoumei", "daihitsu", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku", "meikan", "hoikuen", "hojokin", "kaedama", "kogitte", "obhoumon"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "hp", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken", "seinen"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "tablet", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin", "kanpukin", "leaseback", "ninchi", "hochouki", "shinsatsu"] }
+  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "karakon", "shikijo", "seifuku", "hoshouden", "lease", "shincho", "fanclub", "doukou", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver", "sports", "archive", "henpin"] },
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "shoumei", "daihitsu", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku", "meikan", "hoikuen", "hojokin", "kaedama", "kogitte", "obhoumon", "gakusai"] },
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "hp", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken", "seinen", "mujin"] },
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "tablet", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin", "kanpukin", "leaseback", "ninchi", "hochouki", "shinsatsu", "yukioroshi"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -469,6 +469,7 @@ function modesHTML() {
       ["時", "だましが届く時間", "24時間の時計で、手口が届く時間を見る", "#help", null, "clock24", "", null],
       ["点", "メッセージをチェック", "届いたメッセージを貼って、サインに色をつける", "#help", null, "checker", "", null],
       ["相", "188に相談する練習", "相談員の質問に答えて、相談メモを作る", "#home", null, null, "", "call"],
+      ["待", "守りの待ち受け", "ロック画面に置く、守りのひとことの壁紙", "#help", null, "wallpaper", "", null],
       ["約", "守りの約束カード", "家族で決めた約束を、カードにして残す", "#help", null, "pledge", "", null],
       ["授", "授業で使う", "ワークシートや、発表用の画面", "#teach", null, null, "", null]
     ]]
@@ -1020,6 +1021,7 @@ function achievements() {
     { id: "pledge", ic: "約", n: "わが家の約束", d: "守りの約束カードを保存か印刷する", got: !!store.get("dl3-pledged", false) },
     { id: "cert", ic: "証", n: "修了証", d: "コースの修了証を保存か印刷する", got: !!store.get("dl3-cert", false) },
     { id: "days7", ic: "暦", n: "7日の積み重ね", d: "7つの日に、シナリオを体験する", got: new Set([...(store.get("dl3-days", []) || []), ...(store.get("dl3-log", []) || []).map((x) => dayKey(new Date(x.t)))]).size >= 7 },
+    { id: "wp", ic: "待", n: "いつも目に入る守り", d: "守りの待ち受けを保存する", got: !!store.get("dl3-wped", false) },
     { id: "call", ic: "相", n: "相談の練習生", d: "「188に相談する練習」を最後まで終える", got: (store.get("dl3-call", 0) || 0) >= 1 }
   ];
 }
@@ -1260,6 +1262,7 @@ function renderHelp() {
   ${clockHTML()}
   ${familyHTML()}
   ${pledgeHTML()}
+  ${wpHTML()}
   ${phraseBookHTML()}
   ${wordsHTML()}
   <section class="sec" aria-label="断り方">
@@ -1275,6 +1278,7 @@ function renderHelp() {
   </section>`;
   bindPhraseBook();
   bindPledge();
+  bindWp();
   bindChecker();
   bindClock();
   document.querySelectorAll("[data-easybtn]").forEach((b) => (b.onclick = toggleEasy));
@@ -3332,6 +3336,72 @@ function drawPledge() {
   x.fillStyle = "rgba(245,247,250,.55)"; x.font = `500 22px ${F}`; x.textAlign = "center";
   const d = new Date();
   x.fillText(`${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日に決めました　｜　だまされ体験ラボ`, W / 2, H - 92);
+}
+/* ===== 守りの待ち受け：ロック画面に置いておく、ひとことの壁紙をつくる ===== */
+const WP_PHRASES = [
+  ["急かされたら、", "いったん止まる。"],
+  ["うますぎる話は、", "まず疑う。"],
+  ["お金の話は、", "家族に聞いてから。"],
+  ["リンクは押さず、", "公式から確かめる。"],
+  ["「秘密にして」は、", "話していいサイン。"],
+  ["迷ったら、", "188に電話。"]
+];
+const WP_THEMES = {
+  navy:  { n: "紺と金",   bg: ["#14243A", "#0B1522"], ink: "#F5F7FA", ac: "#D6B97F" },
+  dawn:  { n: "あさやけ", bg: ["#3A2340", "#E0866A"], ink: "#FFF6EE", ac: "#FFD27A" },
+  mint:  { n: "ミント",   bg: ["#E3F4EE", "#9ED3C3"], ink: "#123B33", ac: "#0E7A5E" },
+  paper: { n: "和紙",     bg: ["#FBF8F1", "#EFE6D2"], ink: "#1B2534", ac: "#B08A2E" }
+};
+const wpState = () => Object.assign({ p: 0, t: "navy" }, store.get("dl3-wp", {}) || {});
+function wpHTML() {
+  const s = wpState();
+  return `<section class="sec wp-sec" id="wallpaper" aria-label="守りの待ち受け"><div class="sec-h"><h2>守りの待ち受けをつくる</h2><p>スマホのロック画面に、守りのひとことを。あやしい通知が来たとき、まず目に入ります。</p></div>
+    <div class="wp-wrap">
+      <div class="wp-phone"><canvas id="wpCv" width="1080" height="1920" aria-label="待ち受けのプレビュー"></canvas><span class="wp-clock" aria-hidden="true"><b>9:41</b><small>${(() => { const d = new Date(); return `${d.getMonth() + 1}月${d.getDate()}日 ${"日月火水木金土"[d.getDay()]}曜日`; })()}</small></span></div>
+      <div class="wp-form">
+        <fieldset class="wp-f"><legend>ひとこと</legend>${WP_PHRASES.map((p, i) => `<label class="wp-opt"><input type="radio" name="wpP" value="${i}"${s.p === i ? " checked" : ""}><span>${esc(p.join(""))}</span></label>`).join("")}</fieldset>
+        <fieldset class="wp-f"><legend>色</legend><div class="wp-sw">${Object.entries(WP_THEMES).map(([k, t]) => `<label class="wp-c" style="--a:${t.bg[0]};--b:${t.bg[1]}"><input type="radio" name="wpT" value="${k}"${s.t === k ? " checked" : ""}><i aria-hidden="true"></i><span>${esc(t.n)}</span></label>`).join("")}</div></fieldset>
+        <div class="row-btns"><button class="btn small primary" type="button" id="wpSave">画像を保存</button></div>
+        <p class="pl-note">${mascot("sm")}<span>保存した画像を、スマホの設定から「壁紙（ロック画面）」にえらんでください。上のほうは時計が重なるので、ひとことは下に置いています。</span></p>
+      </div>
+    </div></section>`;
+}
+function drawWp() {
+  const cv = $("wpCv"); if (!cv) return;
+  const s = wpState(), t = WP_THEMES[s.t] || WP_THEMES.navy, p = WP_PHRASES[s.p] || WP_PHRASES[0];
+  const x = cv.getContext("2d"), W = 1080, H = 1920, F = '"Zen Kaku Gothic New", "Yu Gothic", sans-serif', M = '"Shippori Mincho", "Yu Mincho", serif';
+  const g = x.createLinearGradient(0, 0, W * 0.4, H); g.addColorStop(0, t.bg[0]); g.addColorStop(1, t.bg[1]);
+  x.fillStyle = g; x.fillRect(0, 0, W, H);
+  /* うすい盾のもよう */
+  x.save(); x.globalAlpha = 0.07; x.fillStyle = t.ink; x.translate(W * 0.78, H * 0.5);
+  x.beginPath(); x.moveTo(0, -260); x.lineTo(220, -170); x.lineTo(200, 90); x.quadraticCurveTo(140, 250, 0, 330); x.quadraticCurveTo(-140, 250, -200, 90); x.lineTo(-220, -170); x.closePath(); x.fill(); x.restore();
+  /* ひとこと（下半分） */
+  x.textAlign = "left"; x.textBaseline = "alphabetic";
+  x.fillStyle = t.ac; x.fillRect(110, 1060, 90, 8);
+  x.fillStyle = t.ink;
+  const fit = (txt, max, size, font) => { let fz = size; x.font = `800 ${fz}px ${font}`; while (x.measureText(txt).width > max && fz > 50) { fz -= 4; x.font = `800 ${fz}px ${font}`; } return fz; };
+  const f1 = fit(p[0], W - 220, 96, M); x.fillText(p[0], 110, 1200);
+  x.fillStyle = t.ac; const f2 = fit(p[1], W - 220, 120, M); x.fillText(p[1], 110, 1200 + Math.max(f1, f2) + 40);
+  /* 下の相談先 */
+  const by = H - 330;
+  x.globalAlpha = 0.9; x.strokeStyle = t.ink; x.lineWidth = 2; x.beginPath(); x.moveTo(110, by); x.lineTo(W - 110, by); x.stroke(); x.globalAlpha = 1;
+  x.fillStyle = t.ink; x.font = `700 34px ${F}`; x.fillText("迷ったら", 110, by + 70);
+  x.font = `900 76px ${F}`; x.fillText("188", 110, by + 160);
+  x.font = `700 30px ${F}`; x.fillText("消費者ホットライン", 300, by + 150);
+  x.textAlign = "right"; x.font = `900 76px ${F}`; x.fillText("#9110", W - 110, by + 160);
+  x.font = `700 26px ${F}`; x.globalAlpha = 0.75; x.fillText("警察相談", W - 110, by + 70); x.globalAlpha = 1;
+}
+function bindWp() {
+  if (!$("wpCv")) return;
+  const save = () => {
+    const p = document.querySelector('input[name="wpP"]:checked'), t = document.querySelector('input[name="wpT"]:checked');
+    store.set("dl3-wp", { p: p ? +p.value : 0, t: t ? t.value : "navy" });
+    drawWp();
+  };
+  document.querySelectorAll('input[name="wpP"], input[name="wpT"]').forEach((r) => (r.onchange = save));
+  $("wpSave").onclick = () => { store.set("dl3-wped", true); setTimeout(checkAch, 800); const a = document.createElement("a"); a.href = $("wpCv").toDataURL("image/png"); a.download = "mamori-machiuke.png"; a.click(); };
+  drawWp();
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(drawWp);
 }
 function bindPledge() {
   if (!$("plCv")) return;
