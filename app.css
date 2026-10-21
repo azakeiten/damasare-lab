@@ -2166,3 +2166,33 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 @media (prefers-reduced-motion: reduce) { .ck-bar { transition: none; } }
 :root[data-theme="contrast"] .ck-bar { stroke: #fff; }
 :root[data-theme="contrast"] .ck-b.on .ck-bar, :root[data-theme="contrast"] .ck-b.top .ck-bar { stroke: #FFE600; }
+
+/* ---------- v61 つづけた日カレンダー ---------- */
+.hm-box { display: grid; gap: 14px; padding: 16px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface); }
+.hm-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.hm-stats div { display: grid; padding: 8px 12px; border-radius: 14px; background: var(--surface-2); }
+.hm-stats b { font-family: var(--font-display); font-weight: 400; font-size: var(--step-2); line-height: 1.2; font-variant-numeric: tabular-nums; }
+.hm-stats div:first-child b { color: var(--gold); }
+.hm-stats span { font-size: var(--step--2); font-weight: 700; color: var(--muted); }
+.hm-scroll { overflow-x: auto; padding-bottom: 4px; }
+.hm-grid { --cell: 14px; --gap: 4px; display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; gap: 4px 6px; width: max-content; margin: 0 auto; }
+.hm-months { grid-column: 2; display: grid; grid-template-columns: repeat(16, var(--cell)); column-gap: var(--gap); font-size: 11px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+.hm-days { grid-column: 1; grid-row: 2; display: grid; grid-template-rows: repeat(7, var(--cell)); row-gap: var(--gap); font-size: 10px; font-weight: 700; color: var(--muted); line-height: var(--cell); }
+.hm-cols { grid-column: 2; grid-row: 2; display: grid; grid-auto-flow: column; grid-auto-columns: var(--cell); column-gap: var(--gap); }
+.hm-col { display: grid; grid-template-rows: repeat(7, var(--cell)); row-gap: var(--gap); }
+.hm-c { display: block; width: var(--cell, 15px); height: var(--cell, 15px); border-radius: 4px; background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--line); }
+.hm-c.l1 { background: color-mix(in srgb, var(--accent) 32%, transparent); box-shadow: none; }
+.hm-c.l2 { background: color-mix(in srgb, var(--accent) 62%, transparent); box-shadow: none; }
+.hm-c.l3 { background: var(--accent); box-shadow: none; }
+.hm-c.l4 { background: var(--gold); box-shadow: none; }
+.hm-c.now { outline: 2px solid var(--ink); outline-offset: 1px; }
+.hm-c.fut { background: transparent; box-shadow: none; }
+@media (min-width: 720px) { .hm-grid { --cell: 22px; --gap: 6px; } }
+@media (min-width: 1000px) { .hm-grid { --cell: 26px; --gap: 6px; } }
+.hm-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.hm-msg { display: flex; align-items: center; gap: 8px; margin: 0; font-size: var(--step--1); font-weight: 700; }
+.hm-msg .mascot { width: 34px; height: 34px; flex: none; }
+.hm-leg { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; color: var(--muted); font-weight: 700; }
+.hm-leg .hm-c { --cell: 12px; }
+:root[data-theme="contrast"] .hm-c.l1, :root[data-theme="contrast"] .hm-c.l2 { background: #8a7a00; }
+:root[data-theme="contrast"] .hm-c.l3, :root[data-theme="contrast"] .hm-c.l4 { background: #FFE600; }

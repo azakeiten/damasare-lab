@@ -116,11 +116,11 @@ function totals() {
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
   { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "speedup", "kenshin", "portal", "chosaku", "ichi", "qrlogin", "goukaku", "follower", "giftwari", "airdrop"] },
-  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "share", "gakunen", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi", "sotsuaru", "catch", "taikyo", "hakobi"] },
+  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "share", "gakunen", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi", "sotsuaru", "catch", "taikyo", "hakobi", "battery"] },
   { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "karakon", "shikijo", "seifuku", "hoshouden", "lease", "shincho", "fanclub", "doukou", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver", "sports"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "shoumei", "daihitsu", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku", "meikan", "hoikuen", "hojokin"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "hp", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "tablet", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin", "kanpukin", "leaseback", "ninchi"] }
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "shoumei", "daihitsu", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku", "meikan", "hoikuen", "hojokin", "kaedama", "kogitte"] },
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "hp", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken", "seinen"] },
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "tablet", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin", "kanpukin", "leaseback", "ninchi", "hochouki"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -149,6 +149,46 @@ function courseNext(sc) {
   return nx ? { c, s: nx, done: list.filter((s) => cleared(s.id)).length, all: list.length } : { c, s: null, done: list.length, all: list.length };
 }
 
+/* ===== つづけた日カレンダー：体験した日を、16週間のマス目に色でならべる ===== */
+function heatHTML() {
+  const log = store.get("dl3-log", []) || [];
+  const by = {};
+  log.forEach((x) => { const k = dayKey(new Date(x.t)); by[k] = (by[k] || 0) + 1; });
+  (store.get("dl3-days", []) || []).forEach((k) => { if (!by[k]) by[k] = 1; });
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const W = 16, start = new Date(today); start.setDate(start.getDate() - today.getDay() - (W - 1) * 7);
+  /* 連続日数：今日（まだなら昨日）からさかのぼる */
+  let stk = 0; const c = new Date(today); if (!by[dayKey(c)]) c.setDate(c.getDate() - 1);
+  while (by[dayKey(c)]) { stk++; c.setDate(c.getDate() - 1); }
+  /* いちばん長い連続 */
+  const keys = Object.keys(by).map((k) => { const [y, m, d] = k.split("-").map(Number); return new Date(y, m - 1, d).getTime(); }).sort((a, b) => a - b);
+  let best = 0, run = 0, prev = null;
+  keys.forEach((t) => { run = prev != null && Math.round((t - prev) / 864e5) === 1 ? run + 1 : 1; best = Math.max(best, run); prev = t; });
+  const lv = (n) => (n >= 5 ? 4 : n >= 3 ? 3 : n >= 2 ? 2 : n ? 1 : 0);
+  const cols = [], months = [];
+  for (let w = 0; w < W; w++) {
+    const cells = [];
+    for (let d = 0; d < 7; d++) {
+      const day = new Date(start); day.setDate(start.getDate() + w * 7 + d);
+      if (d === 0 && (w === 0 || day.getDate() <= 7)) months.push([w, `${day.getMonth() + 1}月`]);
+      const fut = day > today, n = by[dayKey(day)] || 0;
+      cells.push(fut ? `<i class="hm-c fut" aria-hidden="true"></i>` : `<i class="hm-c l${lv(n)}${+day === +today ? " now" : ""}" title="${day.getMonth() + 1}月${day.getDate()}日：${n ? `${n}話` : "なし"}"></i>`);
+    }
+    cols.push(`<div class="hm-col">${cells.join("")}</div>`);
+  }
+  const msg = !keys.length ? "1本体験すると、今日のマスに色がつきます。" : stk >= 7 ? `${stk}日つづいています。見抜く力が、くらしの一部になってきました。` : stk >= 2 ? `${stk}日つづいています。明日も1話、どうですか？` : by[dayKey(today)] ? "今日も体験しました。明日もつづけて、連続記録をのばそう。" : "今日はまだです。1話3分から。";
+  const active = Object.keys(by).length;
+  return `<section class="sec hm-sec" id="heat" aria-label="つづけた日カレンダー"><div class="sec-h"><h2>つづけた日カレンダー</h2><p>体験した日に色がつきます。毎日少しずつが、いちばんの守りです。</p></div>
+    <div class="hm-box">
+      <div class="hm-stats"><div><b>${stk}</b><span>日連続</span></div><div><b>${best}</b><span>最長の連続</span></div><div><b>${active}</b><span>体験した日</span></div></div>
+      <div class="hm-scroll"><div class="hm-grid" role="img" aria-label="過去${W}週間の体験した日：${active}日、連続${stk}日">
+        <div class="hm-months" aria-hidden="true">${months.map(([w, m]) => `<span style="grid-column:${w + 1}">${m}</span>`).join("")}</div>
+        <div class="hm-days" aria-hidden="true"><span></span><span>月</span><span></span><span>水</span><span></span><span>金</span><span></span></div>
+        <div class="hm-cols">${cols.join("")}</div></div></div>
+      <div class="hm-foot"><p class="hm-msg">${mascot("sm")}<span>${esc(msg)}</span></p>
+        <span class="hm-leg" aria-hidden="true">少<i class="hm-c l0"></i><i class="hm-c l1"></i><i class="hm-c l2"></i><i class="hm-c l3"></i><i class="hm-c l4"></i>多</span></div>
+    </div></section>`;
+}
 /* ふりかえり帳：体験の記録を、新しい順に */
 function logPlay(sc, id, n, caught, missed) {
   const log = store.get("dl3-log", []) || [];
@@ -421,6 +461,7 @@ function modesHTML() {
       ["顔", "相手の人物帳", "これまでに出会った「相手」", "#zukan", null, "castbook", `${met}/${SCENARIOS.length}`, null],
       ["形", "守りのかたち", "見抜きのレーダーと、あなたの守りのタイプ", "#zukan", null, "shape", "", null],
       ["章", "称号", "体験を重ねて集める", "#zukan", null, null, `${got}/${ach.length}`, null],
+      ["日", "つづけた日カレンダー", "体験した日に色がつく、16週間のマス目", "#zukan", null, "heat", "", null],
       ["着", "ミヌケの着せかえ", "レベルで手に入るアクセサリー", "#zukan", null, "wear", "", null],
       ["証", "コースの修了証", "コースを修了したら、名前入りの修了証", "#zukan", null, "cert", `${COURSES.filter((c) => courseOf(c).every((s) => cleared(s.id))).length}/${COURSES.length}`, null]
     ]],
@@ -978,6 +1019,7 @@ function achievements() {
     { id: "wana", ic: "罠", n: "ワナ見やぶり", d: "画面のワナさがしで30点以上", got: (store.get("dl3-wana", 0) || 0) >= 30 },
     { id: "pledge", ic: "約", n: "わが家の約束", d: "守りの約束カードを保存か印刷する", got: !!store.get("dl3-pledged", false) },
     { id: "cert", ic: "証", n: "修了証", d: "コースの修了証を保存か印刷する", got: !!store.get("dl3-cert", false) },
+    { id: "days7", ic: "暦", n: "7日の積み重ね", d: "7つの日に、シナリオを体験する", got: new Set([...(store.get("dl3-days", []) || []), ...(store.get("dl3-log", []) || []).map((x) => dayKey(new Date(x.t)))]).size >= 7 },
     { id: "call", ic: "相", n: "相談の練習生", d: "「188に相談する練習」を最後まで終える", got: (store.get("dl3-call", 0) || 0) >= 1 }
   ];
 }
@@ -1164,6 +1206,7 @@ function renderZukan() {
   ${achHTML()}
   ${wearHTML()}
   ${certHTML()}
+  ${heatHTML()}
   ${journalHTML()}
   <div class="zk-tools" id="zkTools" role="group" aria-label="図鑑をしぼりこむ">
     <div class="frow"><span class="frow-h">系統</span>${[["all", "すべて", all.length], ...catRows.map((r) => [r.ck, r.c.n, r.items.length])].map(([k, n, c]) => `<button class="chipbtn sm" type="button" data-zc="${k}" aria-pressed="${zkCat === k}">${k !== "all" ? `<span aria-hidden="true">${CATS[k].ic}</span>` : ""}${esc(n)}<small>${c}</small></button>`).join("")}</div>
