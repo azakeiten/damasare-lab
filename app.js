@@ -116,11 +116,11 @@ function totals() {
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
   { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "speedup", "kenshin", "portal", "chosaku", "ichi", "qrlogin", "goukaku", "follower", "giftwari", "airdrop", "shiryoku", "sensei"] },
-  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "share", "gakunen", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi", "sotsuaru", "catch", "taikyo", "hakobi", "battery", "tire"] },
-  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "karakon", "shikijo", "seifuku", "hoshouden", "lease", "shincho", "fanclub", "doukou", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver", "sports", "archive", "henpin"] },
+  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "share", "gakunen", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi", "sotsuaru", "catch", "taikyo", "hakobi", "battery", "tire", "carshare"] },
+  { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "karakon", "shikijo", "seifuku", "hoshouden", "lease", "shincho", "fanclub", "doukou", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver", "sports", "archive", "henpin", "cutmodel"] },
   { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "shoumei", "daihitsu", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku", "meikan", "hoikuen", "hojokin", "kaedama", "kogitte", "obhoumon", "gakusai"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "hp", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken", "seinen", "mujin"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "tablet", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin", "kanpukin", "leaseback", "ninchi", "hochouki", "shinsatsu", "yukioroshi"] }
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "hp", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken", "seinen", "mujin", "kujibiki", "souzoku"] },
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "tablet", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin", "kanpukin", "leaseback", "ninchi", "hochouki", "shinsatsu", "yukioroshi", "atm"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -467,6 +467,7 @@ function modesHTML() {
     ]],
     ["くらしで使う", [
       ["時", "だましが届く時間", "24時間の時計で、手口が届く時間を見る", "#help", null, "clock24", "", null],
+      ["止", "立ち止まりフローチャート", "6つの質問で、いま止まるべきかを点検", "#help", null, "flow", "", null],
       ["点", "メッセージをチェック", "届いたメッセージを貼って、サインに色をつける", "#help", null, "checker", "", null],
       ["相", "188に相談する練習", "相談員の質問に答えて、相談メモを作る", "#home", null, null, "", "call"],
       ["待", "守りの待ち受け", "ロック画面に置く、守りのひとことの壁紙", "#help", null, "wallpaper", "", null],
@@ -1022,6 +1023,7 @@ function achievements() {
     { id: "cert", ic: "証", n: "修了証", d: "コースの修了証を保存か印刷する", got: !!store.get("dl3-cert", false) },
     { id: "days7", ic: "暦", n: "7日の積み重ね", d: "7つの日に、シナリオを体験する", got: new Set([...(store.get("dl3-days", []) || []), ...(store.get("dl3-log", []) || []).map((x) => dayKey(new Date(x.t)))]).size >= 7 },
     { id: "wp", ic: "待", n: "いつも目に入る守り", d: "守りの待ち受けを保存する", got: !!store.get("dl3-wped", false) },
+    { id: "flow", ic: "止", n: "立ち止まる力", d: "立ち止まりフローチャートを最後まで答える", got: !!store.get("dl3-flowed", false) },
     { id: "call", ic: "相", n: "相談の練習生", d: "「188に相談する練習」を最後まで終える", got: (store.get("dl3-call", 0) || 0) >= 1 }
   ];
 }
@@ -1244,6 +1246,7 @@ function renderHelp() {
   <div class="help-hero bleed b-hero"><div class="eyebrow">IF SOMETHING HAPPENS</div><h1>困ったら、ひとりで抱えない</h1>
     <p style="color:var(--muted)">だまされたのは恥ずかしいことではありません。早く相談するほど、取れる手段が増えます。迷ったら、まず188へ。</p></div>
   ${checkerHTML()}
+  ${flowHTML()}
   <div class="calls">
     <div class="call"><span class="eyebrow">消費者ホットライン</span><div class="num">188</div><p>局番なし。近くの消費生活センターにつながります。契約・解約・お金のトラブル全般。「いやや！」で覚えよう。</p></div>
     <div class="call"><span class="eyebrow">警察相談専用電話</span><div class="num">#9110</div><p>詐欺かもしれない、脅されている、個人情報を悪用されたかも、というとき。緊急のときは110番。</p></div>
@@ -1280,6 +1283,7 @@ function renderHelp() {
   bindPledge();
   bindWp();
   bindChecker();
+  bindFlow();
   bindClock();
   document.querySelectorAll("[data-easybtn]").forEach((b) => (b.onclick = toggleEasy));
   document.querySelectorAll("[data-voicebtn]").forEach((b) => (b.onclick = toggleVoice));
@@ -3226,6 +3230,49 @@ function checkMsg(text) {
   html += esc(text.slice(p));
   const cats = [...new Set(keep.map((h) => h.cat))];
   return { html, cats, keep };
+}
+/* ===== 立ち止まりフローチャート：いま来ている話を、6つの質問で点検する ===== */
+const FLOW_Q = [
+  { c: "kane",    q: "お金・電子マネー・ポイントを払う、送る話が出ている？", y: "お金の話が出た" },
+  { c: "isogi",   q: "「今日だけ」「今すぐ」「期限まで」と急かされている？", y: "急かされている" },
+  { c: "himitsu", q: "「だれにも言わないで」「別のアプリで」と言われた？", y: "秘密・場所を移す" },
+  { c: "kojin",   q: "名前・住所・写真・パスワード・番号を聞かれた？", y: "個人情報を聞かれた" },
+  { c: "umai",    q: "「必ずもうかる」「無料」「あなただけ」など、話がうますぎる？", y: "うますぎる話" },
+  { c: "check",   q: "相手が本物か、公式のサイトや窓口で、自分で確かめた？", y: "自分で確かめた", inv: true }
+];
+let FL = [];
+function flowVerdict() {
+  const yes = FL.filter((a, i) => !FLOW_Q[i].inv && a).length, checked = FL[5] === true;
+  const risk = yes + (checked ? 0 : 1);
+  if (risk >= 3) return { k: "stop", h: "いったん止まろう", d: "あやしいサインがいくつも重なっています。返事も支払いもしないで、家族やまわりの大人に、画面を見せて相談しよう。", act: ["返事・支払い・入力をしない", "画面を保存する", "家族や先生に見せる", "188か#9110に相談"] };
+  if (risk >= 1) return { k: "check", h: "確かめてから動こう", d: "気になるサインがあります。相手のことを、公式のサイトや窓口で自分で確かめるまで、決めないでおこう。", act: ["公式サイトを自分で検索する", "家族に一言話す", "その場で決めない"] };
+  return { k: "ok", h: "いまのところ、大きなサインはなし", d: "それでも、話が変わったら、もう一度この質問をしてみよう。「お金」「急かす」が出てきたら、そこで止まる。", act: ["話が変わったら、もう一度点検", "迷ったら家族に一言"] };
+}
+function flowHTML() {
+  const i = FL.length, done = i >= FLOW_Q.length;
+  const steps = FLOW_Q.map((s, k) => {
+    const a = FL[k], st = k < i ? (s.inv ? (a ? "good" : "warn") : (a ? "warn" : "good")) : k === i ? "now" : "todo";
+    return `<li class="fl-step ${st}"><span class="fl-dot" aria-hidden="true">${k < i ? (st === "warn" ? "!" : "✓") : k + 1}</span>
+      <div class="fl-body"><p class="fl-q">${esc(s.q)}</p>
+      ${k < i ? `<span class="fl-a">${a ? "はい" : "いいえ"}${st === "warn" ? `<em>${esc(s.inv ? "まだ確かめていない" : s.y)}</em>` : ""}</span>` : k === i ? `<div class="fl-btns"><button class="btn small" type="button" data-fl="1">はい</button><button class="btn small" type="button" data-fl="0">いいえ</button></div>` : ""}</div></li>`;
+  }).join("");
+  let res = "";
+  if (done) {
+    const v = flowVerdict(), cats = FLOW_Q.filter((s, k) => !s.inv && FL[k]).map((s) => s.c);
+    const recs = cats.length ? SCENARIOS.filter((sc) => !sc.gen).map((sc) => { const cs = new Set(Object.values(sc.signs).map((x) => x.cat)); return { sc, n: cats.filter((c) => cs.has(c)).length + Math.random() * 0.5 }; }).sort((a, b) => b.n - a.n).slice(0, 3) : [];
+    res = `<div class="fl-res ${v.k}" role="status"><span class="fl-badge">${v.k === "stop" ? "STOP" : v.k === "check" ? "CHECK" : "OK"}</span><b>${esc(v.h)}</b><p>${esc(v.d)}</p>
+      <ol class="fl-act">${v.act.map((a) => `<li>${esc(a)}</li>`).join("")}</ol>
+      ${recs.length ? `<div class="fl-recs"><span>このサインが出てくる話で、練習しておこう</span>${recs.map(({ sc }) => `<a href="#${sc.id}">${esc(sc.tag)}</a>`).join("")}</div>` : ""}
+      <div class="row-btns"><button class="btn small" type="button" id="flReset">はじめから</button>${v.k !== "ok" ? `<a class="btn small primary" href="tel:188">188に電話する</a>` : ""}</div></div>`;
+  }
+  return `<section class="sec fl-sec" id="flow" aria-label="立ち止まりフローチャート"><div class="sec-h"><h2>立ち止まりフローチャート</h2><p>いま来ているメッセージや電話、お誘い。6つの質問に「はい・いいえ」で答えると、止まるべきかがわかります。</p></div>
+    <div class="fl-box"><ol class="fl-steps">${steps}</ol>${res}</div></section>`;
+}
+function bindFlow() {
+  const sec = $("flow"); if (!sec) return;
+  const re = (focusSel) => { const t = document.createElement("div"); t.innerHTML = flowHTML(); $("flow").replaceWith(t.firstElementChild); bindFlow(); const f = document.querySelector(focusSel); if (f) f.focus({ preventScroll: true }); };
+  sec.querySelectorAll("[data-fl]").forEach((b) => (b.onclick = () => { FL.push(b.dataset.fl === "1"); if (FL.length >= FLOW_Q.length) { store.set("dl3-flowed", true); setTimeout(checkAch, 600); } re(FL.length >= FLOW_Q.length ? "#flReset" : "#flow [data-fl]"); }));
+  if ($("flReset")) $("flReset").onclick = () => { FL = []; re("#flow [data-fl]"); };
 }
 function checkerHTML() {
   return `<section class="sec checker" id="checker" aria-label="届いたメッセージをチェック">
