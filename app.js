@@ -116,11 +116,11 @@ function totals() {
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
   { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "speedup", "kenshin", "portal", "chosaku", "ichi", "qrlogin", "goukaku", "follower", "giftwari", "airdrop", "shiryoku", "sensei"] },
-  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "share", "gakunen", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi", "sotsuaru", "catch", "taikyo", "hakobi", "battery", "tire", "carshare"] },
+  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "share", "gakunen", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi", "sotsuaru", "catch", "taikyo", "hakobi", "battery", "tire", "carshare", "petsagashi"] },
   { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "karakon", "shikijo", "seifuku", "hoshouden", "lease", "shincho", "fanclub", "doukou", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver", "sports", "archive", "henpin", "cutmodel"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "shoumei", "daihitsu", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku", "meikan", "hoikuen", "hojokin", "kaedama", "kogitte", "obhoumon", "gakusai"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "hp", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken", "seinen", "mujin", "kujibiki", "souzoku"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "tablet", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin", "kanpukin", "leaseback", "ninchi", "hochouki", "shinsatsu", "yukioroshi", "atm"] }
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "shoumei", "daihitsu", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku", "meikan", "hoikuen", "hojokin", "kaedama", "kogitte", "obhoumon", "gakusai", "programming", "shashinkan"] },
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "hp", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken", "seinen", "mujin", "kujibiki", "souzoku", "classt"] },
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "tablet", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin", "kanpukin", "leaseback", "ninchi", "hochouki", "shinsatsu", "yukioroshi", "atm", "eiei"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -1474,8 +1474,9 @@ function openScenario(id) {
     playNode(sc.start);
   };
   showLock(sc);
+  showOpening(sc);
   $("goBtn").onclick = () => {
-    hideLock();
+    hideLock(); closeOpening(true);
     if (store.get("dl3-coach2", false)) return begin();
     showCoach(begin);
   };
@@ -1510,6 +1511,37 @@ function lockHTML(sc) {
     ${story}
     <span class="lk-hint">通知をタップして、ひらく</span>
   </div>`;
+}
+/* ===== オープニング：話のはじまりに、事件ファイルのようなタイトルカードを出す（押すとすぐ閉じる） ===== */
+let OPEN_T = null;
+function showOpening(sc) {
+  closeOpening(true);
+  if (prefs.easy || sc.gen) return;
+  const no = String(SCENARIOS.indexOf(sc) + 1).padStart(3, "0"), g = GENRES[sc.genre], seen = (prog(sc.id).plays || 0) > 0;
+  const chars = [...sc.title].map((ch, i) => `<span style="--i:${i}">${esc(ch)}</span>`).join("");
+  $("screen").insertAdjacentHTML("beforeend", `<div class="opening${S.honne ? " honne" : ""}${seen ? " quick" : ""}" id="opening" role="button" tabindex="0" aria-label="${esc(sc.title)}。押すと始まります" style="--gh:${g.h}">
+    <div class="op-grain" aria-hidden="true"></div>
+    <div class="op-top"><span class="op-file">CASE FILE</span><span class="op-no">No.${no}</span></div>
+    <div class="op-mid">
+      <span class="op-tag">${esc(g.n)}｜${esc(sc.tag)}</span>
+      <h2 class="op-title">${chars}</h2>
+      <span class="op-line" aria-hidden="true"></span>
+      <div class="op-meta"><span><small>あなたは</small>${esc(ROLES[roleOf(sc)] || "")}</span><span><small>時刻</small>${esc(sc.clock || "")}</span><span><small>サイン</small>${Object.keys(sc.signs).length}つ</span></div>
+    </div>
+    <div class="op-foot">${S.honne ? `<b class="op-honne">本音モード</b>` : `<span>だまされる前に、気づけるか。</span>`}<i>タップで始める</i></div>
+  </div>`);
+  const el = $("opening");
+  el.onclick = () => closeOpening();
+  el.onkeydown = (e) => { if (e.key === "Enter" || e.key === " " || e.key === "Escape") { e.preventDefault(); closeOpening(); } };
+  const ms = reduced ? 900 : seen ? 1300 : 2600;
+  OPEN_T = setTimeout(() => closeOpening(), ms * Math.max(0.35, TEMPO[prefs.tempo] || 1));
+}
+function closeOpening(now) {
+  clearTimeout(OPEN_T); OPEN_T = null;
+  const el = $("opening"); if (!el) return;
+  if (now || reduced) return el.remove();
+  el.classList.add("out"); el.onclick = null;
+  setTimeout(() => el.remove(), 420);
 }
 function showLock(sc) {
   hideLock(true);
