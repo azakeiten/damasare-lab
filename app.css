@@ -2362,3 +2362,17 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 @keyframes speakRing { 0% { box-shadow: 0 0 0 0 rgba(76, 197, 150, .7); } 100% { box-shadow: 0 0 0 10px transparent; } }
 @media (prefers-reduced-motion: reduce) { .head.speaking .call-wave i { animation: none; height: 12px; } .head.speaking .avs .av { animation: none; box-shadow: 0 0 0 3px #4CC596; } }
 @media (max-width: 380px) { .call-wave { display: none; } }
+
+/* ---------- v70 アドレスバーの点検 ---------- */
+.url > span:not(.sr), .url mark > span { opacity: 0; animation: urlType .01s calc(var(--i) * 22ms) forwards; }
+@keyframes urlType { to { opacity: 1; } }
+.url .url-sus { background: transparent; color: inherit; text-decoration: underline wavy transparent; text-decoration-thickness: 1.5px; text-underline-offset: 3px;
+  animation: urlSus .5s calc(var(--n) * 22ms + 200ms) forwards; border-radius: 3px; }
+@keyframes urlSus { to { color: var(--danger); text-decoration-color: var(--danger); background: var(--danger-soft); } }
+.url-tip.sus { color: var(--danger); font-weight: 700; }
+.url-tip.sus > span { opacity: 0; animation: opFade .4s calc(var(--n) * 22ms + 500ms) forwards; }
+.url-tip.sus b { display: inline-grid; place-items: center; width: 16px; height: 16px; margin-right: 4px; border-radius: 50%; background: var(--danger); color: #fff; font-size: 11px; }
+@media (prefers-reduced-motion: reduce) {
+  .url > span:not(.sr), .url mark > span, .url-tip.sus > span { animation: none; opacity: 1; }
+  .url .url-sus { animation: none; color: var(--danger); text-decoration-color: var(--danger); background: var(--danger-soft); }
+}

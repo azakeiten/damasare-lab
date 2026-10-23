@@ -115,12 +115,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "speedup", "kenshin", "portal", "chosaku", "ichi", "qrlogin", "goukaku", "follower", "giftwari", "airdrop", "shiryoku", "sensei", "iede", "jidori", "shotaijo", "sumahokashi", "jusho", "kyoju", "jidouonsei"] },
-  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "share", "gakunen", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi", "sotsuaru", "catch", "taikyo", "hakobi", "battery", "tire", "carshare", "petsagashi", "sitter", "host", "escrow"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "speedup", "kenshin", "portal", "chosaku", "ichi", "qrlogin", "goukaku", "follower", "giftwari", "airdrop", "shiryoku", "sensei", "iede", "jidori", "shotaijo", "sumahokashi", "jusho", "kyoju", "jidouonsei", "gameshop"] },
+  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "share", "gakunen", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi", "sotsuaru", "catch", "taikyo", "hakobi", "battery", "tire", "carshare", "petsagashi", "sitter", "host", "escrow", "passport"] },
   { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "karakon", "shikijo", "seifuku", "hoshouden", "lease", "shincho", "fanclub", "doukou", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver", "sports", "archive", "henpin", "cutmodel", "itaba", "cosplay"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "shoumei", "daihitsu", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku", "meikan", "hoikuen", "hojokin", "kaedama", "kogitte", "obhoumon", "gakusai", "programming", "shashinkan", "resort", "gd", "ongaku"] },
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "shoumei", "daihitsu", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku", "meikan", "hoikuen", "hojokin", "kaedama", "kogitte", "obhoumon", "gakusai", "programming", "shashinkan", "resort", "gd", "ongaku", "shutsugan", "tekisei"] },
   { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "hp", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken", "seinen", "mujin", "kujibiki", "souzoku", "classt"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "tablet", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin", "kanpukin", "leaseback", "ninchi", "hochouki", "shinsatsu", "yukioroshi", "atm", "eiei", "genya", "hakajimai", "fusa", "keitaimibarai", "depart"] }
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "tablet", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin", "kanpukin", "leaseback", "ninchi", "hochouki", "shinsatsu", "yukioroshi", "atm", "eiei", "genya", "hakajimai", "fusa", "keitaimibarai", "depart", "popup"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -1633,6 +1633,26 @@ function renderMap() {
 }
 
 let CALL_T = 0;
+/* ===== アドレスバーの点検：URLを1文字ずつ打ち出し、あやしい部分に赤い波線をひく ===== */
+const URL_SUS_TLD = /\.(xyz|top|shop|click|xx|xxx|info|online|site|buzz|live|icu|cc|ru|cn|work)(?=\/|$)/i;
+function urlMarkup(raw) {
+  const u = raw.replace(/^https?:\/\//, "");
+  const ranges = [];
+  const t = URL_SUS_TLD.exec(u); if (t) ranges.push([t.index, t.index + t[0].length]);
+  const re = /(-?x{3,}|-[0-9]{3,}|[0-9]{4,})/gi; let m;
+  while ((m = re.exec(u))) { const a = m.index, b = a + m[0].length; if (!ranges.some(([p, q]) => a < q && b > p)) ranges.push([a, b]); }
+  ranges.sort((p, q) => p[0] - q[0]);
+  const reason = t ? `公式とちがうかも（${t[0]}）` : ranges.length ? "公式とちがうかも（見なれない文字）" : "";
+  let html = "", open = false;
+  [...u].forEach((ch, k) => {
+    const inR = ranges.some(([a, b]) => k >= a && k < b);
+    if (inR && !open) { html += `<mark class="url-sus">`; open = true; }
+    if (!inR && open) { html += "</mark>"; open = false; }
+    html += `<span style="--i:${k}">${esc(ch)}</span>`;
+  });
+  if (open) html += "</mark>";
+  return { html, reason, n: u.length };
+}
 function setHead() {
   const sc = S.sc, scn = S.scene || {};
   const keys = [scn.who, ...(scn.also || [])].filter((k) => k && sc.cast[k]);
@@ -1654,9 +1674,10 @@ function setHead() {
     CALL_T = setInterval(() => { const el = $("callT"); if (!el) return clearInterval(CALL_T); const s = Math.floor((Date.now() - t0) / 1000); el.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; }, 1000);
   } else if (isUrl) {
     /* ブラウザ：アドレスバーにURLを大きく。正しいかどうかは自分で確かめる */
+    const um = urlMarkup(status);
     head.innerHTML = `<div class="urlbar"><span class="url-ic" aria-hidden="true">${svgI('<rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>')}</span>
-      <span class="url"><span class="sr">アドレス：</span>${esc(status.replace(/^https?:\/\//, ""))}</span><span class="app">${esc(scn.app || "")}</span></div>
-      <div class="url-tip">${mascot("sm")}<span>URL（アドレス）も、確かめるポイント</span></div>`;
+      <span class="url" style="--n:${um.n}"><span class="sr">アドレス：</span>${um.html}</span><span class="app">${esc(scn.app || "")}</span></div>
+      <div class="url-tip${um.reason ? " sus" : ""}" style="--n:${um.n}">${mascot("sm")}<span>${um.reason ? `<b>！</b>${esc(um.reason)}` : "URL（アドレス）も、確かめるポイント"}</span></div>`;
   } else {
     head.innerHTML = `<span class="chev" aria-hidden="true">‹</span>${avs}
     <span class="who"><b>${esc(name)}</b>${status ? `<span${/登録されていません|知らない/.test(status) ? ` class="warnst"` : ""}>${esc(status)}</span>` : ""}</span><span class="app">${esc(scn.app || "")}</span>`;
