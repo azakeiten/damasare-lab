@@ -2302,3 +2302,20 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 @media (prefers-reduced-motion: reduce) {
   .opening, .opening *, .op-title span { animation: none !important; opacity: 1 !important; transform: none !important; filter: none !important; }
 }
+
+/* ---------- v66 エンドカード ---------- */
+.endcard { --ec: #D6B97F; position: absolute; inset: 0; z-index: 7; pointer-events: none; display: grid; grid-template-rows: auto 1fr auto; padding: 44px 22px 30px; color: #F5F7FA;
+  background: radial-gradient(90% 60% at 50% 45%, color-mix(in srgb, var(--ec) 22%, transparent), transparent 70%), rgba(7, 12, 20, .9); backdrop-filter: blur(3px); animation: opIn .25s ease-out both; }
+.endcard.e-safe { --ec: #3FBF8F; }
+.endcard.e-partial { --ec: #F2B33D; }
+.endcard.e-bad { --ec: #E5534B; }
+.endcard.out { animation: opOut .4s ease-in both; }
+.ec-file { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; letter-spacing: .22em; color: #D6B97F; }
+.ec-stamp { align-self: center; justify-self: center; display: grid; justify-items: center; gap: 6px; padding: 18px 22px 14px; border: 4px double var(--ec); border-radius: 10px; color: var(--ec); transform: rotate(-8deg);
+  text-shadow: 0 0 18px color-mix(in srgb, var(--ec) 45%, transparent); animation: ecSlam .55s .15s cubic-bezier(.2, 1.4, .4, 1) both; }
+.ec-stamp b { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.5rem, 7vw, 2.1rem); letter-spacing: .1em; line-height: 1; white-space: nowrap; }
+.ec-stamp span { font-size: 15px; font-weight: 800; letter-spacing: .3em; }
+.ec-sub { display: grid; justify-items: center; gap: 4px; font-size: 14px; font-weight: 700; animation: opFade .4s .6s both; }
+.ec-sub small { font-size: 11px; color: #A9B4C2; letter-spacing: .08em; }
+@keyframes ecSlam { 0% { opacity: 0; transform: rotate(-8deg) scale(2.4); filter: blur(4px); } 60% { opacity: 1; transform: rotate(-8deg) scale(.94); filter: none; } 100% { opacity: 1; transform: rotate(-8deg) scale(1); } }
+@media (prefers-reduced-motion: reduce) { .endcard, .endcard * { animation: none !important; } }
