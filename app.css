@@ -2319,3 +2319,17 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 .ec-sub small { font-size: 11px; color: #A9B4C2; letter-spacing: .08em; }
 @keyframes ecSlam { 0% { opacity: 0; transform: rotate(-8deg) scale(2.4); filter: blur(4px); } 60% { opacity: 1; transform: rotate(-8deg) scale(.94); filter: none; } 100% { opacity: 1; transform: rotate(-8deg) scale(1); } }
 @media (prefers-reduced-motion: reduce) { .endcard, .endcard * { animation: none !important; } }
+
+/* ---------- v67 ピンチ演出 ---------- */
+.screen::after { content: ""; position: absolute; inset: 0; z-index: 5; pointer-events: none; border-radius: inherit; opacity: 0; transition: opacity .6s;
+  box-shadow: inset 0 0 0 0 transparent; }
+.screen[data-danger="3"]::after { opacity: 1; box-shadow: inset 0 0 28px 2px rgba(229, 83, 75, .28); animation: pulseDanger 2.4s ease-in-out infinite; }
+.screen[data-danger="4"]::after { opacity: 1; box-shadow: inset 0 0 40px 6px rgba(229, 83, 75, .38); animation: pulseDanger 1.6s ease-in-out infinite; }
+.screen[data-danger="5"]::after { opacity: 1; box-shadow: inset 0 0 56px 10px rgba(229, 83, 75, .5); animation: pulseDanger 1s ease-in-out infinite; }
+.screen.fx-catch::after { opacity: 1; animation: fxCatch .9s ease-out both; }
+.screen.fx-miss::after { opacity: 1; animation: fxMiss .9s ease-out both; }
+@keyframes pulseDanger { 50% { opacity: .45; } }
+@keyframes fxCatch { 0% { box-shadow: inset 0 0 0 3px rgba(214, 185, 127, .95), inset 0 0 50px 8px rgba(255, 210, 120, .45); } 100% { box-shadow: inset 0 0 0 0 transparent; opacity: 0; } }
+@keyframes fxMiss { 0% { box-shadow: inset 0 0 0 3px rgba(229, 83, 75, .9), inset 0 0 60px 12px rgba(229, 83, 75, .45); } 100% { box-shadow: inset 0 0 0 0 transparent; opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .screen[data-danger]::after { animation: none; } }
+:root[data-theme="contrast"] .screen[data-danger="4"]::after, :root[data-theme="contrast"] .screen[data-danger="5"]::after { box-shadow: inset 0 0 0 4px #FF4D4D; }
