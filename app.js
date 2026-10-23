@@ -115,12 +115,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "speedup", "kenshin", "portal", "chosaku", "ichi", "qrlogin", "goukaku", "follower", "giftwari", "airdrop", "shiryoku", "sensei", "iede", "jidori", "shotaijo", "sumahokashi", "jusho"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "speedup", "kenshin", "portal", "chosaku", "ichi", "qrlogin", "goukaku", "follower", "giftwari", "airdrop", "shiryoku", "sensei", "iede", "jidori", "shotaijo", "sumahokashi", "jusho", "kyoju", "jidouonsei"] },
   { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "share", "gakunen", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi", "sotsuaru", "catch", "taikyo", "hakobi", "battery", "tire", "carshare", "petsagashi", "sitter", "host", "escrow"] },
   { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "karakon", "shikijo", "seifuku", "hoshouden", "lease", "shincho", "fanclub", "doukou", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver", "sports", "archive", "henpin", "cutmodel", "itaba", "cosplay"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "shoumei", "daihitsu", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku", "meikan", "hoikuen", "hojokin", "kaedama", "kogitte", "obhoumon", "gakusai", "programming", "shashinkan", "resort", "gd"] },
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "shoumei", "daihitsu", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku", "meikan", "hoikuen", "hojokin", "kaedama", "kogitte", "obhoumon", "gakusai", "programming", "shashinkan", "resort", "gd", "ongaku"] },
   { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "hp", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken", "seinen", "mujin", "kujibiki", "souzoku", "classt"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "tablet", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin", "kanpukin", "leaseback", "ninchi", "hochouki", "shinsatsu", "yukioroshi", "atm", "eiei", "genya", "hakajimai", "fusa"] }
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "tablet", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin", "kanpukin", "leaseback", "ninchi", "hochouki", "shinsatsu", "yukioroshi", "atm", "eiei", "genya", "hakajimai", "fusa", "keitaimibarai", "depart"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -1648,7 +1648,7 @@ function setHead() {
   if (scn.type === "call") {
     /* 通話中の画面：大きなアイコンと、進んでいく通話時間 */
     head.innerHTML = `<div class="call-top">${avs}<span class="who"><b>${esc(name)}</b><span>${esc(status || scn.app || "")}</span></span>
-      <span class="call-t" aria-hidden="true"><i></i><span id="callT">0:00</span></span></div>
+      <span class="call-t" aria-hidden="true"><i></i><span id="callT">0:00</span></span><span class="call-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></div>
       <div class="call-keys" aria-hidden="true"><span>消音</span><span>キーパッド</span><span>スピーカー</span><span class="end">終了</span></div>`;
     const t0 = Date.now();
     CALL_T = setInterval(() => { const el = $("callT"); if (!el) return clearInterval(CALL_T); const s = Math.floor((Date.now() - t0) / 1000); el.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; }, 1000);
@@ -1681,6 +1681,15 @@ function append(html) {
   return el;
 }
 
+/* ===== 通話中の声の波：電話の相手が話しているあいだ、通話画面に音の波が動く ===== */
+let WAVE_T = null;
+function voiceWave(text) {
+  const head = $("head"); if (!head || !head.classList.contains("h-call")) return;
+  clearTimeout(WAVE_T);
+  head.classList.add("speaking");
+  const f = factor();
+  WAVE_T = setTimeout(() => head.classList.remove("speaking"), f > 0 ? Math.min(3600, 700 + text.length * 70) * f : 300);
+}
 async function showItem(it) {
   if (S.run !== RUN) return;
   const [k, a, b] = it;
@@ -1692,6 +1701,7 @@ async function showItem(it) {
     const cont = S.lastFrom === who;
     const slot = cont ? `<span class="av-slot"></span>` : `<span class="av-slot">${av(S.sc, who, true)}</span>`;
     const nm = showName && !cont ? `<span class="nm">${esc(c.n)}</span>` : "";
+    if (scn.type === "call" && (!b || b === scn.who)) voiceWave(a);
     if (factor() > 0) {
       const tEl = append(`<div class="row them typing${cont ? " cont" : ""}">${slot}<span class="bub">${nm}<p><i></i><i></i><i></i></p></span></div>`);
       await pause(Math.min(1500, 350 + a.length * 22));

@@ -2347,3 +2347,18 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 @keyframes tsSpin { from { transform: rotate(180deg); } to { transform: rotate(1980deg); } }
 @keyframes tsLine { to { width: 160px; } }
 @keyframes tsText { from { opacity: 0; letter-spacing: .6em; filter: blur(4px); } to { opacity: 1; letter-spacing: .18em; filter: none; } }
+
+/* ---------- v69 通話中の声の波 ---------- */
+.h-call .who { flex: 1 1 auto; min-width: 0; }
+.call-wave { flex: none; display: inline-flex; align-items: center; gap: 3px; height: 26px; padding: 0 2px; }
+.call-wave i { width: 3px; height: 4px; border-radius: 3px; background: color-mix(in srgb, var(--on-brand) 45%, transparent); transition: height .25s, background .25s; }
+.head.speaking .call-wave i { background: #4CC596; animation: waveBar .9s ease-in-out infinite; }
+.head.speaking .call-wave i:nth-child(2) { animation-delay: -.15s; } .head.speaking .call-wave i:nth-child(3) { animation-delay: -.45s; }
+.head.speaking .call-wave i:nth-child(4) { animation-delay: -.3s; } .head.speaking .call-wave i:nth-child(5) { animation-delay: -.6s; }
+.head.speaking .call-wave i:nth-child(6) { animation-delay: -.2s; } .head.speaking .call-wave i:nth-child(7) { animation-delay: -.5s; }
+.head.speaking .call-wave i:nth-child(8) { animation-delay: -.35s; } .head.speaking .call-wave i:nth-child(9) { animation-delay: -.7s; }
+.head.speaking .avs .av { animation: speakRing .9s ease-out infinite; }
+@keyframes waveBar { 0%, 100% { height: 4px; } 25% { height: 20px; } 50% { height: 9px; } 75% { height: 16px; } }
+@keyframes speakRing { 0% { box-shadow: 0 0 0 0 rgba(76, 197, 150, .7); } 100% { box-shadow: 0 0 0 10px transparent; } }
+@media (prefers-reduced-motion: reduce) { .head.speaking .call-wave i { animation: none; height: 12px; } .head.speaking .avs .av { animation: none; box-shadow: 0 0 0 3px #4CC596; } }
+@media (max-width: 380px) { .call-wave { display: none; } }
