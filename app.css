@@ -2376,3 +2376,25 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
   .url > span:not(.sr), .url mark > span, .url-tip.sus > span { animation: none; opacity: 1; }
   .url .url-sus { animation: none; color: var(--danger); text-decoration-color: var(--danger); background: var(--danger-soft); }
 }
+
+/* ---------- v71 記録のシャッター ---------- */
+.ev-flash { position: absolute; inset: 0; z-index: 6; pointer-events: none; background: #fff; animation: evFlash .45s ease-out both; }
+.ev-flash.memo { background: #FFF3CC; }
+@keyframes evFlash { 0% { opacity: .85; } 100% { opacity: 0; } }
+.ev-shot { position: absolute; z-index: 6; left: 50%; top: 42%; width: 130px; padding: 10px 10px 18px; margin: -60px 0 0 -65px; pointer-events: none; display: grid; gap: 5px;
+  background: #fff; border-radius: 6px; box-shadow: 0 10px 30px rgba(0, 0, 0, .35); transform-origin: center; animation: evFly .85s .1s cubic-bezier(.5, 0, .3, 1) both; }
+.ev-shot i { display: block; height: 6px; border-radius: 3px; background: #D7DEE7; }
+.ev-shot i:nth-child(2) { width: 70%; }
+.ev-shot span { font-size: 9px; line-height: 1.4; color: #1B2534; background: #EEF2F6; border-radius: 6px; padding: 4px 6px; max-height: 3.2em; overflow: hidden; }
+.ev-shot.memo { background: #FFFBEA; }
+.ev-shot.memo i { background: #E8D9A8; }
+@keyframes evFly { 0% { transform: scale(1.4) rotate(-3deg); opacity: 0; } 25% { transform: scale(1) rotate(-3deg); opacity: 1; }
+  100% { transform: translate(140px, -210px) scale(.12) rotate(8deg); opacity: .2; } }
+.ev-badge { position: absolute; z-index: 4; right: 14px; top: 130px; display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px 4px 6px; border-radius: 999px; pointer-events: none;
+  background: var(--band-ink); color: #F5F7FA; font-size: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, .25); }
+.ev-badge .ev-ic { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; background: #4CC596; color: #0B1522; font-size: 11px; }
+.ev-badge b { font-variant-numeric: tabular-nums; font-size: 14px; }
+.ev-badge small { font-size: 10px; color: #A9B4C2; font-weight: 700; }
+.ev-badge.bump { animation: evBump .45s cubic-bezier(.2, 1.6, .4, 1); }
+@keyframes evBump { 0% { transform: scale(1); } 40% { transform: scale(1.25); } 100% { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .ev-badge.bump { animation: none; } }

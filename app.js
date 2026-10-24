@@ -115,12 +115,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "speedup", "kenshin", "portal", "chosaku", "ichi", "qrlogin", "goukaku", "follower", "giftwari", "airdrop", "shiryoku", "sensei", "iede", "jidori", "shotaijo", "sumahokashi", "jusho", "kyoju", "jidouonsei", "gameshop"] },
-  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "share", "gakunen", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi", "sotsuaru", "catch", "taikyo", "hakobi", "battery", "tire", "carshare", "petsagashi", "sitter", "host", "escrow", "passport"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "speedup", "kenshin", "portal", "chosaku", "ichi", "qrlogin", "goukaku", "follower", "giftwari", "airdrop", "shiryoku", "sensei", "iede", "jidori", "shotaijo", "sumahokashi", "jusho", "kyoju", "jidouonsei", "gameshop", "azuke"] },
+  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "share", "gakunen", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi", "sotsuaru", "catch", "taikyo", "hakobi", "battery", "tire", "carshare", "petsagashi", "sitter", "host", "escrow", "passport", "kanojo"] },
   { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "karakon", "shikijo", "seifuku", "hoshouden", "lease", "shincho", "fanclub", "doukou", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver", "sports", "archive", "henpin", "cutmodel", "itaba", "cosplay"] },
-  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "shoumei", "daihitsu", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku", "meikan", "hoikuen", "hojokin", "kaedama", "kogitte", "obhoumon", "gakusai", "programming", "shashinkan", "resort", "gd", "ongaku", "shutsugan", "tekisei"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "hp", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken", "seinen", "mujin", "kujibiki", "souzoku", "classt"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "tablet", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin", "kanpukin", "leaseback", "ninchi", "hochouki", "shinsatsu", "yukioroshi", "atm", "eiei", "genya", "hakajimai", "fusa", "keitaimibarai", "depart", "popup"] }
+  { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "shoumei", "daihitsu", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku", "meikan", "hoikuen", "hojokin", "kaedama", "kogitte", "obhoumon", "gakusai", "programming", "shashinkan", "resort", "gd", "ongaku", "shutsugan", "tekisei", "kyuryo"] },
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "hp", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken", "seinen", "mujin", "kujibiki", "souzoku", "classt", "reform"] },
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "tablet", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin", "kanpukin", "leaseback", "ninchi", "hochouki", "shinsatsu", "yukioroshi", "atm", "eiei", "genya", "hakajimai", "fusa", "keitaimibarai", "depart", "popup", "rokuon"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -1446,7 +1446,7 @@ function openScenario(id) {
   S = { sc, run: RUN, signs: {}, order: {}, scene: null, clock: sc.clock || "12:00", lastFrom: null, skip: false, path: [], hist: [] };
   S.honne = HONNE_NEXT; HONNE_NEXT = false;
   hush();
-  { const ec = $("endcard"); if (ec) ec.remove(); const ts = $("tskip"); if (ts) ts.remove(); }
+  { const ec = $("endcard"); if (ec) ec.remove(); const ts = $("tskip"); if (ts) ts.remove(); const eb = $("evBadge"); if (eb) eb.remove(); }
   $("screen").classList.toggle("honne-on", !!S.honne);
   $("overlay").hidden = true;
   $("log").innerHTML = "";
@@ -2025,6 +2025,21 @@ async function waitUp(n) {
     choicesUI(n, "時間をおくと、冷静になれます。「今すぐ」と言われても、いったん止まってだいじょうぶ。");
   }
 }
+/* ===== 記録の演出：シャッターが光り、写真が画面の角の「記録」に飛んでいく ===== */
+function shutterFx(memo) {
+  const scr = $("screen"); if (!scr) return;
+  let badge = $("evBadge");
+  if (!badge) { scr.insertAdjacentHTML("beforeend", `<div class="ev-badge" id="evBadge" aria-hidden="true"><span class="ev-ic">${memo ? "✎" : "◉"}</span><b>0</b><small>記録</small></div>`); badge = $("evBadge"); }
+  const lg = $("log"); if (lg) badge.style.top = Math.round(lg.getBoundingClientRect().top - scr.getBoundingClientRect().top + 10) + "px";
+  const bump = () => { badge.querySelector("b").textContent = S.evidence || 0; badge.classList.remove("bump"); void badge.offsetWidth; badge.classList.add("bump"); };
+  if (prefs.easy || reduced || factor() === 0) return bump();
+  const last = [...$("log").querySelectorAll(".row.them p, .shot .t")].pop();
+  const txt = last ? last.textContent.slice(0, 40) : "";
+  scr.insertAdjacentHTML("beforeend", `<div class="ev-flash${memo ? " memo" : ""}" aria-hidden="true"></div><div class="ev-shot${memo ? " memo" : ""}" aria-hidden="true"><i></i><i></i><span>${esc(txt)}</span><i></i></div>`);
+  const fl = scr.querySelector(".ev-flash:last-of-type"), shot = scr.querySelector(".ev-shot:last-of-type");
+  setTimeout(() => { fl && fl.remove(); }, 500);
+  setTimeout(() => { shot && shot.remove(); bump(); }, 900);
+}
 async function memoUp(n) {
   const my = S.run;
   lockComposer();
@@ -2032,6 +2047,7 @@ async function memoUp(n) {
   S.evidence = (S.evidence || 0) + 1;
   append(`<div class="act">${inPerson() ? "相手の名前や話したことを、スマホにメモした" : "画面をスクリーンショットして保存した"}</div>`); S.lastFrom = null;
   if (S.evidence === 1) S.xp = (S.xp || 0) + addXP(2);
+  shutterFx(inPerson());
   await pause(400); if (my !== RUN) return;
   append(`<div class="chip ok"><i></i><span>記録を残した（${S.evidence}件）　相談するときの大事な証拠になります</span></div>`);
   await pause(300); if (my !== RUN) return;
