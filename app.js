@@ -115,12 +115,12 @@ function totals() {
 /* 学びのコース：テーマごとに話をまとめて、順番に体験できるようにする */
 const COURSES = [
   { id: "first", n: "はじめての5本", d: "まずはここから。よくあるトラブルを一通り体験します。", s: ["phishing", "side", "ticket", "oreore", "takeover"] },
-  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "speedup", "kenshin", "portal", "chosaku", "ichi", "qrlogin", "goukaku", "follower", "giftwari", "airdrop", "shiryoku", "sensei", "iede", "jidori", "shotaijo", "sumahokashi", "jusho", "kyoju", "jidouonsei", "gameshop", "azuke", "satooya", "shoukin", "gakkouhi", "chubaito", "mynacard"] },
-  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "share", "gakunen", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi", "sotsuaru", "catch", "taikyo", "hakobi", "battery", "tire", "carshare", "petsagashi", "sitter", "host", "escrow", "passport", "kanojo", "roomshare", "minpaku", "ikkatsu"] },
+  { id: "sns", n: "スマホ・SNS編", d: "通知、リンク、DM、アプリ。毎日さわるスマホの中のサイン。", s: ["phishing", "takeover", "teishi", "apk", "qrpay", "aivoice", "shashin", "shindan", "teiki", "kyohaku", "sim", "sakura", "nft", "akarom", "crowd", "diet", "etc", "jewel", "aiapp", "shoken", "kaizoku", "reply", "points", "shareacct", "aikoi", "shomei", "otoshimono", "haishin", "sakujo", "cheat", "machigai", "utsuteru", "isan", "gametomo", "kaiyaku", "zeikin", "wangiri", "uwasa", "nayami", "badge", "vpn", "yt", "kashiacct", "shukudai", "coupon", "narisumashi", "chain", "kakeibo", "group", "code", "speedup", "kenshin", "portal", "chosaku", "ichi", "qrlogin", "goukaku", "follower", "giftwari", "airdrop", "shiryoku", "sensei", "iede", "jidori", "shotaijo", "sumahokashi", "jusho", "kyoju", "jidouonsei", "gameshop", "azuke", "satooya", "shoukin", "gakkouhi", "chubaito", "mynacard", "omamori"] },
+  { id: "hitori", n: "ひとり暮らし準備編", d: "部屋探し、引っ越し、回線、カード。新生活の前に。", s: ["chintai", "kaishu", "denki", "rental", "koukuuken", "kariru", "hikkoshi", "hoshou", "touhin", "water", "gas", "cashback", "kokusei", "gaichu", "takuhai", "koushin", "share", "gakunen", "cardtel", "suido", "kaisen", "wifi", "okuritsuke", "gakuhi", "sotsuaru", "catch", "taikyo", "hakobi", "battery", "tire", "carshare", "petsagashi", "sitter", "host", "escrow", "passport", "kanojo", "roomshare", "minpaku", "ikkatsu", "daikou"] },
   { id: "oshi", n: "推し活編", d: "チケット、応援広告、課金。好きな気持ちにつけこむ話。", s: ["ticket", "nariori", "ouen", "collab", "esports", "chusen", "livecom", "oripa", "replica", "kyoudou", "sotsuryo", "tousan", "misanga", "shirotaku", "photo", "toreka", "kuruma", "karakon", "shikijo", "seifuku", "hoshouden", "lease", "shincho", "fanclub", "doukou", "seiyuu", "uketori", "tatekae", "taikai", "shuuri", "kakin", "gameacct", "liver", "sports", "archive", "henpin", "cutmodel", "itaba", "cosplay", "noruma"] },
   { id: "shinro", n: "進学・就職編", d: "入学、サークル、バイト、就活。新しい環境のはじまりに。", s: ["kyokasho", "buhi", "pcmonitor", "shuppan", "ceo", "taishoku", "konkatsu", "ocampus", "shanai", "sankousho", "option", "kakomon", "volunteer", "shoumei", "daihitsu", "circle", "baito", "offapp", "kenshuhi", "report", "gakuwari", "suisen", "shogakukin", "intern", "eikaiwa", "visa", "coaching", "menkyo", "haitatsu", "shukatsu", "course", "kyozai", "ryugaku", "meikan", "hoikuen", "hojokin", "kaedama", "kogitte", "obhoumon", "gakusai", "programming", "shashinkan", "resort", "gd", "ongaku", "shutsugan", "tekisei", "kyuryo", "kaki"] },
-  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "hp", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken", "seinen", "mujin", "kujibiki", "souzoku", "classt", "reform", "omatome", "bouhan"] },
-  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "tablet", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin", "kanpukin", "leaseback", "ninchi", "hochouki", "shinsatsu", "yukioroshi", "atm", "eiei", "genya", "hakajimai", "fusa", "keitaimibarai", "depart", "popup", "rokuon", "kagi", "futon", "idenshi"] }
+  { id: "okane", n: "お金の話編", d: "投資、借金、出資。「もうかる」「借りられる」の裏側。", s: ["invest", "multi", "yami", "kojinyushi", "genkinka", "pay", "saimu", "kigyo", "meigi", "acctbuy", "kyuyo", "shuuekika", "shutten", "sakurabaito", "shikaku", "wagyu", "gaika", "shinkoku", "hp", "gym", "mansion", "torimodoshi", "yosou", "seikei", "task", "salon", "doga", "dousoukai", "kaigai", "shoukaiya", "kaiga", "naishoku", "otoshidama", "kouryuukai", "dropship", "chiken", "seinen", "mujin", "kujibiki", "souzoku", "classt", "reform", "omatome", "bouhan", "meigiloan", "fukkyu"] },
+  { id: "kazoku", n: "家族を守る編", d: "祖父母や親にかかってくる電話や訪問。あなたが気づいて、伝える番。", s: ["oreore", "kazokuline", "oshikai", "hoken", "saimin", "bousai", "sumaho", "solar", "shoukaki", "kotsumitsudo", "hagaki", "daibiki", "surikae", "apoden", "mikoukai", "loto", "reji", "mizu", "sougi", "shouhinken", "nenkin", "seizen", "haka", "rusuban", "kuyou", "kani", "shinbun", "kaigo", "akiya", "gojokai", "aircon", "tablet", "kidsmodel", "nisepolice", "mynahoken", "tenken", "kyufu", "cardtel", "henkin", "kanpukin", "leaseback", "ninchi", "hochouki", "shinsatsu", "yukioroshi", "atm", "eiei", "genya", "hakajimai", "fusa", "keitaimibarai", "depart", "popup", "rokuon", "kagi", "futon", "idenshi", "terebi"] }
 ];
 const cleared = (id) => !!(progress[id] && (progress[id].ends || []).length);
 const courseOf = (c) => c.s.map(byId).filter(Boolean);
@@ -1446,7 +1446,7 @@ function openScenario(id) {
   S = { sc, run: RUN, signs: {}, order: {}, scene: null, clock: sc.clock || "12:00", lastFrom: null, skip: false, path: [], hist: [] };
   S.honne = HONNE_NEXT; HONNE_NEXT = false;
   hush();
-  { const ec = $("endcard"); if (ec) ec.remove(); const ts = $("tskip"); if (ts) ts.remove(); const eb = $("evBadge"); if (eb) eb.remove(); delete $("composer").dataset.deciding; $("composer").classList.remove("deciding"); const cs = $("csSheet"); if (cs) cs.remove(); }
+  { const ec = $("endcard"); if (ec) ec.remove(); const ts = $("tskip"); if (ts) ts.remove(); const eb = $("evBadge"); if (eb) eb.remove(); delete $("composer").dataset.deciding; $("composer").classList.remove("deciding"); const cs = $("csSheet"); if (cs) cs.remove(); const sf = $("sfSheet"); if (sf) sf.remove(); }
   $("screen").classList.toggle("honne-on", !!S.honne);
   $("overlay").hidden = true;
   $("log").innerHTML = "";
@@ -2000,6 +2000,22 @@ function searchWord(info) {
   const nm = c ? c.n.replace(/（？）|\(\?\)/g, "").trim() : "";
   return (nm && nm.length <= 14 ? nm + " " : "") + S.sc.tag;
 }
+/* ===== 検索の演出：スマホにブラウザが開き、検索語が打ちこまれ、注意喚起の結果が上から並ぶ ===== */
+async function searchFx(q, sg) {
+  if (prefs.easy || reduced || factor() === 0 || S.skip) return;
+  const old = $("sfSheet"); if (old) old.remove();
+  const chars = [...q].map((ch, i) => `<span style="--i:${i}">${esc(ch)}</span>`).join("");
+  $("screen").insertAdjacentHTML("beforeend", `<div class="sf-sheet" id="sfSheet" aria-hidden="true" style="--n:${[...q].length}">
+    <div class="sf-bar"><span class="sf-lens"></span><span class="sf-q">${chars}</span><span class="sf-caret"></span></div>
+    <div class="sf-list">
+      <div class="sf-item warn" style="--k:0"><span class="sf-tag">注意喚起</span><b>${/「/.test(sg.t) ? esc(sg.t) : `『${esc(sg.t)}』`}に注意</b><small>消費生活センター・警察などのお知らせ</small></div>
+      <div class="sf-item" style="--k:1"><span class="sf-tag sns">SNS</span><b>「同じ連絡が来た。無視して正解だった」</b><small>みんなの書きこみ</small></div>
+      <div class="sf-item" style="--k:2"><span class="sf-tag ok">相談</span><b>消費者ホットライン 188・#9110</b><small>公式の相談窓口</small></div>
+    </div></div>`);
+  const sh = $("sfSheet");
+  await pause(2300); if (!sh.isConnected) return;
+  sh.classList.add("out"); setTimeout(() => sh.remove(), 340);
+}
 async function searchUp(n) {
   const my = S.run, info = nodeInfo(n);
   const sg = info.risky ? S.sc.signs[info.risky.sign] : n.choices.map((c) => c.sign && S.sc.signs[c.sign]).find(Boolean);
@@ -2008,6 +2024,7 @@ async function searchUp(n) {
   const q = searchWord(info);
   append(`<div class="act">「${esc(q)}」で検索してみた</div>`); S.lastFrom = null;
   if (!S.didSearch) { S.didSearch = true; S.xp = (S.xp || 0) + addXP(2); }
+  if (sg) { await searchFx(q, sg); if (my !== RUN) return; }
   await pause(600); if (my !== RUN) return;
   const cat = CATS[sg.cat];
   append(`<div class="shot wide search-res"><div class="t">検索結果</div><ul>

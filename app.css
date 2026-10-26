@@ -2453,3 +2453,28 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 .cs-them.typing i:nth-child(2) { animation-delay: .15s; } .cs-them.typing i:nth-child(3) { animation-delay: .3s; }
 @keyframes csUp { from { transform: translateY(110%); } to { transform: none; } }
 @keyframes csDown { to { transform: translateY(110%); opacity: .4; } }
+
+/* ---------- v75 検索の演出 ---------- */
+.sf-sheet { position: absolute; inset: 0; z-index: 6; pointer-events: none; display: grid; align-content: start; gap: 12px; padding: 54px 14px 14px;
+  background: var(--surface); animation: sfIn .3s ease-out both; }
+.sf-sheet.out { animation: sfOut .32s ease-in both; }
+.sf-bar { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 999px; background: var(--surface-2); border: 1.5px solid var(--line); box-shadow: 0 3px 10px rgba(0, 0, 0, .08); }
+.sf-lens { position: relative; flex: none; width: 14px; height: 14px; border: 2px solid var(--muted); border-radius: 50%; animation: lensPulse .9s calc(var(--n) * 45ms) ease-in-out 2; }
+.sf-lens::after { content: ""; position: absolute; right: -5px; bottom: -5px; width: 7px; height: 2px; background: var(--muted); transform: rotate(45deg); border-radius: 2px; }
+.sf-q { font-size: 14px; font-weight: 700; color: var(--ink); white-space: nowrap; overflow: hidden; }
+.sf-q span { opacity: 0; animation: urlType .01s calc(var(--i) * 45ms) forwards; }
+.sf-caret { width: 2px; height: 16px; background: var(--accent); animation: blink .8s steps(2) infinite; }
+.sf-list { display: grid; gap: 8px; }
+.sf-item { display: grid; gap: 3px; padding: 10px 12px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface);
+  opacity: 0; animation: opFade .35s calc(var(--n) * 45ms + 250ms + var(--k) * 180ms) forwards; }
+.sf-item b { font-size: 13px; line-height: 1.45; color: var(--ink); }
+.sf-item small { font-size: 10.5px; color: var(--muted); }
+.sf-item.warn { border-color: var(--danger); background: var(--danger-soft); box-shadow: 0 0 0 0 rgba(229, 83, 75, .5);
+  animation: opFade .35s calc(var(--n) * 45ms + 250ms) forwards, warnRing 1.2s calc(var(--n) * 45ms + 600ms) ease-out 1; }
+.sf-tag { justify-self: start; font-size: 10px; font-weight: 800; letter-spacing: .06em; padding: 1px 8px; border-radius: 4px; background: var(--danger); color: #fff; }
+.sf-tag.sns { background: #5B6777; }
+.sf-tag.ok { background: var(--safe); }
+@keyframes sfIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes sfOut { to { opacity: 0; transform: translateY(14px); } }
+@keyframes lensPulse { 50% { transform: scale(1.25); border-color: var(--accent); } }
+@keyframes warnRing { 0% { box-shadow: 0 0 0 0 rgba(229, 83, 75, .5); } 100% { box-shadow: 0 0 0 12px transparent; } }
