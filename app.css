@@ -2478,3 +2478,22 @@ html[data-easy="1"] #easyBtn, html[data-easy="1"] [data-easybtn] { background: v
 @keyframes sfOut { to { opacity: 0; transform: translateY(14px); } }
 @keyframes lensPulse { 50% { transform: scale(1.25); border-color: var(--accent); } }
 @keyframes warnRing { 0% { box-shadow: 0 0 0 0 rgba(229, 83, 75, .5); } 100% { box-shadow: 0 0 0 12px transparent; } }
+
+/* ---------- v76 ひと呼吸の演出 ---------- */
+.br-sheet { position: absolute; inset: 0; z-index: 6; pointer-events: none; display: grid; place-content: center; justify-items: center; gap: 14px; color: #F5F7FA;
+  background: rgba(11, 21, 34, .72); backdrop-filter: blur(6px); animation: opIn .4s ease-out both; }
+.br-sheet.out { animation: opOut .4s ease-in both; }
+.br-ring { position: relative; width: 140px; height: 140px; display: grid; place-items: center; }
+.br-ring::before, .br-ring::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(214, 185, 127, .55); animation: brRing 2.6s ease-in-out both; }
+.br-ring::after { inset: -16px; border-color: rgba(214, 185, 127, .22); animation-delay: .12s; }
+.br-core { width: 70px; height: 70px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #FFE9A8, #D6B97F 60%, rgba(214, 185, 127, .2)); box-shadow: 0 0 40px rgba(214, 185, 127, .5);
+  animation: brCore 2.6s ease-in-out both; }
+.br-word { position: relative; height: 1.6em; width: 8em; text-align: center; font-family: var(--font-display); font-weight: 400; font-size: 1.4rem; letter-spacing: .2em; }
+.br-word span { position: absolute; inset: 0; opacity: 0; }
+.br-word .in { animation: brIn 2.6s both; }
+.br-word .out { animation: brOut 2.6s both; }
+.br-sheet small { font-size: 12px; color: #A9B4C2; letter-spacing: .1em; }
+@keyframes brCore { 0% { transform: scale(.55); } 50% { transform: scale(1.35); } 100% { transform: scale(.75); } }
+@keyframes brRing { 0% { transform: scale(.6); opacity: .2; } 50% { transform: scale(1.12); opacity: 1; } 100% { transform: scale(.8); opacity: .4; } }
+@keyframes brIn { 0%, 5% { opacity: 0; } 15%, 42% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@keyframes brOut { 0%, 50% { opacity: 0; } 60%, 90% { opacity: 1; } 100% { opacity: .6; } }
